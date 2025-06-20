@@ -11,6 +11,7 @@ const techCategories = [
       { name: "Python", iconPath: "/tech_icons/python.png" },
       { name: "JavaScript", iconPath: "/tech_icons/javascript.png" },
       { name: "React", iconPath: "/tech_icons/react.svg" },
+      { name: "Tailwind CSS", iconPath: "/tech_icons/tailwindcss.svg" },
       { name: "AngularJS", iconPath: "/tech_icons/angular.svg" },
       { name: "Spring Boot", iconPath: "/tech_icons/springboot.svg" },
       { name: "REST API", iconPath: "/tech_icons/rest.svg" },
@@ -78,7 +79,7 @@ const TechStack = () => {
               {category.technologies.map(({ name, iconPath }, techIndex) => (
                 <div
                   key={techIndex}
-                  className="p-3 flex flex-col items-center justify-center group transition-all duration-300 hover:scale-105 cursor-pointer"
+                  className="p-3 flex flex-col items-center justify-center group transition-all duration-300 hover:scale-150 cursor-pointer"
                   title={name}
                 >
                   <img 
