@@ -85,3 +85,49 @@
     50% { transform: translateY(-10px); }
   }
 }
+
+.relative {
+  position: relative;
+}
+
+.input-wrapper {
+  width: 20rem;
+}
+
+.base-input {
+  height: 3rem;
+  width: 100%;
+  cursor: default;
+  border-radius: 0.5rem;
+  border: 1px solid #2d3748;
+  background-color: #1a202c;
+  padding: 0.875rem;
+  color: #cbd5e0;
+  transition: border-color 0.5s;
+  outline: none;
+}
+
+.base-input:focus {
+  border-color: #e47320;
+}
+
+.base-input::placeholder {
+  color: #718096;
+  user-select: none;
+}
+
+.overlay-input {
+  pointer-events: none;
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 10;
+  height: 3rem;
+  width: 100%;
+  cursor: default;
+  border-radius: 0.5rem;
+  background-color: transparent;
+  padding: 0.875rem;
+  opacity: 0;
+  transition: opacity 0.5s;
+}

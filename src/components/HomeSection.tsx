@@ -2,8 +2,8 @@ const HomeSection = () => {
   return (
     <section className="min-h-screen flex items-center justify-center px-6">
       
-        <div className="w-full sm:max-w-4xl text-center relative">
-        <div className="glass-strong rounded-3xl p-12 animate-float relative overflow-visible">
+        <div className="w-full sm:max-w-4xl text-center">
+        <div className="glass-strong rounded-3xl p-12 transition-all duration-500 hover:scale-110 transform-gpu">
           
           {/* Person sitting on the left side */}
           <div className="absolute -top-30 left-4 z-10">
@@ -18,8 +18,11 @@ const HomeSection = () => {
           <h1 className="text-6xl md:text-6xl font-bold mb-6 text-glow">
             Waleed Tariq
           </h1>
-          <h1 className="text-xl md:text-2xl text-white/50 italic mb-8 max-w-2xl mx-auto">
-            Software Engineer @ Sainsbury's Tech
+          <h1 className="text-xl md:text-2xl text-white/50 italic mb-8 max-w-2xl mx-auto flex items-center justify-center gap-2">
+            Software Engineer @ Sainsbury's
+            <span className="inline-flex items-center opacity-75">
+              📍 UK
+            </span>
           </h1>
           <p className="text-xl md:text-2xl text-white/70 mb-8 max-w-2xl mx-auto">
             Crafting scalable systems and robust architectures

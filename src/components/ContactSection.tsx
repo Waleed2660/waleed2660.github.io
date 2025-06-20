@@ -18,8 +18,8 @@ const ContactSection = () => {
               href="mailto:hello@engineer.dev"
               className="glass rounded-2xl p-6 flex items-center justify-center space-x-4 hover:bg-white/10 transition-all duration-300 hover:scale-105 group"
             >
-              <Mail className="w-6 h-6 text-blue-300 group-hover:text-white transition-colors" />
-              <span className="text-white/80 text-lg group-hover:text-white transition-colors">
+              <Mail className="w-6 h-6 text-blue-300 group-hover:text-red-400 transition-colors" />
+              <span className="text-white/80 text-lg group-hover:text-red-400 transition-colors">
                 hello@waleedtariq.com
               </span>
             </a>
@@ -29,17 +29,17 @@ const ContactSection = () => {
                 href="https://www.linkedin.com/in/waleed-t/" 
                 target="_blank"
                 rel="noopener noreferrer"
-                className="glass rounded-2xl px-6 py-3 hover:bg-white/10 transition-all duration-300 cursor-pointer hover:scale-105"
+                className="glass rounded-2xl px-6 py-3 hover:bg-white/10 transition-all duration-300 cursor-pointer hover:scale-105 group"
                 >
-                <span className="text-white/80">LinkedIn</span>
+                <span className="text-white/80 group-hover:text-red-400">LinkedIn</span>
               </a>
 
               <a
                 href="https://github.com/Waleed2660"
                 target="_blank"
                 rel="noopener noreferrer" 
-                className="glass rounded-2xl px-6 py-3 hover:bg-white/10 transition-all duration-300 cursor-pointer hover:scale-105">
-                <span className="text-white/80">GitHub</span>
+                className="glass rounded-2xl px-6 py-3 hover:bg-white/10 transition-all duration-300 cursor-pointer hover:scale-105 group">
+                <span className="text-white/80 group-hover:text-red-400">GitHub</span>
               </a>
             </div>
           </div>
