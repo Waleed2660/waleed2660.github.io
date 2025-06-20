@@ -1,6 +1,3 @@
-
-import { Mail } from 'lucide-react';
-
 const ContactSection = () => {
   return (
     <section className="min-h-screen flex items-center justify-center px-6">
@@ -10,38 +7,51 @@ const ContactSection = () => {
         </h2>
         <div className="glass-strong rounded-3xl p-12">
           <p className="text-xl text-white/70 mb-8 leading-relaxed">
-            Let's build something amazing together
+            Whether you're looking to collaborate on innovative projects or explore new opportunities, I'm always excited to connect. Drop me a message!
           </p>
-          
-          <div className="space-y-6">
-            <a
-              href="mailto:hello@engineer.dev"
-              className="glass rounded-2xl p-6 flex items-center justify-center space-x-4 hover:bg-white/10 transition-all duration-300 hover:scale-105 group"
-            >
-              <Mail className="w-6 h-6 text-blue-300 group-hover:text-red-400 transition-colors" />
-              <span className="text-white/80 text-lg group-hover:text-red-400 transition-colors">
-                hello@waleedtariq.com
-              </span>
-            </a>
-            
-            <div className="flex justify-center space-x-4">
-              <a
-                href="https://www.linkedin.com/in/waleed-t/" 
-                target="_blank"
-                rel="noopener noreferrer"
-                className="glass rounded-2xl px-6 py-3 hover:bg-white/10 transition-all duration-300 cursor-pointer hover:scale-105 group"
-                >
-                <span className="text-white/80 group-hover:text-red-400">LinkedIn</span>
-              </a>
 
-              <a
-                href="https://github.com/Waleed2660"
-                target="_blank"
-                rel="noopener noreferrer" 
-                className="glass rounded-2xl px-6 py-3 hover:bg-white/10 transition-all duration-300 cursor-pointer hover:scale-105 group">
-                <span className="text-white/80 group-hover:text-red-400">GitHub</span>
-              </a>
-            </div>
+          <a
+            href="/resume.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="glass rounded-2xl px-8 py-4 hover:bg-white/10 transition-all duration-300 cursor-pointer hover:scale-105 group flex items-center justify-center gap-3 mb-8 mx-auto w-fit"
+          >
+            <img 
+              src="/misc/resume.png" 
+              alt="Resume"
+              className="w-6 h-6 object-contain brightness-100" 
+            />
+            <span className="text-white/80 text-lg group-hover:text-blue-400">View Resume</span>
+          </a>
+          
+          <div className="flex flex-col sm:flex-row justify-center gap-4">
+            <a
+              href="https://www.linkedin.com/in/waleed-t/" 
+              target="_blank"
+              rel="noopener noreferrer"
+              className="glass rounded-2xl px-8 py-4 hover:bg-white/10 transition-all duration-300 cursor-pointer hover:scale-105 group flex items-center justify-center gap-3"
+            >
+              <img 
+                src="/misc/linkedin.webp" 
+                alt="LinkedIn"
+                className="w-6 h-6 object-contain brightness-100" 
+              />
+              <span className="text-white/80 text-lg group-hover:text-red-400">LinkedIn</span>
+            </a>
+
+            <a
+              href="https://github.com/Waleed2660"
+              target="_blank"
+              rel="noopener noreferrer" 
+              className="glass rounded-2xl px-8 py-4 hover:bg-white/10 transition-all duration-300 cursor-pointer hover:scale-105 group flex items-center justify-center gap-3"
+            >
+              <img 
+                src="/misc/github.png" 
+                alt="GitHub"
+                className="w-6 h-6 object-contain brightness-100" 
+              />
+              <span className="text-white/80 text-lg group-hover:text-red-400">GitHub</span>
+            </a>
           </div>
         </div>
       </div>

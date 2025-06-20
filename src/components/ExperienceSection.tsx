@@ -63,16 +63,16 @@ const ExperienceSection = () => {
   };
 
   return (
-    <section className="min-h-screen flex items-center justify-center px-6">
+    <section className="min-h-screen flex items-center justify-center px-6 relative z-0">
       <div className="max-w-4xl w-full">
-        <h2 className="text-4xl md:text-6xl font-bold text-center mb-16 text-glow">
+        <h2 className="text-4xl md:text-6xl font-bold text-center mb-8 sm:mb-16 text-glow">
           Experience 🎯
         </h2>
         <div className="space-y-8">
           {experiences.map((exp, index) => (
             <div
               key={index}
-              className={`glass-strong rounded-3xl p-8 transition-all duration-500 hover:bg-white/10 
+              className={`glass-strong rounded-3xl p-8 transition-all duration-500 hover:bg-white/10
                 ${expandedCard === index ? 'scale-105' : 'hover:scale-105'}`}
             >
               <div className="flex flex-col md:flex-row gap-8">
