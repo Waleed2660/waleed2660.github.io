@@ -2,19 +2,34 @@
 const ProjectsSection = () => {
   const projects = [
     {
-      title: "Microservices Platform",
-      description: "Scalable architecture handling 1M+ requests",
-      tech: ["Node.js", "Redis", "Docker"]
+      title: "Spring Boot Learning Kit",
+      description: "An open-source enterprise-grade Spring Boot application designed to help developers bridge the gap between tutorials and real-world development.",
+      tech: ["Spring Boot", "ActiveMQ", "PostgreSQL", "Prometheus", "GitHub Actions", "JMeter", "RabbitMQ", "Apache Camel"],
+      github: "https://github.com/Waleed2660"
     },
     {
-      title: "Real-time Analytics API",
-      description: "High-performance data processing pipeline",
-      tech: ["Python", "Apache Kafka", "InfluxDB"]
+      title: "Nimbus",
+      description: "Personal Cloud Storage webapp built with JS, React, Tailwind CSS. Allows file upload, download & directory navigation. Backend application is built with Java SpringBoot which uses Amazon S3 to store files.",
+      tech: ["React", "Tailwind CSS", "Spring Boot", "AWS S3"],
+      github: "https://github.com/Waleed2660/nimbus-ui"
     },
     {
-      title: "Cloud Infrastructure",
-      description: "Auto-scaling serverless deployment system",
-      tech: ["AWS Lambda", "Terraform", "PostgreSQL"]
+      title: "Fly Drone with Xbox Controller",
+      description: "Created a script using Tello SDK & API to control DJI Tello drone with an Xbox Controller, including live video feed streaming from the drone's camera to your device.",
+      tech: ["Python", "OpenCV", "DJI Tello SDK", "REST"],
+      github: "https://github.com/Waleed2660/DJITello_Xbox_Controller"
+    },
+    {
+      title: "Handy",
+      description: "Inspired by Apple Vision Pro, this project uses Google's Mediapipe framework and OpenCV to detect hand gestures to control your desktop cursor, supporting actions like pinching and dragging.",
+      tech: ["Python", "OpenCV", "Mediapipe"],
+      github: "https://github.com/Waleed2660/Handy"
+    },
+    {
+      title: "C.O.G.S",
+      description: "A 2D platform fighter game inspired by classic titles like Mario & Contra, featuring action-packed gameplay and retro-style graphics. Built using Java and JSFML (Java Simple and Fast Multimedia Library).",
+      tech: ["Java", "JSFML", "Game Development"],
+      github: "https://github.com/Waleed2660/COGS"
     }
   ];
 
@@ -30,13 +45,16 @@ const ProjectsSection = () => {
               key={index}
               className="glass-strong rounded-3xl p-8 hover:bg-white/10 transition-all duration-500 hover:scale-105 group"
             >
-              <h3 className="text-2xl font-semibold text-white mb-4 group-hover:text-blue-300 transition-colors">
-                {project.title}
-              </h3>
-              <p className="text-white/70 mb-6 leading-relaxed">
-                {project.description}
-              </p>
-              <div className="space-y-2">
+              <div className="flex flex-col h-full">
+                <h3 className="text-2xl font-semibold text-white mb-4 group-hover:text-blue-300 transition-colors">
+                  {project.title}
+                </h3>
+                <p className="text-white/70 mb-6 leading-relaxed">
+                  {project.description}
+                </p>
+                <div className="mt-auto">
+                  <div className="flex justify-between items-end">
+                    <div className="flex flex-wrap gap-2">
                 {project.tech.map((tech, techIndex) => (
                   <div
                     key={techIndex}
@@ -45,6 +63,22 @@ const ProjectsSection = () => {
                     {tech}
                   </div>
                 ))}
+                    </div>
+                    <a 
+                      href={project.github}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 text-white/50 hover:text-blue-300 transition-colors group/link"
+                    >
+                      <span className="text-sm opacity-40 group-hover/link:opacity-100 transition-opacity">View Code</span>
+                      <img 
+                        src="/misc/github.png" 
+                        alt="GitHub"
+                        className="w-6 h-6 object-contain brightness-50 group-hover/link:brightness-100 transition-all" 
+                      />
+                    </a>
+                  </div>
+                </div>
               </div>
             </div>
           ))}

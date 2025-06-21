@@ -36,7 +36,7 @@ const ContactSection = () => {
                 alt="LinkedIn"
                 className="w-6 h-6 object-contain brightness-100" 
               />
-              <span className="text-white/80 text-lg group-hover:text-red-400">LinkedIn</span>
+              <span className="text-white/80 text-lg group-hover:text-blue-400">LinkedIn</span>
             </a>
 
             <a
@@ -50,7 +50,7 @@ const ContactSection = () => {
                 alt="GitHub"
                 className="w-6 h-6 object-contain brightness-100" 
               />
-              <span className="text-white/80 text-lg group-hover:text-red-400">GitHub</span>
+              <span className="text-white/80 text-lg group-hover:text-blue-400">GitHub</span>
             </a>
           </div>
         </div>
