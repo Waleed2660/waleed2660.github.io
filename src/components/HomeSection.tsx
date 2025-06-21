@@ -21,7 +21,7 @@ const HomeSection = () => {
           <h1 className="text-lg sm:text-xl md:text-2xl text-white/50 italic mb-6 sm:mb-8 max-w-2xl mx-auto flex items-center justify-center gap-2 flex-wrap">
             Software Engineer @ Sainsbury's
             <span className="inline-flex items-center opacity-75">
-              📍 UK
+              📍 Manchester, UK
             </span>
           </h1>
           <p className="text-lg sm:text-xl md:text-2xl text-white/70 mb-6 sm:mb-8 max-w-2xl mx-auto">

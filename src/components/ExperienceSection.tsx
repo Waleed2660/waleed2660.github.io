@@ -4,6 +4,7 @@ import { useState } from "react";
 interface Experience {
   title: string;
   company: string;
+  location: string;
   logo: string;
   period: string;
   tech: string[];
@@ -17,6 +18,7 @@ const ExperienceSection = () => {
     {
       title: "Software Engineer",
       company: "Sainsbury's Tech",
+      location: "Manchester, UK",
       logo: "/work_exp/sainsburys.png",
       period: "2025 - Present",
       tech: ["Java", "Spring Boot", "Apache Kafka", "Kubernetes", "AWS"],
@@ -32,6 +34,7 @@ const ExperienceSection = () => {
     {
       title: "Software Engineer",
       company: "The Hut Group",
+      location: "Manchester, UK",
       logo: "/work_exp/thg.jpg",
       period: "2022 - 2025",
       tech: ["Java", "Spring Boot", "Apache ActiveMQ"],
@@ -47,6 +50,7 @@ const ExperienceSection = () => {
     {
       title: "Machine Learning Researcher",
       company: "Lancaster University",
+      location: "Lancaster, UK",
       logo: "/work_exp/lancaster-uni.webp",
       period: "2022 - 2022",
       tech: ["Python", "Machine Learning", "OpenCV", "PyTorch", "Data Annotations"],
@@ -89,7 +93,10 @@ const ExperienceSection = () => {
                     <h3 className="text-2xl font-semibold text-white">{exp.title}</h3>
                     <span className="text-blue-300 text-lg">{exp.period}</span>
                   </div>
-                  <p className="text-white/70 text-xl mb-4">{exp.company}</p>
+                  <div className="space-y-1 mb-4">
+                    <p className="text-white/70 text-xl">{exp.company}</p>
+                    <p className="text-white/40 text-sm">{exp.location}</p>
+                  </div>
                   <div className="flex flex-wrap gap-3 mb-4">
                     {exp.tech.map((tech, techIndex) => (
                       <span
