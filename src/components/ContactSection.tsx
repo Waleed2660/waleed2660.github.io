@@ -11,7 +11,7 @@ const ContactSection = () => {
           </p>
 
           <a
-            href="/resume.pdf"
+            href="https://1drv.ms/b/c/ed206a2a209b2044/EUQgmyAqaiAggO1kFgIAAAABX3XXQfz16gUH8UZByj3Rpg?e=Ij8VS9"
             target="_blank"
             rel="noopener noreferrer"
             className="glass rounded-2xl px-8 py-4 hover:bg-white/10 transition-all duration-300 cursor-pointer hover:scale-105 group flex items-center justify-center gap-3 mb-8 mx-auto w-fit"
