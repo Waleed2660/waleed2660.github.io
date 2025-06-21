@@ -5,31 +5,36 @@ const ProjectsSection = () => {
       title: "Spring Boot Learning Kit",
       description: "An open-source enterprise-grade Spring Boot application designed to help developers bridge the gap between tutorials and real-world development.",
       tech: ["Spring Boot", "ActiveMQ", "PostgreSQL", "Prometheus", "GitHub Actions", "JMeter", "RabbitMQ", "Apache Camel"],
-      github: "https://github.com/Waleed2660"
+      github: "https://github.com/Waleed2660",
+      image: "/tech_icons/springboot.svg"
     },
     {
       title: "Nimbus",
       description: "Personal Cloud Storage webapp built with JS, React, Tailwind CSS. Allows file upload, download & directory navigation. Backend application is built with Java SpringBoot which uses Amazon S3 to store files.",
       tech: ["React", "Tailwind CSS", "Spring Boot", "AWS S3"],
-      github: "https://github.com/Waleed2660/nimbus-ui"
+      github: "https://github.com/Waleed2660/nimbus-ui",
+      image: "/projects/nimbus_logo.png"
     },
     {
       title: "Fly Drone with Xbox Controller",
       description: "Created a script using Tello SDK & API to control DJI Tello drone with an Xbox Controller, including live video feed streaming from the drone's camera to your device.",
       tech: ["Python", "OpenCV", "DJI Tello SDK", "REST"],
-      github: "https://github.com/Waleed2660/DJITello_Xbox_Controller"
+      github: "https://github.com/Waleed2660/DJITello_Xbox_Controller",
+      image: "/projects/controller.png"
     },
     {
       title: "Handy",
       description: "Inspired by Apple Vision Pro, this project uses Google's Mediapipe framework and OpenCV to detect hand gestures to control your desktop cursor, supporting actions like pinching and dragging.",
       tech: ["Python", "OpenCV", "Mediapipe"],
-      github: "https://github.com/Waleed2660/Handy"
+      github: "https://github.com/Waleed2660/Handy",
+      image: "/projects/pinching-hand.svg"
     },
     {
       title: "C.O.G.S",
       description: "A 2D platform fighter game inspired by classic titles like Mario & Contra, featuring action-packed gameplay and retro-style graphics. Built using Java and JSFML (Java Simple and Fast Multimedia Library).",
       tech: ["Java", "JSFML", "Game Development"],
-      github: "https://github.com/Waleed2660/COGS"
+      github: "https://github.com/Waleed2660/COGS",
+      image: "/projects/cogs.svg"
     }
   ];
 
@@ -46,9 +51,16 @@ const ProjectsSection = () => {
               className="glass-strong rounded-3xl p-8 hover:bg-white/10 transition-all duration-500 hover:scale-105 group"
             >
               <div className="flex flex-col h-full">
-                <h3 className="text-2xl font-semibold text-white mb-4 group-hover:text-blue-300 transition-colors">
-                  {project.title}
-                </h3>
+                <div className="flex items-center gap-4 mb-4">
+                  <img 
+                    src={project.image} 
+                    alt={project.title}
+                    className="w-10 h-10 object-contain brightness-90 group-hover:brightness-100 transition-all"
+                  />
+                  <h3 className="text-2xl font-semibold text-white group-hover:text-blue-300 transition-colors">
+                    {project.title}
+                  </h3>
+                </div>
                 <p className="text-white/70 mb-6 leading-relaxed">
                   {project.description}
                 </p>
