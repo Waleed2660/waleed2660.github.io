@@ -41,19 +41,19 @@ const Index = () => {
       <Navigation onSectionClick={scrollToSection} />
       
       <main className="relative z-10">
-        <div id="home">
+        <div id="home" className="scroll-mt-0">
           <HomeSection />
         </div>
-        <div id="experience">
+        <div id="experience" className="scroll-mt-32">
           <ExperienceSection />
         </div>
-        <div id="projects">
+        <div id="projects" className="scroll-mt-0">
           <ProjectsSection />
         </div>
-        <div id="tools">
+        <div id="tools" className="scroll-mt-0">
           <TechStack />
         </div>
-        <div id="contact">
+        <div id="contact" className="scroll-mt-10">
           <ContactSection />
         </div>
       </main>
