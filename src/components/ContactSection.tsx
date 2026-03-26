@@ -1,4 +1,4 @@
-import { Mail } from "lucide-react";
+import { FileText, Mail } from "lucide-react";
 
 const ContactSection = () => {
   return (
@@ -18,11 +18,7 @@ const ContactSection = () => {
             rel="noopener noreferrer"
             className="glass rounded-2xl px-8 py-4 hover:bg-white/10 transition-all duration-300 cursor-pointer hover:scale-105 group flex items-center justify-center gap-3 mb-8 mx-auto w-fit"
           >
-            <img 
-              src="/misc/resume.png" 
-              alt="Resume"
-              className="w-6 h-6 object-contain brightness-100" 
-            />
+            <FileText className="w-6 h-6 text-white/80 group-hover:text-blue-400 transition-colors" />
             <span className="text-white/80 text-lg group-hover:text-blue-400">View Resume</span>
           </a>
           
