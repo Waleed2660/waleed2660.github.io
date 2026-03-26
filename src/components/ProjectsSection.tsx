@@ -1,12 +1,22 @@
 
+type Project = {
+  title: string;
+  description: string;
+  tech: string[];
+  github: string;
+  image: string;
+  stars?: number;
+};
+
 const ProjectsSection = () => {
-  const projects = [
+  const projects: Project[] = [
     {
       title: "Spring Boot Learning Kit",
       description: "An open-source enterprise-grade Spring Boot application designed to help developers bridge the gap between tutorials and real-world development.",
       tech: ["Spring Boot", "ActiveMQ", "PostgreSQL", "Prometheus", "GitHub Actions", "JMeter", "RabbitMQ", "Apache Camel"],
-      github: "https://github.com/Waleed2660",
-      image: "/tech_icons/springboot.svg"
+      github: "https://github.com/Waleed2660/springboot-learning-kit",
+      image: "/tech_icons/springboot.svg",
+      stars: 94
     },
     {
       title: "Nimbus",
@@ -48,7 +58,7 @@ const ProjectsSection = () => {
           {projects.map((project, index) => (
             <div
               key={index}
-              className="glass-strong rounded-3xl p-8 hover:bg-white/10 transition-all duration-500 hover:scale-105 group"
+              className={`glass-strong rounded-3xl p-8 hover:bg-white/10 transition-all duration-500 hover:scale-105 group${project.stars ? " featured-card" : ""}`}
             >
               <div className="flex flex-col h-full">
                 <div className="flex items-center gap-4 mb-4">
@@ -57,9 +67,16 @@ const ProjectsSection = () => {
                     alt={project.title}
                     className="w-10 h-10 object-contain brightness-90 group-hover:brightness-100 transition-all"
                   />
-                  <h3 className="text-2xl font-semibold text-white group-hover:text-blue-300 transition-colors">
-                    {project.title}
-                  </h3>
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <h3 className="text-2xl font-semibold text-white group-hover:text-blue-300 transition-colors">
+                      {project.title}
+                    </h3>
+                    {project.stars && (
+                      <span className="glass rounded-xl px-3 py-1 text-sm text-yellow-300/90 whitespace-nowrap">
+                        ★ {project.stars}
+                      </span>
+                    )}
+                  </div>
                 </div>
                 <p className="text-white/70 mb-6 leading-relaxed">
                   {project.description}
