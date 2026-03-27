@@ -1,4 +1,6 @@
 
+import { useEffect, useState } from "react";
+
 type Project = {
   title: string;
   description: string;
@@ -9,6 +11,19 @@ type Project = {
 };
 
 const ProjectsSection = () => {
+  const [springbootStars, setSpringbootStars] = useState<number>(94);
+
+  useEffect(() => {
+    fetch("https://api.github.com/repos/Waleed2660/springboot-learning-kit")
+      .then((res) => res.json())
+      .then((data) => {
+        if (typeof data.stargazers_count === "number") {
+          setSpringbootStars(data.stargazers_count);
+        }
+      })
+      .catch(() => {/* keep fallback */});
+  }, []);
+
   const projects: Project[] = [
     {
       title: "Spring Boot Learning Kit",
@@ -16,7 +31,7 @@ const ProjectsSection = () => {
       tech: ["Spring Boot", "ActiveMQ", "PostgreSQL", "Prometheus", "GitHub Actions", "JMeter", "RabbitMQ", "Apache Camel"],
       github: "https://github.com/Waleed2660/springboot-learning-kit",
       image: "/tech_icons/springboot.svg",
-      stars: 94
+      stars: springbootStars
     },
     {
       title: "Nimbus",

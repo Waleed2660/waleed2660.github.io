@@ -40,6 +40,7 @@ const techCategories = [
       { name: "Jenkins", iconPath: "/tech_icons/jenkins.svg" },
       { name: "IntelliJ Idea", iconPath: "/tech_icons/intellij.png" },
       { name: "JMeter", iconPath: "/tech_icons/jmeter.svg" },
+      { name: "k6", iconPath: "/tech_icons/k6-logo.svg.png" },
     ]
   },
   {
