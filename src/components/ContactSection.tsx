@@ -2,7 +2,7 @@ import { FileText, Mail } from "lucide-react";
 
 const ContactSection = () => {
   return (
-    <section className="min-h-screen flex items-center justify-center px-6">
+    <section className="flex items-center justify-center px-6 py-24">
       <div className="max-w-2xl w-full text-center">
         <h2 className="text-4xl md:text-6xl font-bold mb-16 text-glow">
           Get In Touch 📬

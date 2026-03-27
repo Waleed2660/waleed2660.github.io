@@ -60,7 +60,7 @@ const techCategories = [
 
 const TechStack = () => {
   return (
-    <section className="min-h-screen flex flex-col items-center justify-center px-4 py-20">
+    <section className="flex flex-col items-center justify-center px-4 py-24">
       <h2 className="text-4xl md:text-6xl font-bold text-center mb-16 text-glow">
         Tech Stack 🛠️
       </h2>

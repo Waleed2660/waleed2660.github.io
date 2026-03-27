@@ -67,7 +67,7 @@ const ExperienceSection = () => {
   };
 
   return (
-    <section className="min-h-screen flex items-center justify-center px-6 relative z-0">
+    <section className="flex items-center justify-center px-6 py-24 relative z-0">
       <div className="max-w-4xl w-full">
         <h2 className="text-4xl md:text-6xl font-bold text-center mb-8 sm:mb-16 text-glow">
           Experience 🎯

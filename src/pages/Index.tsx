@@ -57,6 +57,9 @@ const Index = () => {
           <ContactSection />
         </div>
       </main>
+      <footer className="relative z-10 text-center py-6 text-sm text-white/40">
+        © {new Date().getFullYear()} Waleed Tariq. All rights reserved.
+      </footer>
     </div>
   );
 };
