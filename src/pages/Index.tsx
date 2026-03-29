@@ -30,7 +30,7 @@ const Index = () => {
     left: `${Math.random() * 100}%`,
     top: `${Math.random() * 100}%`,
     duration: `${10 + Math.random() * 18}s`,
-    delay: `${Math.random() * 30}s`,
+    delay: `-${Math.random() * 30}s`,
   })), []);
 
   useEffect(() => {
