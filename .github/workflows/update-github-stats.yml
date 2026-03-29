@@ -4,8 +4,6 @@ on:
   schedule:
     - cron: '0 3 * * *'  # Daily at 3am UTC
   workflow_dispatch:       # Allow manual trigger from Actions tab
-  push:
-    branches: [main]
 
 permissions:
   contents: write
