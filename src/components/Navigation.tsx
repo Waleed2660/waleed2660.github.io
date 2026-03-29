@@ -7,6 +7,7 @@ const Navigation = ({ onSectionClick }: NavigationProps) => {
     { id: 'home', label: 'Home' },
     { id: 'experience', label: 'Experience' },
     { id: 'projects', label: 'Projects' },
+    { id: 'github', label: 'GitHub' },
     { id: 'tools', label: 'Tech Stack' },
     { id: 'contact', label: 'Contact' }
   ];

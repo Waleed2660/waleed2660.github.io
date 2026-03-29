@@ -3,6 +3,7 @@ import Navigation from '@/components/Navigation';
 import HomeSection from '@/components/HomeSection';
 import ExperienceSection from '@/components/ExperienceSection';
 import ProjectsSection from '@/components/ProjectsSection';
+import GitHubSection from '@/components/GitHubSection';
 import TechStack from '@/components/TechStack';
 import ContactSection from '@/components/ContactSection';
 
@@ -49,6 +50,9 @@ const Index = () => {
         </div>
         <div id="projects" className="scroll-mt-0">
           <ProjectsSection />
+        </div>
+        <div id="github" className="scroll-mt-0">
+          <GitHubSection />
         </div>
         <div id="tools" className="scroll-mt-0">
           <TechStack />
