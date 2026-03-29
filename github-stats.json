@@ -1,0 +1,11 @@
+{
+  "followers": 11,
+  "public_repos": 15,
+  "stars": 100,
+  "languages": [
+    { "name": "Java", "percentage": 50 },
+    { "name": "Python", "percentage": 27 },
+    { "name": "TypeScript", "percentage": 14 },
+    { "name": "JavaScript", "percentage": 9 }
+  ]
+}
