@@ -98,6 +98,20 @@ const GitHubSection = () => {
                 <div className="text-white/50 text-xs mt-1">Repos</div>
               </div>
             </div>
+
+            {/* Streak stats */}
+            <div className="mt-6">
+              <p className="text-white/40 text-xs uppercase tracking-widest mb-3">Streak</p>
+              <img
+                src="https://streak-stats.demolab.com?user=Waleed2660&theme=transparent&hide_border=true&stroke=ffffff20&ring=818cf8&fire=818cf8&currStreakLabel=ffffff99&sideLabels=ffffff99&currStreakNum=ffffff&sideNums=ffffff&dates=ffffff40&background=00000000"
+                alt="GitHub streak stats"
+                className="w-full rounded-xl opacity-90 hover:opacity-100 transition-opacity duration-300"
+                loading="lazy"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).parentElement!.style.display = "none";
+                }}
+              />
+            </div>
           </div>
 
           {/* Right: Top Languages */}

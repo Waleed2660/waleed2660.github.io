@@ -1,5 +1,5 @@
 
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import Navigation from '@/components/Navigation';
 import HomeSection from '@/components/HomeSection';
 import ExperienceSection from '@/components/ExperienceSection';
@@ -25,6 +25,14 @@ const Index = () => {
     }
   };
 
+  const stars = useMemo(() => Array.from({ length: 20 }, (_, i) => ({
+    id: i,
+    left: `${Math.random() * 100}%`,
+    top: `${Math.random() * 100}%`,
+    duration: `${10 + Math.random() * 18}s`,
+    delay: `${Math.random() * 30}s`,
+  })), []);
+
   useEffect(() => {
     const handler = (e: MouseEvent) => {
       document.querySelectorAll<HTMLElement>('.glass-strong').forEach(card => {
@@ -46,16 +54,15 @@ const Index = () => {
 
       {/* Floating particles effect */}
       <div className="fixed inset-0 pointer-events-none">
-        {[...Array(20)].map((_, i) => (
+        {stars.map((s) => (
           <div
-            key={i}
-            className="absolute w-1 h-1 bg-white/20 rounded-full animate-float"
+            key={s.id}
+            className="absolute w-1 h-1 bg-white rounded-full"
             style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 6}s`,
-              animationDuration: `${3 + Math.random() * 2}s`,
-              willChange: 'transform'
+              left: s.left,
+              top: s.top,
+              animation: `twinkle ${s.duration} ease-in-out infinite ${s.delay}`,
+              willChange: 'opacity, filter'
             }}
           />
         ))}
