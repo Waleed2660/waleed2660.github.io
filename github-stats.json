@@ -3,9 +3,17 @@
   "public_repos": 15,
   "stars": 100,
   "languages": [
-    { "name": "Java", "percentage": 50 },
-    { "name": "Python", "percentage": 27 },
-    { "name": "TypeScript", "percentage": 14 },
-    { "name": "JavaScript", "percentage": 9 }
+    {
+      "name": "Java",
+      "percentage": 40
+    },
+    {
+      "name": "Python",
+      "percentage": 40
+    },
+    {
+      "name": "TypeScript",
+      "percentage": 20
+    }
   ]
 }
