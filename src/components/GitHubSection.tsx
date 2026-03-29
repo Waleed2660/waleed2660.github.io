@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 // Contribution colour — violet-600, rich and visible against dark background
 const USERNAME = "Waleed2660";
@@ -43,6 +43,7 @@ const GitHubSection = () => {
   const [totalStars, setTotalStars] = useState<number | null>(null);
   const [languages, setLanguages] = useState<Language[]>([]);
   const [chartSvg, setChartSvg] = useState<string | null>(null);
+  const chartRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     fetch(`https://api.github.com/users/${USERNAME}`)
@@ -73,15 +74,26 @@ const GitHubSection = () => {
       })
       .catch(() => {});
 
-    fetch(`https://ghchart.rshah.org/${CHART_COLOR}/${USERNAME}`)
-      .then((r) => r.text())
-      .then((svg) => {
-        const modified = svg
-          .split(`fill:${EMPTY_CELL_COLOR}`)
-          .join(`fill:#14112a`);
-        setChartSvg(modified);
-      })
-      .catch(() => {});
+    // Lazy-load chart only when section scrolls into view
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          observer.disconnect();
+          fetch(`https://ghchart.rshah.org/${CHART_COLOR}/${USERNAME}`)
+            .then((r) => r.text())
+            .then((svg) => {
+              const modified = svg
+                .split(`fill:${EMPTY_CELL_COLOR}`)
+                .join(`fill:#14112a`);
+              setChartSvg(modified);
+            })
+            .catch(() => {});
+        }
+      },
+      { threshold: 0.1 }
+    );
+    if (chartRef.current) observer.observe(chartRef.current);
+    return () => observer.disconnect();
   }, []);
 
   return (
@@ -159,7 +171,7 @@ const GitHubSection = () => {
         </div>
 
         {/* Full-width Contribution Graph */}
-        <div className="glass-strong rounded-3xl p-8 mt-6">
+        <div ref={chartRef} className="glass-strong rounded-3xl p-8 mt-6">
           <p className="text-white/40 text-xs uppercase tracking-widest mb-4">
             Contribution Graph
           </p>

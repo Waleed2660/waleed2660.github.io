@@ -99,6 +99,7 @@
   
   .animate-float {
     animation: float 6s ease-in-out infinite;
+    will-change: transform;
   }
   
   @keyframes float {
