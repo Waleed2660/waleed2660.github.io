@@ -60,8 +60,8 @@ const conferences: Conference[] = [
       { label: "Grow Your Future", url: "https://portal.lancaster.ac.uk/ask/grow-your-future/", icon: "https://www.lancaster.ac.uk/media/wdp/style-assets/images/foundation/lu-shield.svg" },
     ],
     photos: [
-      { src: "/conferences/gyf/gyf_talk_2025.webp", alt: "Talk at Capital Connections 2025", span: "row"},
-      { src: "/conferences/gyf/students_2025.webp", alt: "Students at Capital Connections 2025", span: "both" },
+      { src: "/conferences/gyf/gyf_talk_2025.webp", alt: "Talk at Capital Connections 2025" },
+      { src: "/conferences/gyf/students_2025.webp", alt: "Students at Capital Connections 2025" },
     ],
   },
   {
@@ -121,7 +121,7 @@ const conferences: Conference[] = [
     accentColor: "from-emerald-500/20 to-teal-500/10",
     tagline: "Lancaster University alumni networking",
     summary:
-      "This time around I was on the other side of the table — invited back by the Grow Your Future team as a Lancaster alumnus to share my experiences with current students. Spent the evening chatting with a lot of students one-on-one, fielding questions about the job hunt, what work is actually like day-to-day, managing expectations around salary and culture, and dealing with the pressure of breaking into industry. It was a genuinely rewarding experience to give back to the same community that helped me when I was in their shoes.",
+      "Invited again by the Grow Your Future team as a Lancaster alumnus to share my experiences with current students. Spent the evening chatting with students one-on-one, fielding questions about the job hunt, what work is actually like day-to-day, managing expectations around salary and culture, and dealing with the pressure of breaking into industry. Always a great event to be part of.",
     talks: [
       {
         title: "Alumni Speaker",
@@ -138,7 +138,10 @@ const conferences: Conference[] = [
     links: [
       { label: "Grow Your Future", url: "https://portal.lancaster.ac.uk/ask/grow-your-future/", icon: "https://www.lancaster.ac.uk/media/wdp/style-assets/images/foundation/lu-shield.svg" },
     ],
-    photos: [],
+    photos: [
+      { src: "/conferences/gyf/students_2026.webp", alt: "Students at Capital Connections 2026" },
+      { src: "/conferences/gyf/gyf_2026.webp", alt: "Capital Connections 2026" },
+    ],
   },
 ];
 
@@ -149,18 +152,19 @@ const PhotoGrid = ({ photos, accent }: { photos: PhotoSlot[]; accent: string }) 
   const placeholderEmojis = ["📸", "🎙️", "💡", "🧑‍💻", "🎯", "☕"];
 
   return (
-    <div className="grid grid-cols-3 grid-rows-2 gap-2 h-64 overflow-hidden">
+    <div className={photos.length <= 2 ? "flex gap-2 h-64" : "grid grid-cols-3 grid-rows-2 gap-2 h-64 overflow-hidden"}>
       {photos.map((photo, i) => {
         const isLoaded = loaded[i];
         const isErrored = errored[i];
         const colSpan = photo.span === "full" ? "col-span-3" : photo.span === "col" || photo.span === "both" ? "col-span-2" : "col-span-1";
         const rowSpan = photo.span === "row" || photo.span === "both" ? "row-span-2" : "row-span-1";
+        const flexClass = photos.length <= 2 ? "flex-1 min-w-0" : `${colSpan} ${rowSpan}`;
 
         return (
           <div
             key={i}
-            className={`${colSpan} ${rowSpan} relative rounded-2xl overflow-hidden glass group/photo`}
-            style={photo.gridCol || photo.gridRow ? { gridColumn: photo.gridCol, gridRow: photo.gridRow } : undefined}
+            className={`${flexClass} relative rounded-2xl overflow-hidden glass group/photo`}
+            style={photos.length > 2 && (photo.gridCol || photo.gridRow) ? { gridColumn: photo.gridCol, gridRow: photo.gridRow } : undefined}
           >
             {!isErrored && (
               <img
