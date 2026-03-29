@@ -1,4 +1,30 @@
+import { useEffect, useState } from 'react';
+
+const TYPING_TEXT = "Software Engineer @ Sainsbury's";
+const CAREER_START = new Date(2022, 6, 1); // July 2022 — THG start
+
+function getYOE(): string {
+  const now = new Date();
+  const years = (now.getTime() - CAREER_START.getTime()) / (1000 * 60 * 60 * 24 * 365.25);
+  const floored = Math.floor(years);
+  return `${floored}+ YOE`;
+}
+
 const HomeSection = () => {
+  const [displayed, setDisplayed] = useState('');
+  const [typingDone, setTypingDone] = useState(false);
+
+  useEffect(() => {
+    if (displayed.length < TYPING_TEXT.length) {
+      const timer = setTimeout(() => {
+        setDisplayed(TYPING_TEXT.slice(0, displayed.length + 1));
+      }, 55);
+      return () => clearTimeout(timer);
+    } else {
+      setTypingDone(true);
+    }
+  }, [displayed]);
+
   return (
     <section className="min-h-screen flex items-center justify-center px-6">
       
@@ -19,15 +45,23 @@ const HomeSection = () => {
             Waleed Tariq
           </h1>
           <h1 className="text-lg sm:text-xl md:text-2xl text-white/50 italic mb-6 sm:mb-8 max-w-2xl mx-auto flex items-center justify-center gap-2 flex-wrap">
-            Software Engineer @ Sainsbury's
-            <span className="inline-flex items-center opacity-75">
-              📍 Manchester, UK
+            <span>
+              {displayed}
+              {!typingDone && <span className="animate-blink ml-0.5">|</span>}
             </span>
+            {typingDone && (
+              <span className="inline-flex items-center opacity-75 animate-fade-in">
+                📍 Manchester, UK
+              </span>
+            )}
           </h1>
           <p className="text-lg sm:text-xl md:text-2xl text-white/70 mb-6 sm:mb-8 max-w-2xl mx-auto">
-            Building reliable backends that make complex problems look simple
+            Backend engineer obsessed with scale and performance — Java, Kafka, Kubernetes, and the satisfaction of a system that holds under pressure
           </p>
           <div className="flex justify-center flex-wrap gap-3">
+            <div className="glass rounded-2xl px-6 py-3">
+              <span className="text-white/80">{getYOE()}</span>
+            </div>
             <div className="glass rounded-2xl px-6 py-3">
               <span className="text-white/80">Java</span>
             </div>
@@ -39,9 +73,6 @@ const HomeSection = () => {
             </div>
             <div className="glass rounded-2xl px-6 py-3">
               <span className="text-white/80">AWS</span>
-            </div>
-            <div className="glass rounded-2xl px-6 py-3">
-              <span className="text-white/80">3+ YOE</span>
             </div>
           </div>
         </div>

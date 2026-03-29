@@ -1,8 +1,9 @@
 interface NavigationProps {
   onSectionClick: (section: string) => void;
+  activeSection: string;
 }
 
-const Navigation = ({ onSectionClick }: NavigationProps) => {
+const Navigation = ({ onSectionClick, activeSection }: NavigationProps) => {
   const sections = [
     { id: 'home', label: 'Home' },
     { id: 'experience', label: 'Experience' },
@@ -20,7 +21,11 @@ const Navigation = ({ onSectionClick }: NavigationProps) => {
             <button
               key={section.id}
               onClick={() => onSectionClick(section.id)}
-              className="px-6 py-3 rounded-xl text-white/80 hover:text-white hover:bg-white/10 hover:scale-110 transition-all duration-300 text-sm font-medium"
+              className={`px-6 py-3 rounded-xl text-sm font-medium transition-all duration-300 hover:scale-110 ${
+                activeSection === section.id
+                  ? 'bg-white/15 text-white'
+                  : 'text-white/80 hover:text-white hover:bg-white/10'
+              }`}
             >
               {section.label}
             </button>
