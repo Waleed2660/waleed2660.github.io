@@ -7,9 +7,9 @@ const techCategories = [
   {
     title: "Languages & Core Technologies",
     technologies: [
-      { name: "Java", iconPath: "/tech_icons/java.png" },
-      { name: "Python", iconPath: "/tech_icons/python.png" },
-      { name: "JavaScript", iconPath: "/tech_icons/javascript.png" },
+      { name: "Java", iconPath: "/tech_icons/java.webp" },
+      { name: "Python", iconPath: "/tech_icons/python.webp" },
+      { name: "JavaScript", iconPath: "/tech_icons/javascript.webp" },
       { name: "React", iconPath: "/tech_icons/react.svg" },
       { name: "Tailwind CSS", iconPath: "/tech_icons/tailwindcss.svg" },
       { name: "AngularJS", iconPath: "/tech_icons/angular.svg" },
@@ -26,10 +26,10 @@ const techCategories = [
       { name: "AWS", iconPath: "/tech_icons/aws.svg" },
       { name: "Amazon S3", iconPath: "/tech_icons/s3.svg" },
       { name: "Nginx", iconPath: "/tech_icons/nginx.svg" },
-      { name: "Apache Tomcat", iconPath: "/tech_icons/tomcat.png" },
+      { name: "Apache Tomcat", iconPath: "/tech_icons/tomcat.webp" },
       { name: "Apache ActiveMQ", iconPath: "/tech_icons/activemq.svg" },
-      { name: "Apache Kafka", iconPath: "/tech_icons/kafka.png" },
-      { name: "RabbitMQ", iconPath: "/tech_icons/rabbit.png" }
+      { name: "Apache Kafka", iconPath: "/tech_icons/kafka.webp" },
+      { name: "RabbitMQ", iconPath: "/tech_icons/rabbit.webp" }
     ]
   },
   {
@@ -38,9 +38,9 @@ const techCategories = [
       { name: "Git", iconPath: "/tech_icons/git.svg" },
       { name: "GitHub Actions", iconPath: "/tech_icons/githubactions.svg" },
       { name: "Jenkins", iconPath: "/tech_icons/jenkins.svg" },
-      { name: "IntelliJ Idea", iconPath: "/tech_icons/intellij.png" },
+      { name: "IntelliJ Idea", iconPath: "/tech_icons/intellij.webp" },
       { name: "JMeter", iconPath: "/tech_icons/jmeter.svg" },
-      { name: "k6", iconPath: "/tech_icons/k6-logo.svg.png" },
+      { name: "k6", iconPath: "/tech_icons/k6-logo.webp" },
     ]
   },
   {
@@ -53,7 +53,7 @@ const techCategories = [
       { name: "Elasticsearch", iconPath: "/tech_icons/elasticsearch.svg" },
       { name: "Prometheus", iconPath: "/tech_icons/prometheus.svg" },
       { name: "Grafana", iconPath: "/tech_icons/grafana.svg" },
-      { name: "Graphite", iconPath: "/tech_icons/graphite.png" },
+      { name: "Graphite", iconPath: "/tech_icons/graphite.webp" },
     ]
   }
 ];
@@ -86,6 +86,9 @@ const TechStack = () => {
                   <img 
                     src={iconPath} 
                     alt={name}
+                    width="40"
+                    height="40"
+                    loading="lazy"
                     className="w-10 h-10 mb-2 object-contain filter brightness-100 group-hover:brightness-110 transition-all"
                   />
                   <span className="text-white/80 text-xs font-medium text-center group-hover:text-white transition-colors">

@@ -108,8 +108,8 @@
   }
 
   @keyframes twinkle {
-    0%, 44%, 56%, 100% { opacity: 0.35; filter: none; }
-    50% { opacity: 1; filter: brightness(20) drop-shadow(0 0 6px #fff) drop-shadow(0 0 14px rgba(180, 210, 255, 1)) drop-shadow(0 0 24px rgba(180, 210, 255, 0.8)); }
+    0%, 44%, 56%, 100% { opacity: 0.35; transform: scale(1); }
+    50% { opacity: 1; transform: scale(3); box-shadow: 0 0 6px 2px #fff, 0 0 14px 4px rgba(180, 210, 255, 0.9); }
   }
 }
 

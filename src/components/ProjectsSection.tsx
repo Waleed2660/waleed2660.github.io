@@ -38,14 +38,14 @@ const ProjectsSection = () => {
       description: "Personal Cloud Storage webapp built with JS, React, Tailwind CSS. Allows file upload, download & directory navigation. Backend application is built with Java SpringBoot which uses Amazon S3 to store files.",
       tech: ["React", "Tailwind CSS", "Spring Boot", "AWS S3"],
       github: "https://github.com/Waleed2660/nimbus-ui",
-      image: "/projects/nimbus_logo.png"
+      image: "/projects/nimbus_logo.webp"
     },
     {
       title: "Fly Drone with Xbox Controller",
       description: "Created a script using Tello SDK & API to control DJI Tello drone with an Xbox Controller, including live video feed streaming from the drone's camera to your device.",
       tech: ["Python", "OpenCV", "DJI Tello SDK", "REST"],
       github: "https://github.com/Waleed2660/DJITello_Xbox_Controller",
-      image: "/projects/controller.png"
+      image: "/projects/controller.webp"
     },
     {
       title: "Handy",
@@ -80,6 +80,9 @@ const ProjectsSection = () => {
                   <img 
                     src={project.image} 
                     alt={project.title}
+                    width="40"
+                    height="40"
+                    loading="lazy"
                     className="w-10 h-10 object-contain brightness-90 group-hover:brightness-100 transition-all"
                   />
                   <div className="flex items-center gap-2 flex-wrap">
@@ -116,8 +119,11 @@ const ProjectsSection = () => {
                     >
                       <span className="text-sm opacity-40 group-hover/link:opacity-100 transition-opacity">View Code</span>
                       <img 
-                        src="/misc/github.png" 
+                        src="/misc/github.webp" 
                         alt="GitHub"
+                        width="24"
+                        height="24"
+                        loading="lazy"
                         className="w-6 h-6 object-contain brightness-50 group-hover/link:brightness-100 transition-all" 
                       />
                     </a>

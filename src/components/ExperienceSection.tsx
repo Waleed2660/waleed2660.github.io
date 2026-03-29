@@ -25,7 +25,7 @@ const ExperienceSection = () => {
       title: "Software Engineer",
       company: "Sainsbury's Tech",
       location: "Manchester, UK",
-      logo: "/work_exp/sainsburys.png",
+      logo: "/work_exp/sainsburys.webp",
       period: "2025 - Present",
       tech: ["Java", "Spring Boot", "Apache Kafka", "Kubernetes", "AWS"],
       description: [
@@ -41,7 +41,7 @@ const ExperienceSection = () => {
       title: "Software Engineer",
       company: "The Hut Group",
       location: "Manchester, UK",
-      logo: "/work_exp/thg.jpg",
+      logo: "/work_exp/thg.webp",
       period: "2022 - 2025",
       tech: ["Java", "Spring Boot", "Apache ActiveMQ"],
       promotions: [
@@ -109,6 +109,9 @@ const ExperienceSection = () => {
                       <img
                         src={exp.logo}
                         alt={`${exp.company} logo`}
+                        width="80"
+                        height="80"
+                        loading="lazy"
                         className="w-20 h-20 object-contain filter brightness-100"
                       />
                     </div>

@@ -34,8 +34,11 @@ const HomeSection = () => {
           {/* Person sitting on the left side */}
           <div className="absolute -top-20 sm:-top-30 left-2 sm:left-4 z-10">
             <img
-              src="../../dev_hoodie_sitting.png"
+              src="../../dev_hoodie_sitting.webp"
               alt="Profile image"
+              width="140"
+              height="190"
+              fetchPriority="high"
               className="w-[100px] h-[140px] sm:w-[140px] sm:h-[190px] rounded-lg [filter:drop-shadow(0_25px_15px_rgba(0,0,0,0.2))]"
             />
           </div>

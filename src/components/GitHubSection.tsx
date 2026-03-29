@@ -105,6 +105,8 @@ const GitHubSection = () => {
               <img
                 src="https://streak-stats.demolab.com?user=Waleed2660&theme=transparent&hide_border=true&stroke=ffffff20&ring=818cf8&fire=818cf8&currStreakLabel=ffffff99&sideLabels=ffffff99&currStreakNum=ffffff&sideNums=ffffff&dates=ffffff40&background=00000000"
                 alt="GitHub streak stats"
+                width="800"
+                height="200"
                 className="w-full rounded-xl opacity-90 hover:opacity-100 transition-opacity duration-300"
                 loading="lazy"
                 onError={(e) => {
@@ -169,6 +171,9 @@ const GitHubSection = () => {
             <img
               src={`https://ghchart.rshah.org/${CHART_COLOR}/${USERNAME}`}
               alt="GitHub contribution graph"
+              width="800"
+              height="128"
+              loading="lazy"
               className="w-full rounded-xl opacity-75 hover:opacity-100 transition-opacity duration-300"
               onError={(e) => {
                 (e.target as HTMLImageElement).parentElement!.style.display = "none";
