@@ -7,10 +7,12 @@ import ProjectsSection from '@/components/ProjectsSection';
 import GitHubSection from '@/components/GitHubSection';
 import TechStack from '@/components/TechStack';
 import ContactSection from '@/components/ContactSection';
+import CurrentlySection from '@/components/CurrentlySection';
+import ConferencesSection from '@/components/ConferencesSection';
 import FadeIn from '@/components/FadeIn';
 import { useActiveSection } from '@/hooks/use-active-section';
 
-const SECTION_IDS = ['home', 'experience', 'projects', 'github', 'tools', 'contact'];
+const SECTION_IDS = ['home', 'experience', 'projects', 'currently', 'conferences', 'github', 'tools', 'contact'];
 
 const Index = () => {
   const activeSection = useActiveSection(SECTION_IDS);
@@ -79,6 +81,12 @@ const Index = () => {
         </div>
         <div id="projects" className="scroll-mt-0">
           <FadeIn><ProjectsSection /></FadeIn>
+        </div>
+        <div id="currently" className="scroll-mt-0">
+          <FadeIn><CurrentlySection /></FadeIn>
+        </div>
+        <div id="conferences" className="scroll-mt-0">
+          <FadeIn><ConferencesSection /></FadeIn>
         </div>
         <div id="github" className="scroll-mt-0">
           <FadeIn><GitHubSection /></FadeIn>
