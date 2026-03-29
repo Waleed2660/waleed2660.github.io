@@ -44,7 +44,7 @@ const ContactSection = () => {
               className="glass rounded-2xl px-8 py-4 hover:bg-white/10 transition-all duration-300 cursor-pointer hover:scale-105 group flex items-center justify-center gap-3"
             >
               <img 
-                src="/misc/github.png" 
+                src="/misc/github.webp" 
                 alt="GitHub"
                 className="w-6 h-6 object-contain brightness-100" 
               />
