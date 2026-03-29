@@ -108,8 +108,8 @@
   }
 
   @keyframes twinkle {
-    0%, 44%, 56%, 100% { opacity: 0.35; transform: scale(1); }
-    50% { opacity: 1; transform: scale(3); box-shadow: 0 0 6px 2px #fff, 0 0 14px 4px rgba(180, 210, 255, 0.9); }
+    0%, 44%, 56%, 100% { opacity: 0.35; filter: brightness(1); }
+    50% { opacity: 1; filter: brightness(15); }
   }
 }
 
