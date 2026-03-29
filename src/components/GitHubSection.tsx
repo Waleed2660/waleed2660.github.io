@@ -22,56 +22,27 @@ const LANGUAGE_COLORS: Record<string, string> = {
   Rust: "#dea584",
 };
 
-interface GitHubUser {
-  followers: number;
-  public_repos: number;
-}
-
-interface Repo {
-  stargazers_count: number;
-  language: string | null;
-  fork: boolean;
-}
-
 interface Language {
   name: string;
   percentage: number;
 }
 
+interface GitHubStats {
+  followers: number;
+  public_repos: number;
+  stars: number;
+  languages: Language[];
+}
+
 const GitHubSection = () => {
-  const [user, setUser] = useState<GitHubUser | null>(null);
-  const [totalStars, setTotalStars] = useState<number | null>(null);
-  const [languages, setLanguages] = useState<Language[]>([]);
+  const [stats, setStats] = useState<GitHubStats | null>(null);
   const [chartSvg, setChartSvg] = useState<string | null>(null);
   const chartRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    fetch(`https://api.github.com/users/${USERNAME}`)
+    fetch('/github-stats.json')
       .then((r) => r.json())
-      .then((data: GitHubUser) => setUser(data))
-      .catch(() => {});
-
-    fetch(`https://api.github.com/users/${USERNAME}/repos?per_page=100&sort=updated`)
-      .then((r) => r.json())
-      .then((repos: Repo[]) => {
-        const ownRepos = repos.filter((r) => !r.fork);
-        setTotalStars(ownRepos.reduce((s, r) => s + r.stargazers_count, 0));
-
-        const langCount: Record<string, number> = {};
-        ownRepos.forEach((r) => {
-          if (r.language) langCount[r.language] = (langCount[r.language] || 0) + 1;
-        });
-        const sorted = Object.entries(langCount)
-          .sort((a, b) => b[1] - a[1])
-          .slice(0, 5);
-        const total = sorted.reduce((s, [, c]) => s + c, 0);
-        setLanguages(
-          sorted.map(([name, count]) => ({
-            name,
-            percentage: Math.round((count / total) * 100),
-          }))
-        );
-      })
+      .then((data: GitHubStats) => setStats(data))
       .catch(() => {});
 
     // Lazy-load chart only when section scrolls into view
@@ -110,19 +81,19 @@ const GitHubSection = () => {
             <div className="grid grid-cols-3 gap-4 text-center">
               <div className="glass rounded-2xl py-4 px-2">
                 <div className="text-2xl font-bold text-yellow-300">
-                  {totalStars !== null ? totalStars : "—"}
+                  {stats ? stats.stars : "—"}
                 </div>
                 <div className="text-white/50 text-xs mt-1">Stars</div>
               </div>
               <div className="glass rounded-2xl py-4 px-2">
                 <div className="text-2xl font-bold text-blue-300">
-                  {user ? user.followers : "—"}
+                  {stats ? stats.followers : "—"}
                 </div>
                 <div className="text-white/50 text-xs mt-1">Followers</div>
               </div>
               <div className="glass rounded-2xl py-4 px-2">
                 <div className="text-2xl font-bold text-purple-300">
-                  {user ? user.public_repos : "—"}
+                  {stats ? stats.public_repos : "—"}
                 </div>
                 <div className="text-white/50 text-xs mt-1">Repos</div>
               </div>
@@ -134,7 +105,7 @@ const GitHubSection = () => {
             <p className="text-white/40 text-xs uppercase tracking-widest mb-5">
               Top Languages
             </p>
-            {languages.length === 0 ? (
+            {!stats ? (
               <div className="space-y-3">
                 {[...Array(4)].map((_, i) => (
                   <div key={i} className="h-4 bg-white/10 rounded-full animate-pulse" />
@@ -142,7 +113,7 @@ const GitHubSection = () => {
               </div>
             ) : (
               <div className="space-y-4">
-                {languages.map(({ name, percentage }) => (
+                {stats.languages.map(({ name, percentage }) => (
                   <div key={name}>
                     <div className="flex justify-between text-sm mb-1.5">
                       <span className="text-white/80 flex items-center gap-2">
