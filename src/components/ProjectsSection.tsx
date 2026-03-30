@@ -8,10 +8,13 @@ type Project = {
   github: string;
   image: string;
   stars?: number;
+  forks?: number;
+  highlights?: string[];
 };
 
 const ProjectsSection = () => {
   const [springbootStars, setSpringbootStars] = useState<number>(94);
+  const [springbootForks, setSpringbootForks] = useState<number>(0);
 
   useEffect(() => {
     fetch("https://api.github.com/repos/Waleed2660/springboot-learning-kit")
@@ -19,6 +22,9 @@ const ProjectsSection = () => {
       .then((data) => {
         if (typeof data.stargazers_count === "number") {
           setSpringbootStars(data.stargazers_count);
+        }
+        if (typeof data.forks_count === "number") {
+          setSpringbootForks(data.forks_count);
         }
       })
       .catch(() => {/* keep fallback */});
@@ -31,7 +37,18 @@ const ProjectsSection = () => {
       tech: ["Spring Boot", "ActiveMQ", "PostgreSQL", "Prometheus", "GitHub Actions", "JMeter", "RabbitMQ", "Apache Camel"],
       github: "https://github.com/Waleed2660/springboot-learning-kit",
       image: "/tech_icons/springboot.svg",
-      stars: springbootStars
+      stars: springbootStars,
+      forks: springbootForks,
+      highlights: [
+        "Project setup with Spring Boot best practices & layered architecture",
+        "Apache ActiveMQ integration with Apache Camel routing",
+        "RabbitMQ messaging with Spring Boot",
+        "Database schema migration & query optimisation with Flyway",
+        "Unit & integration tests with JUnit and Testcontainers",
+        "Prometheus metrics integration & Grafana dashboards",
+        "Load testing with JMeter & k6",
+        "Code style enforcement with Checkstyle & formatting tools",
+      ]
     },
     {
       title: "Nimbus",
@@ -69,8 +86,65 @@ const ProjectsSection = () => {
         <h2 className="text-4xl md:text-6xl font-bold text-center mb-16 text-glow relative">
           Projects 🚀
         </h2>
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {projects.map((project, index) => (
+        <div className="flex flex-col gap-8">
+          {/* Featured project - full width */}
+          {projects.filter(p => p.stars).map((project, index) => (
+            <div
+              key={`featured-${index}`}
+              className="glass-strong featured-card rounded-3xl p-8 hover:bg-white/10 transition-all duration-500 hover:scale-[1.02] group"
+            >
+              <div className="flex flex-col md:flex-row gap-8">
+                <div className="flex-shrink-0 flex flex-col items-center justify-center gap-3">
+                  <img
+                    src={project.image}
+                    alt={project.title}
+                    width="72"
+                    height="72"
+                    loading="lazy"
+                    className="w-18 h-18 object-contain brightness-90 group-hover:brightness-100 transition-all"
+                    style={{ width: 72, height: 72 }}
+                  />
+                </div>
+                <div className="flex flex-col flex-1">
+                  <div className="flex items-center gap-3 mb-1 flex-wrap">
+                    <h3 className="text-2xl font-semibold text-white group-hover:text-blue-300 transition-colors">{project.title}</h3>
+                    <span className="glass rounded-xl px-3 py-1 text-xs font-bold text-blue-300/80 tracking-widest uppercase">Featured</span>
+                    <span className="glass rounded-xl px-3 py-1 text-sm text-yellow-300/90 whitespace-nowrap">★ {project.stars}</span>
+                    {project.forks !== undefined && project.forks > 0 && (
+                      <span className="glass rounded-xl px-3 py-1 text-sm text-white/50 whitespace-nowrap">⑂ {project.forks}</span>
+                    )}
+                  </div>
+                  <p className="text-white/70 mb-4 leading-relaxed">{project.description}</p>
+                  {project.highlights && (
+                    <ul className="mb-6 grid sm:grid-cols-2 gap-x-6 gap-y-2">
+                      {project.highlights.map((point, pi) => (
+                        <li key={pi} className="flex items-start gap-2 text-white/60 text-sm">
+                          <span className="text-blue-400/70 mt-0.5 flex-shrink-0">▸</span>
+                          {point}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                  <div className="flex justify-between items-end mt-auto">
+                    <div className="flex flex-wrap gap-2">
+                      {project.tech.map((tech, ti) => (
+                        <div key={ti} className="glass rounded-xl px-3 py-1 text-white/80 text-sm inline-block">{tech}</div>
+                      ))}
+                    </div>
+                    <a href={project.github} target="_blank" rel="noopener noreferrer"
+                      className="flex items-center gap-2 text-white/50 hover:text-blue-300 transition-colors group/link ml-4 flex-shrink-0">
+                      <span className="text-sm opacity-40 group-hover/link:opacity-100 transition-opacity">View Code</span>
+                      <img src="/misc/github.webp" alt="GitHub" width="24" height="24" loading="lazy"
+                        className="w-6 h-6 object-contain brightness-50 group-hover/link:brightness-100 transition-all" />
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+          {/* Rest of projects grid */}
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {projects.filter(p => !p.stars).map((project, index) => (
             <div
               key={index}
               className={`glass-strong rounded-3xl p-8 hover:bg-white/10 transition-all duration-500 hover:scale-105 group${project.stars ? " featured-card" : ""}`}
@@ -132,6 +206,7 @@ const ProjectsSection = () => {
               </div>
             </div>
           ))}
+          </div>
         </div>
       </div>
     </section>
