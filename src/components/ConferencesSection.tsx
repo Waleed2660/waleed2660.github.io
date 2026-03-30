@@ -24,11 +24,12 @@ type Conference = {
   emoji: string;
   accentColor: string;
   tagline: string;
-  summary: string;
+  summary: string | React.ReactNode;
   talks: Talk[];
   tags: string[];
   links: { label: string; url: string; icon?: string }[];
   photos: PhotoSlot[];
+  gridHeight?: string;
 };
 
 const conferences: Conference[] = [
@@ -112,6 +113,43 @@ const conferences: Conference[] = [
     ],
   },
   {
+    name: "Sainsbury's Tech Con",
+    shortName: "TECH CON",
+    edition: "2025",
+    date: "June 2025",
+    location: "London, UK",
+    emoji: "🏆",
+    accentColor: "from-orange-500/20 to-yellow-500/10",
+    tagline: "Sainsbury's Digital, Tech and Data Conference",
+    summary: (
+      <>
+        My first ever internal tech conference and what a way to experience it. My team walked away with the{" "}
+        <span className="text-yellow-300 font-semibold">Strategic Team of the Year</span>{" "}
+        award. Heard from a brilliant lineup of speakers including Bruce Daisley and Kimberly Wilson across a range of topics, and spent time exploring stands from various companies showcasing their latest work.
+      </>
+    ),
+    talks: [
+      {
+        title: "Bruce Daisley & Kimberly Wilson",
+        takeaway:
+          "Compelling talks on culture, performance, and what it actually takes to build teams that do great work — the kind of perspective that sticks with you well after the conference ends.",
+      },
+      {
+        title: "Industry Stands & Showcases",
+        takeaway:
+          "Explored stands from a wide range of companies showing off their latest tech and achievements — a good reminder of just how fast things are moving across the industry.",
+      },
+    ],
+    tags: ["Sainsbury's", "Tech Conference", "Internal Event", "Award", "Digital", "Data"],
+    links: [
+      { label: "Sainsbury's Tech", url: "https://www.sainsburys.jobs/teams/technology" },
+    ],
+    photos: [
+      { src: "/conferences/tech_con/team.webp", alt: "Team at Sainsbury's Tech Con", span: "col" },
+      { src: "/conferences/tech_con/award.webp", alt: "Strategic Team of the Year award" }
+    ],
+  },
+  {
     name: "Capital Connections",
     shortName: "CAP CON",
     edition: "2026",
@@ -145,14 +183,14 @@ const conferences: Conference[] = [
   },
 ];
 
-const PhotoGrid = ({ photos, accent }: { photos: PhotoSlot[]; accent: string }) => {
+const PhotoGrid = ({ photos, accent, gridHeight = "h-64" }: { photos: PhotoSlot[]; accent: string; gridHeight?: string }) => {
   const [loaded, setLoaded] = useState<Record<number, boolean>>({});
   const [errored, setErrored] = useState<Record<number, boolean>>({});
 
   const placeholderEmojis = ["📸", "🎙️", "💡", "🧑‍💻", "🎯", "☕"];
 
   return (
-    <div className={photos.length <= 2 ? "flex gap-2 h-64" : "grid grid-cols-3 grid-rows-2 gap-2 h-64 overflow-hidden"}>
+    <div className={photos.length <= 2 ? `flex gap-2 ${gridHeight}` : `grid grid-cols-3 grid-rows-2 gap-2 ${gridHeight} overflow-hidden`}>
       {photos.map((photo, i) => {
         const isLoaded = loaded[i];
         const isErrored = errored[i];
@@ -327,7 +365,7 @@ const ConferencesSection = () => {
                   <p className="text-white/40 text-xs uppercase tracking-widest font-semibold mb-3">
                     Photos
                   </p>
-                  <PhotoGrid photos={conf.photos} accent={conf.accentColor} />
+                  <PhotoGrid photos={conf.photos} accent={conf.accentColor} gridHeight={conf.gridHeight} />
                 </div>
               </div>
             </div>
