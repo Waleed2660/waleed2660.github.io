@@ -29,7 +29,8 @@ const Index = () => {
     }
   };
 
-  const stars = useMemo(() => Array.from({ length: 20 }, (_, i) => ({
+  const starCount = window.innerWidth < 768 ? 8 : 20;
+  const stars = useMemo(() => Array.from({ length: starCount }, (_, i) => ({
     id: i,
     left: `${Math.random() * 100}%`,
     top: `${Math.random() * 100}%`,
