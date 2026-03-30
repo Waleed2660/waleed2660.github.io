@@ -108,8 +108,8 @@
   }
 
   @keyframes twinkle {
-    0%, 44%, 56%, 100% { opacity: 0.35; filter: brightness(1); }
-    50% { opacity: 1; filter: brightness(15); }
+    0%, 44%, 56%, 100% { opacity: 0.2; }
+    50% { opacity: 1; }
   }
 
   @keyframes disintegrate {

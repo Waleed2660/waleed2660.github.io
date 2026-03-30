@@ -72,12 +72,10 @@ const HomeSection = () => {
               </span>
             </div>
 
-            {typingDone && (
-              <div className="inline-flex items-center gap-2 mb-8 text-white/40 animate-[fadeIn_0.5s_ease-in]">
-                <span>📍</span>
-                <span className="text-lg">Manchester, UK</span>
-              </div>
-            )}
+            <div className={`inline-flex items-center gap-2 mb-8 text-white/40 transition-opacity duration-500 ${typingDone ? 'opacity-100' : 'opacity-0'}`}>
+              <span>📍</span>
+              <span className="text-lg">Manchester, UK</span>
+            </div>
 
             <p className="text-xl sm:text-2xl text-white/70 mb-12 max-w-3xl mx-auto leading-relaxed">
               Backend engineer obsessed with scale and performance — Java, Kafka, Kubernetes, and the satisfaction of a system that holds under pressure

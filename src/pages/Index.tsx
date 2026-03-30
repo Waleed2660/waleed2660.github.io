@@ -1,17 +1,18 @@
 
-import { useEffect, useMemo } from 'react';
+import { lazy, Suspense, useEffect, useMemo } from 'react';
 import Navigation from '@/components/Navigation';
 import HomeSection from '@/components/HomeSection';
-import ExperienceSection from '@/components/ExperienceSection';
-import ProjectsSection from '@/components/ProjectsSection';
-import GitHubSection from '@/components/GitHubSection';
-import TechStack from '@/components/TechStack';
-import ContactSection from '@/components/ContactSection';
-import CurrentlySection from '@/components/CurrentlySection';
-import ConferencesSection from '@/components/ConferencesSection';
-import ResearchSection from '@/components/ResearchSection';
 import FadeIn from '@/components/FadeIn';
 import { useActiveSection } from '@/hooks/use-active-section';
+
+const ExperienceSection = lazy(() => import('@/components/ExperienceSection'));
+const ProjectsSection = lazy(() => import('@/components/ProjectsSection'));
+const GitHubSection = lazy(() => import('@/components/GitHubSection'));
+const TechStack = lazy(() => import('@/components/TechStack'));
+const ContactSection = lazy(() => import('@/components/ContactSection'));
+const CurrentlySection = lazy(() => import('@/components/CurrentlySection'));
+const ConferencesSection = lazy(() => import('@/components/ConferencesSection'));
+const ResearchSection = lazy(() => import('@/components/ResearchSection'));
 
 const SECTION_IDS = ['home', 'experience', 'projects', 'research', 'conferences', 'github', 'tools', 'currently', 'contact'];
 
@@ -90,30 +91,32 @@ const Index = () => {
         <div id="home" className="scroll-mt-0">
           <HomeSection />
         </div>
-        <div id="experience" className="scroll-mt-32">
-          <FadeIn><ExperienceSection /></FadeIn>
-        </div>
-        <div id="projects" className="scroll-mt-0">
-          <FadeIn><ProjectsSection /></FadeIn>
-        </div>
-        <div id="research" className="scroll-mt-0">
-          <FadeIn><ResearchSection /></FadeIn>
-        </div>
-        <div id="conferences" className="scroll-mt-0">
-          <FadeIn><ConferencesSection /></FadeIn>
-        </div>
-        <div id="github" className="scroll-mt-0">
-          <FadeIn><GitHubSection /></FadeIn>
-        </div>
-        <div id="tools" className="scroll-mt-0">
-          <FadeIn><TechStack /></FadeIn>
-        </div>
-        <div id="currently" className="scroll-mt-0">
-          <FadeIn><CurrentlySection /></FadeIn>
-        </div>
-        <div id="contact" className="scroll-mt-10">
-          <FadeIn><ContactSection /></FadeIn>
-        </div>
+        <Suspense fallback={null}>
+          <div id="experience" className="scroll-mt-32">
+            <FadeIn><ExperienceSection /></FadeIn>
+          </div>
+          <div id="projects" className="scroll-mt-0">
+            <FadeIn><ProjectsSection /></FadeIn>
+          </div>
+          <div id="research" className="scroll-mt-0">
+            <FadeIn><ResearchSection /></FadeIn>
+          </div>
+          <div id="conferences" className="scroll-mt-0">
+            <FadeIn><ConferencesSection /></FadeIn>
+          </div>
+          <div id="github" className="scroll-mt-0">
+            <FadeIn><GitHubSection /></FadeIn>
+          </div>
+          <div id="tools" className="scroll-mt-0">
+            <FadeIn><TechStack /></FadeIn>
+          </div>
+          <div id="currently" className="scroll-mt-0">
+            <FadeIn><CurrentlySection /></FadeIn>
+          </div>
+          <div id="contact" className="scroll-mt-10">
+            <FadeIn><ContactSection /></FadeIn>
+          </div>
+        </Suspense>
       </main>
       <footer className="relative z-10 text-center py-6 text-sm text-white/40">
         © {new Date().getFullYear()} Waleed Tariq. All rights reserved.
