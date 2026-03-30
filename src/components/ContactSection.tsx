@@ -7,7 +7,7 @@ const ContactSection = () => {
         <h2 className="text-4xl md:text-6xl font-bold mb-16 text-glow">
           Get In Touch 📬
         </h2>
-        <div className="glass-strong rounded-3xl p-12">
+        <div className="glass-strong rounded-3xl p-12 hover:scale-[1.02] hover:bg-white/10 transition-all duration-500">
           <p className="text-xl text-white/70 mb-8 leading-relaxed">
             Whether you're looking to collaborate on innovative projects or explore new opportunities, I'm always excited to connect. Drop me a message!
           </p>

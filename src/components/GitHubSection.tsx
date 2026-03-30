@@ -76,7 +76,7 @@ const GitHubSection = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Left: Stats */}
-          <div className="glass-strong rounded-3xl p-8">
+          <div className="glass-strong rounded-3xl p-8 hover:scale-[1.02] hover:bg-white/10 transition-all duration-500">
             <p className="text-white/40 text-xs uppercase tracking-widest mb-5">Stats</p>
             <div className="grid grid-cols-3 gap-4 text-center">
               <div className="glass rounded-2xl py-4 px-2">
@@ -117,7 +117,7 @@ const GitHubSection = () => {
           </div>
 
           {/* Right: Top Languages */}
-          <div className="glass-strong rounded-3xl p-8">
+          <div className="glass-strong rounded-3xl p-8 hover:scale-[1.02] hover:bg-white/10 transition-all duration-500">
             <p className="text-white/40 text-xs uppercase tracking-widest mb-5">
               Top Languages
             </p>
@@ -158,7 +158,7 @@ const GitHubSection = () => {
         </div>
 
         {/* Full-width Contribution Graph */}
-        <div ref={chartRef} className="glass-strong rounded-3xl p-8 mt-6">
+        <div ref={chartRef} className="glass-strong rounded-3xl p-8 mt-6 hover:scale-[1.02] hover:bg-white/10 transition-all duration-500">
           <p className="text-white/40 text-xs uppercase tracking-widest mb-4">
             Contribution Graph
           </p>

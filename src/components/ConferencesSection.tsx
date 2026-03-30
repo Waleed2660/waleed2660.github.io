@@ -217,7 +217,7 @@ const ConferencesSection = () => {
           {conferences.map((conf, index) => (
             <div
               key={index}
-              className="glass-strong rounded-3xl overflow-hidden hover:bg-white/10 transition-all duration-500 group"
+              className="glass-strong rounded-3xl overflow-hidden hover:bg-white/10 hover:scale-[1.02] transition-all duration-500 group"
             >
               {/* Header band */}
               <div className={`bg-gradient-to-r ${conf.accentColor} px-8 py-5 flex flex-wrap items-center justify-between gap-4 border-b border-white/5`}>
@@ -274,7 +274,7 @@ const ConferencesSection = () => {
                       Key Sessions & Takeaways ({conf.talks.length})
                     </button>
 
-                    {expandedTalks[index] && (
+                    <div className={`overflow-hidden transition-all duration-500 ${expandedTalks[index] ? 'max-h-[800px] opacity-100' : 'max-h-0 opacity-0'}`}>
                       <div className="flex flex-col gap-3">
                         {conf.talks.map((talk, ti) => (
                           <div
@@ -289,7 +289,7 @@ const ConferencesSection = () => {
                           </div>
                         ))}
                       </div>
-                    )}
+                    </div>
                   </div>
 
                   {/* Tags */}
