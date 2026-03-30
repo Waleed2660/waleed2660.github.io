@@ -78,7 +78,7 @@ const HomeSection = () => {
             </div>
 
             <p className="text-xl sm:text-2xl text-white/70 mb-12 max-w-3xl mx-auto leading-relaxed">
-              Backend engineer obsessed with scale and performance — Java, Kafka, Kubernetes, and the satisfaction of a system that holds under pressure
+              Backend engineer obsessed with scale and performance ~ Java, Kafka, Kubernetes, and the satisfaction of a system that holds under pressure
             </p>
 
             <div className="flex justify-center flex-wrap gap-3">
