@@ -32,6 +32,7 @@ const ContactSection = () => {
               <img 
                 src="/misc/linkedin.webp" 
                 alt="LinkedIn"
+                loading="lazy"
                 className="w-6 h-6 object-contain brightness-100" 
               />
               <span className="text-white/80 text-lg group-hover:text-blue-400">LinkedIn</span>
@@ -46,6 +47,7 @@ const ContactSection = () => {
               <img 
                 src="/misc/github.webp" 
                 alt="GitHub"
+                loading="lazy"
                 className="w-6 h-6 object-contain brightness-100" 
               />
               <span className="text-white/80 text-lg group-hover:text-blue-400">GitHub</span>
