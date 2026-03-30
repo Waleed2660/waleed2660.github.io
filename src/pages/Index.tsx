@@ -13,7 +13,7 @@ import ResearchSection from '@/components/ResearchSection';
 import FadeIn from '@/components/FadeIn';
 import { useActiveSection } from '@/hooks/use-active-section';
 
-const SECTION_IDS = ['home', 'experience', 'projects', 'currently', 'conferences', 'research', 'github', 'tools', 'contact'];
+const SECTION_IDS = ['home', 'experience', 'projects', 'research', 'conferences', 'github', 'tools', 'currently', 'contact'];
 
 const Index = () => {
   const activeSection = useActiveSection(SECTION_IDS);
@@ -96,20 +96,20 @@ const Index = () => {
         <div id="projects" className="scroll-mt-0">
           <FadeIn><ProjectsSection /></FadeIn>
         </div>
-        <div id="currently" className="scroll-mt-0">
-          <FadeIn><CurrentlySection /></FadeIn>
+        <div id="research" className="scroll-mt-0">
+          <FadeIn><ResearchSection /></FadeIn>
         </div>
         <div id="conferences" className="scroll-mt-0">
           <FadeIn><ConferencesSection /></FadeIn>
-        </div>
-        <div id="research" className="scroll-mt-0">
-          <FadeIn><ResearchSection /></FadeIn>
         </div>
         <div id="github" className="scroll-mt-0">
           <FadeIn><GitHubSection /></FadeIn>
         </div>
         <div id="tools" className="scroll-mt-0">
           <FadeIn><TechStack /></FadeIn>
+        </div>
+        <div id="currently" className="scroll-mt-0">
+          <FadeIn><CurrentlySection /></FadeIn>
         </div>
         <div id="contact" className="scroll-mt-10">
           <FadeIn><ContactSection /></FadeIn>

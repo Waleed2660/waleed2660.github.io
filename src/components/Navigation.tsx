@@ -8,11 +8,11 @@ const Navigation = ({ onSectionClick, activeSection }: NavigationProps) => {
     { id: 'home', label: 'Home' },
     { id: 'experience', label: 'Experience' },
     { id: 'projects', label: 'Projects' },
-    { id: 'currently', label: 'Exploring' },
-    { id: 'conferences', label: 'Events' },
     { id: 'research', label: 'Research' },
+    { id: 'conferences', label: 'Events' },
     { id: 'github', label: 'GitHub' },
     { id: 'tools', label: 'Stack' },
+    { id: 'currently', label: 'Exploring' },
     { id: 'contact', label: 'Contact' }
   ];
 
