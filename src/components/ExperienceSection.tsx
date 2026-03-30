@@ -15,6 +15,7 @@ interface Experience {
   tech: string[];
   description: string[];
   promotions?: Promotion[];
+  brandColor: string;
 }
 
 const ExperienceSection = () => {
@@ -28,6 +29,7 @@ const ExperienceSection = () => {
       logo: "/work_exp/sainsburys.webp",
       period: "2025 - Present",
       tech: ["Java", "Spring Boot", "Apache Kafka", "Kubernetes", "AWS"],
+      brandColor: "bg-gradient-to-br from-orange-500/10 to-amber-500/10 border-orange-500/30 hover:border-orange-500/50",
       description: [
         "Part of Digital Fulfilment team, developing critical backend services that calculate accurate delivery timelines for customer orders",
         "Currently developing a new order reservation proposition, enabling advanced inventory management and improved customer experience through real-time stock availability",
@@ -44,6 +46,7 @@ const ExperienceSection = () => {
       logo: "/work_exp/thg.webp",
       period: "2022 - 2025",
       tech: ["Java", "Spring Boot", "Apache ActiveMQ"],
+      brandColor: "bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border-cyan-500/40 hover:border-cyan-400/60",
       promotions: [
         { title: "Software Engineer", period: "2024 - 2025" },
         { title: "Graduate Software Engineer", period: "2022 - 2024" },
@@ -64,6 +67,7 @@ const ExperienceSection = () => {
       logo: "/work_exp/lancaster-uni.webp",
       period: "2022 - 2022",
       tech: ["Python", "Machine Learning", "OpenCV", "PyTorch", "Data Annotations"],
+      brandColor: "bg-gradient-to-br from-red-500/10 to-rose-500/10 border-red-500/30 hover:border-red-500/50",
       description: [
         "This research project was offered to me as an extension to my Final Year Project. My research was aimed at fine tuning & evaluating YOLOv3 and YOLOv5 machine learning models to detect landfills from both satellite and drone imagery.",
         "These models were trained on Google cloud for weeks while being tested & evaluated regularly to fine tune training parameters.",
@@ -78,118 +82,118 @@ const ExperienceSection = () => {
 
   return (
     <section className="flex items-center justify-center px-6 py-24 relative z-0">
-      <div className="max-w-4xl w-full">
+      <div className="max-w-6xl w-full">
         <h2 className="text-4xl md:text-6xl font-bold text-center mb-8 sm:mb-16 text-glow">
-          Experience 🎯
+          Experience
         </h2>
 
-        {/* Timeline container */}
-        <div className="relative">
-          {/* Vertical line */}
-          <div className="absolute left-[25px] top-6 bottom-6 w-px bg-white/10" />
+        {/* Cards Grid */}
+        <div className="space-y-6">
+          {experiences.map((exp, index) => (
+            <div key={index} className="group">
+              {/* Card */}
+              <div
+                className={`glass-strong rounded-2xl p-8 transition-all duration-300 border
+                  ${exp.brandColor}
+                  ${expandedCard === index ? 'scale-[1.01]' : 'hover:scale-[1.01] hover:-translate-y-1'}`}
+              >
+                <div className="flex flex-col lg:flex-row gap-6">
+                  {/* Logo */}
+                  <div className="flex-shrink-0">
+                    <img
+                      src={exp.logo}
+                      alt={`${exp.company} logo`}
+                      width="96"
+                      height="96"
+                      loading="lazy"
+                      className="w-24 h-24 object-contain filter brightness-100 hover:scale-110 transition-transform"
+                    />
+                  </div>
 
-          <div className="space-y-8">
-            {experiences.map((exp, index) => (
-              <div key={index} className="relative pl-16">
-                {/* Timeline dot */}
-                <div className={`absolute left-[14px] top-9 w-[22px] h-[22px] rounded-full border-2 z-10 transition-colors duration-300
-                  ${expandedCard === index
-                    ? 'bg-blue-400 border-blue-300 shadow-[0_0_12px_rgba(96,165,250,0.6)]'
-                    : 'bg-slate-800 border-white/30 group-hover:border-blue-400'
-                  }`}
-                />
-
-                {/* Card */}
-                <div
-                  className={`glass-strong rounded-3xl p-8 transition-all duration-500 hover:bg-white/10
-                    ${expandedCard === index ? 'scale-[1.02]' : 'hover:scale-[1.02]'}`}
-                >
-                  <div className="flex flex-col md:flex-row gap-8">
-                    <div className="flex-shrink-0 flex items-center justify-center">
-                      <img
-                        src={exp.logo}
-                        alt={`${exp.company} logo`}
-                        width="80"
-                        height="80"
-                        loading="lazy"
-                        className="w-20 h-20 object-contain filter brightness-100"
-                      />
+                  <div className="flex-grow min-w-0">
+                    {/* Header */}
+                    <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-3">
+                      <div className="flex-1">
+                        <h3 className="text-2xl font-bold text-white mb-1">{exp.title}</h3>
+                        <p className="text-xl text-white/80">{exp.company}</p>
+                        <p className="text-white/50 text-sm mt-1">{exp.location}</p>
+                      </div>
+                      <div className="flex-shrink-0">
+                        <span className="glass px-4 py-2 rounded-lg text-blue-300 text-sm font-semibold whitespace-nowrap inline-block">
+                          {exp.period}
+                        </span>
+                      </div>
                     </div>
 
-                    <div className="flex-grow">
-                      <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
-                        <h3 className="text-2xl font-semibold text-white">{exp.title}</h3>
-                        <span className="text-blue-300 text-lg">{exp.period}</span>
-                      </div>
-                      <div className="space-y-1 mb-4">
-                        <p className="text-white/70 text-xl">{exp.company}</p>
-                        <p className="text-white/40 text-sm">{exp.location}</p>
-                      </div>
-
-                      {/* Promotion ladder */}
-                      {exp.promotions && (
-                        <div className="flex flex-col mb-4 w-fit">
+                    {/* Promotion ladder */}
+                    {exp.promotions && (
+                      <div className="glass rounded-xl p-3 mb-4 w-fit bg-gradient-to-r from-green-500/10 to-blue-500/10 border border-green-500/20">
+                        <div className="flex items-center gap-3">
                           {exp.promotions.map((p, i) => (
-                            <div key={i} className="flex flex-col items-start">
-                              <div className="flex items-center gap-2">
-                                <span className="text-white/70 text-sm font-medium">{p.title}</span>
-                                <span className="text-white/30 text-xs">{p.period}</span>
+                            <div key={i} className="flex items-center gap-2">
+                              <div className="flex flex-col">
+                                <span className="text-white/90 text-xs font-semibold">{p.title}</span>
+                                <span className="text-white/40 text-[10px]">{p.period}</span>
                               </div>
                               {i < exp.promotions!.length - 1 && (
-                                <span className="text-green-400/60 text-xs my-1 w-full text-center">↑</span>
+                                <span className="text-green-400 text-lg">→</span>
                               )}
                             </div>
                           ))}
                         </div>
-                      )}
-                      <div className="flex flex-wrap gap-3 mb-4">
-                        {exp.tech.map((tech, techIndex) => (
-                          <span
-                            key={techIndex}
-                            className="glass rounded-xl px-4 py-2 text-white/80 text-sm"
-                          >
-                            {tech}
-                          </span>
-                        ))}
                       </div>
+                    )}
 
-                      {/* Description - shows when expanded */}
-                      <div className={`overflow-hidden transition-all duration-700 ${
-                        expandedCard === index ? 'max-h-[800px] opacity-100' : 'max-h-0 opacity-0'
-                      }`}>
-                        <ul className="space-y-4 py-2">
+                    {/* Tech Stack */}
+                    <div className="flex flex-wrap gap-2 mb-3">
+                      {exp.tech.map((tech, techIndex) => (
+                        <span
+                          key={techIndex}
+                          className="glass rounded-lg px-3 py-1 text-white/70 text-xs hover:text-white hover:bg-white/10 transition-all"
+                        >
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
+
+                    {/* Description - shows when expanded */}
+                    <div className={`overflow-hidden transition-all duration-500 ${
+                      expandedCard === index ? 'max-h-[1000px] opacity-100 mt-4' : 'max-h-0 opacity-0'
+                    }`}>
+                      <div className="border-t border-white/10 pt-4">
+                        <ul className="space-y-3">
                           {exp.description.map((item, i) => (
                             <li key={i} className="flex items-start gap-3">
-                              <CircleDot className="w-5 h-5 mt-1 text-blue-300/70 flex-shrink-0" />
-                              <span className="text-white/70 text-lg leading-relaxed">{item}</span>
+                              <CircleDot className="w-4 h-4 mt-1 text-blue-400/70 flex-shrink-0" />
+                              <span className="text-white/70 text-sm leading-relaxed">{item}</span>
                             </li>
                           ))}
                         </ul>
                       </div>
                     </div>
-
-                    {/* Expand/Collapse Button */}
-                    <button
-                      onClick={() => toggleCard(index)}
-                      className="self-end md:self-center flex-shrink-0 text-white/50 hover:text-white/90 transition-colors flex flex-col items-center"
-                    >
-                      {expandedCard === index ? (
-                        <>
-                          <ChevronUp className="w-6 h-6" />
-                          <span className="text-sm mt-1">Collapse</span>
-                        </>
-                      ) : (
-                        <>
-                          <ChevronDown className="w-6 h-6" />
-                          <span className="text-sm mt-1">Expand</span>
-                        </>
-                      )}
-                    </button>
                   </div>
                 </div>
+
+                {/* Expand/Collapse Button */}
+                <button
+                  onClick={() => toggleCard(index)}
+                  className="mt-3 mx-auto flex items-center gap-2 text-white/50 hover:text-white/90 transition-all hover:bg-white/5 px-4 py-1.5 rounded-lg text-sm group"
+                >
+                  {expandedCard === index ? (
+                    <>
+                      <span className="font-medium">Show Less</span>
+                      <ChevronUp className="w-4 h-4 group-hover:-translate-y-0.5 transition-transform" />
+                    </>
+                  ) : (
+                    <>
+                      <span className="font-medium">Show More</span>
+                      <ChevronDown className="w-4 h-4 group-hover:translate-y-0.5 transition-transform" />
+                    </>
+                  )}
+                </button>
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
       </div>
     </section>

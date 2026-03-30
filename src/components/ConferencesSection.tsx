@@ -117,7 +117,7 @@ const conferences: Conference[] = [
     shortName: "TECH CON",
     edition: "2025",
     date: "June 2025",
-    location: "London, UK",
+    location: "Birmingham, UK",
     emoji: "🏆",
     accentColor: "from-orange-500/20 to-yellow-500/10",
     tagline: "Sainsbury's Digital, Tech and Data Conference",
@@ -208,7 +208,10 @@ const PhotoGrid = ({ photos, accent, gridHeight = "h-64" }: { photos: PhotoSlot[
               <img
                 src={photo.src}
                 alt={photo.alt}
-                loading="lazy"
+                loading={i === 0 ? "eager" : "lazy"}
+                decoding="async"
+                width="400"
+                height="300"
                 className={`w-full h-full object-cover transition-all duration-500 group-hover/photo:scale-105 ${
                   isLoaded ? "opacity-100" : "opacity-0"
                 }`}
@@ -245,7 +248,7 @@ const ConferencesSection = () => {
     <section className="flex items-center justify-center px-6 py-24 relative z-20">
       <div className="max-w-6xl w-full">
         <h2 className="text-4xl md:text-6xl font-bold text-center mb-4 text-glow relative">
-          On The Ground 🎟️
+          On The Ground
         </h2>
         <p className="text-center text-white/50 mb-16 text-lg">
           Conferences, meetups & events — things I attended and what I took away
@@ -255,7 +258,8 @@ const ConferencesSection = () => {
           {conferences.map((conf, index) => (
             <div
               key={index}
-              className="glass-strong rounded-3xl overflow-hidden hover:bg-white/10 hover:scale-[1.02] transition-all duration-500 group"
+              className="glass-strong rounded-3xl overflow-hidden hover:bg-white/10 hover:scale-[1.02] transition-all duration-500 group will-change-transform"
+              style={{ contentVisibility: index > 0 ? 'auto' : 'visible' }}
             >
               {/* Header band */}
               <div className={`bg-gradient-to-r ${conf.accentColor} px-8 py-5 flex flex-wrap items-center justify-between gap-4 border-b border-white/5`}>
@@ -270,9 +274,6 @@ const ConferencesSection = () => {
                       <h3 className="text-2xl font-bold text-white group-hover:text-blue-300 transition-colors">
                         {conf.name}
                       </h3>
-                      <span className="glass rounded-xl px-3 py-1 text-xs font-bold text-white/70 tracking-widest uppercase">
-                        {conf.edition}
-                      </span>
                     </div>
                     <p className="text-white/50 text-sm mt-0.5 italic">{conf.tagline}</p>
                   </div>

@@ -10,6 +10,7 @@ const Navigation = ({ onSectionClick, activeSection }: NavigationProps) => {
     { id: 'projects', label: 'Projects' },
     { id: 'currently', label: 'Exploring' },
     { id: 'conferences', label: 'Events' },
+    { id: 'research', label: 'Research' },
     { id: 'github', label: 'GitHub' },
     { id: 'tools', label: 'Stack' },
     { id: 'contact', label: 'Contact' }

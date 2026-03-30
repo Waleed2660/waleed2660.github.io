@@ -111,6 +111,21 @@
     0%, 44%, 56%, 100% { opacity: 0.35; filter: brightness(1); }
     50% { opacity: 1; filter: brightness(15); }
   }
+
+  @keyframes disintegrate {
+    0% {
+      transform: translate(0, 0) scale(1);
+      opacity: 1;
+    }
+    100% {
+      transform: translate(var(--tx), var(--ty)) scale(0);
+      opacity: 0;
+    }
+  }
+
+  .animate-disintegrate {
+    animation: disintegrate 0.8s ease-out forwards;
+  }
 }
 
 .relative {

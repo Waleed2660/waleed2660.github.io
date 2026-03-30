@@ -71,7 +71,7 @@ const GitHubSection = () => {
     <section className="flex items-center justify-center px-6 py-24 relative z-10">
       <div className="max-w-4xl w-full">
         <h2 className="text-4xl md:text-6xl font-bold text-center mb-16 text-glow">
-          GitHub 🐙
+          GitHub
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

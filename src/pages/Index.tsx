@@ -9,10 +9,11 @@ import TechStack from '@/components/TechStack';
 import ContactSection from '@/components/ContactSection';
 import CurrentlySection from '@/components/CurrentlySection';
 import ConferencesSection from '@/components/ConferencesSection';
+import ResearchSection from '@/components/ResearchSection';
 import FadeIn from '@/components/FadeIn';
 import { useActiveSection } from '@/hooks/use-active-section';
 
-const SECTION_IDS = ['home', 'experience', 'projects', 'currently', 'conferences', 'github', 'tools', 'contact'];
+const SECTION_IDS = ['home', 'experience', 'projects', 'currently', 'conferences', 'research', 'github', 'tools', 'contact'];
 
 const Index = () => {
   const activeSection = useActiveSection(SECTION_IDS);
@@ -34,6 +35,19 @@ const Index = () => {
     duration: `${10 + Math.random() * 18}s`,
     delay: `-${Math.random() * 30}s`,
   })), []);
+
+  useEffect(() => {
+    // Handle hash navigation (e.g., from dissertation page back button)
+    const hash = window.location.hash.slice(1); // Remove the # symbol
+    if (hash) {
+      setTimeout(() => {
+        const element = document.getElementById(hash);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 100);
+    }
+  }, []);
 
   useEffect(() => {
     const handler = (e: MouseEvent) => {
@@ -87,6 +101,9 @@ const Index = () => {
         </div>
         <div id="conferences" className="scroll-mt-0">
           <FadeIn><ConferencesSection /></FadeIn>
+        </div>
+        <div id="research" className="scroll-mt-0">
+          <FadeIn><ResearchSection /></FadeIn>
         </div>
         <div id="github" className="scroll-mt-0">
           <FadeIn><GitHubSection /></FadeIn>

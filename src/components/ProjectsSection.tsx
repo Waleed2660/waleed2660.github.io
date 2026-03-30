@@ -84,7 +84,7 @@ const ProjectsSection = () => {
     <section className="flex items-center justify-center px-6 py-24 relative z-20">
       <div className="max-w-6xl w-full">
         <h2 className="text-4xl md:text-6xl font-bold text-center mb-16 text-glow relative">
-          Projects 🚀
+          Projects
         </h2>
         <div className="flex flex-col gap-8">
           {/* Featured project - full width */}

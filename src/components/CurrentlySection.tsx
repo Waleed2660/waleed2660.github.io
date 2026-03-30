@@ -63,7 +63,7 @@ const CurrentlySection = () => {
     <section className="flex items-center justify-center px-6 py-24 relative z-20">
       <div className="max-w-6xl w-full">
         <h2 className="text-4xl md:text-6xl font-bold text-center mb-4 text-glow relative">
-          Currently Exploring 🔬
+          Currently Exploring
         </h2>
         <p className="text-center text-white/50 mb-16 text-lg">
           Things I'm actively experimenting with or learning outside of work
