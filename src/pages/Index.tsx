@@ -74,7 +74,7 @@ const Index = () => {
       
       <main className="relative z-10">
         <div id="home" className="scroll-mt-0">
-          <FadeIn><HomeSection /></FadeIn>
+          <HomeSection />
         </div>
         <div id="experience" className="scroll-mt-32">
           <FadeIn><ExperienceSection /></FadeIn>
