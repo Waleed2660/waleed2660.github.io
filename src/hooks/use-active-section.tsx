@@ -5,20 +5,41 @@ export function useActiveSection(ids: string[]) {
   const key = ids.join(',');
 
   useEffect(() => {
-    const observers: IntersectionObserver[] = [];
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY + window.innerHeight / 3; // Check at top third of viewport
+      
+      // Find which section we're currently in
+      for (let i = ids.length - 1; i >= 0; i--) {
+        const section = document.getElementById(ids[i]);
+        if (section) {
+          const { top } = section.getBoundingClientRect();
+          const sectionTop = top + window.scrollY;
+          
+          if (scrollPosition >= sectionTop) {
+            setActive(ids[i]);
+            break;
+          }
+        }
+      }
+    };
 
-    ids.forEach((id) => {
-      const el = document.getElementById(id);
-      if (!el) return;
-      const observer = new IntersectionObserver(
-        ([entry]) => { if (entry.isIntersecting) setActive(id); },
-        { rootMargin: '-40% 0px -40% 0px' }
-      );
-      observer.observe(el);
-      observers.push(observer);
-    });
+    // Initial check
+    handleScroll();
+    
+    // Listen to scroll events with throttling
+    let ticking = false;
+    const onScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          handleScroll();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
 
-    return () => observers.forEach((o) => o.disconnect());
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
   }, [key]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return active;
