@@ -79,9 +79,11 @@
     inset: 0;
     border-radius: inherit;
     background: radial-gradient(
-      180px circle at var(--mouse-x, -999px) var(--mouse-y, -999px),
-      rgba(66, 99, 235, 0.18),
-      transparent 70%
+      220px circle at var(--mouse-x, -999px) var(--mouse-y, -999px),
+      rgba(96, 165, 250, 0.12) 0%,
+      rgba(96, 165, 250, 0.06) 40%,
+      rgba(96, 165, 250, 0.02) 65%,
+      transparent 80%
     );
     pointer-events: none;
     opacity: 0;
@@ -125,6 +127,24 @@
 
   .animate-disintegrate {
     animation: disintegrate 0.8s ease-out forwards;
+  }
+
+  @keyframes drift1 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33%       { transform: translate(40px, -60px) scale(1.05); }
+    66%       { transform: translate(-30px, 40px) scale(0.97); }
+  }
+
+  @keyframes drift2 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33%       { transform: translate(-50px, 30px) scale(1.04); }
+    66%       { transform: translate(40px, -40px) scale(0.98); }
+  }
+
+  @keyframes drift3 {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); }
+    33%       { transform: translate(calc(-50% + 60px), calc(-50% - 40px)) scale(1.06); }
+    66%       { transform: translate(calc(-50% - 40px), calc(-50% + 50px)) scale(0.96); }
   }
 }
 

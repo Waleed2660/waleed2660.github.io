@@ -1,5 +1,6 @@
 import { ChevronDown, ChevronUp, CircleDot } from "lucide-react";
 import { useState } from "react";
+import FadeIn from "./FadeIn";
 
 interface Promotion {
   title: string;
@@ -90,7 +91,8 @@ const ExperienceSection = () => {
         {/* Cards Grid */}
         <div className="space-y-6">
           {experiences.map((exp, index) => (
-            <div key={index} className="group">
+            <FadeIn key={index} delay={index * 120}>
+            <div className="group">
               {/* Card */}
               <div
                 className={`glass-strong rounded-2xl p-8 transition-all duration-300 border
@@ -193,6 +195,7 @@ const ExperienceSection = () => {
                 </button>
               </div>
             </div>
+            </FadeIn>
           ))}
         </div>
       </div>

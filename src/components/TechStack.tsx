@@ -54,19 +54,23 @@ const TechStack = () => {
           {technologies.map((tech, index) => (
             <div
               key={index}
-              className="flex flex-col items-center gap-2 cursor-pointer
+              className="relative flex flex-col items-center group cursor-pointer
                 transition-transform duration-200
                 hover:scale-110 hover:-translate-y-2"
             >
+              {/* Tooltip */}
+              <span
+                className="absolute -top-9 left-1/2 -translate-x-1/2 px-2 py-1 rounded-lg text-white text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-10"
+                style={{ background: 'rgba(0,0,0,0.75)', backdropFilter: 'blur(8px)' }}
+              >
+                {tech.name}
+              </span>
               <img 
                 src={tech.iconPath} 
                 alt={tech.name}
                 loading="lazy"
                 className="w-12 h-12 object-contain"
               />
-              <span className="text-white/70 text-xs font-medium whitespace-nowrap">
-                {tech.name}
-              </span>
             </div>
           ))}
         </div>

@@ -4,6 +4,7 @@ import { useState } from "react";
 const ContactSection = () => {
   const [resumeRevealed, setResumeRevealed] = useState(false);
   const [isDisintegrating, setIsDisintegrating] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   const handleResumeClick = () => {
     setIsDisintegrating(true);
@@ -72,6 +73,12 @@ const ContactSection = () => {
               href={card.href}
               target={card.isExternal ? "_blank" : undefined}
               rel={card.isExternal ? "noopener noreferrer" : undefined}
+              onClick={card.title === "Email" ? (e) => {
+                e.preventDefault();
+                navigator.clipboard.writeText('me@waleedtariq.com');
+                setCopied(true);
+                setTimeout(() => setCopied(false), 2500);
+              } : undefined}
               className={`glass-strong rounded-2xl p-8 
                 bg-gradient-to-br ${card.gradient} ${card.hoverGradient}
                 transition-all duration-300 
@@ -88,7 +95,7 @@ const ContactSection = () => {
                     {card.title}
                   </h3>
                   <p className={`text-white/60 transition-colors ${card.hoverColor}`}>
-                    {card.subtitle}
+                    {card.title === "Email" && copied ? "✓ Copied to clipboard!" : card.subtitle}
                   </p>
                 </div>
                 <Send className={`w-5 h-5 text-white/40 group-hover:translate-x-1 transition-all duration-300 ${card.hoverColor}`} />
