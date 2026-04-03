@@ -69,5 +69,5 @@ jobs:
           git config user.name "Waleed2660"
           git config user.email "$GIT_EMAIL"
           git add public/github-stats.json
-          git diff --staged --quiet || git commit -m "chore: update github stats [skip ci]"
+          git diff --staged --quiet || git commit -m "chore: update github stats"
           git push
