@@ -31,9 +31,9 @@ const ExperienceSection = () => {
       tech: ["Java", "Spring Boot", "Apache Kafka", "Kubernetes", "AWS"],
       brandColor: "bg-gradient-to-br from-orange-500/10 to-amber-500/10 border-orange-500/30 hover:border-orange-500/50",
       description: [
-        "Part of Digital Fulfilment team, developing critical backend services that calculate accurate delivery timelines for customer orders",
+        "Part of Digital Fulfilment team, developing critical backend services that calculate accurate delivery timelines for customer orders — contributing to Sainsbury's online platform serving millions of weekly shoppers across the UK",
         "Currently developing a new order reservation proposition, enabling advanced inventory management and improved customer experience through real-time stock availability",
-        "Building event-driven microservices using Spring Boot and Apache Kafka, handling high-volume data streams for real-time order processing and inventory updates",
+        "Building event-driven microservices using Spring Boot and Apache Kafka, processing high-throughput event streams across multiple topics powering real-time order processing and inventory updates",
         "Architecting solutions using diverse data stores (PostgreSQL, MongoDB, DynamoDB) to optimize for different data access patterns and performance requirements",
         "Managing deployments and infrastructure on AWS using Kubernetes, ensuring high availability and scalability of services",
         "Collaborating with product teams and stakeholders to design and implement solutions that improve order fulfillment accuracy and efficiency"
@@ -52,9 +52,9 @@ const ExperienceSection = () => {
         { title: "Graduate Software Engineer", period: "2022 - 2024" },
       ],
       description: [
-        "Part of Order Processing Team which looks after microservices responsible for processing orders, allocating & generating shipments for Warehouses by leveraging in-depth knowledge in Java, Spring Boot, Apache ActiveMQ, Tomcat, Docker, and MSSQL",
+        "Part of Order Processing Team responsible for microservices that process orders and allocate & generate shipments for warehouses, serving THG's global brand portfolio including Myprotein and LOOKFANTASTIC — leveraging Java, Spring Boot, Apache ActiveMQ, Tomcat, Docker, and MSSQL",
         "Day-to-day work involves developing & deploying new features, bug fixing, code reviews, delivering knowledge share sessions, supporting operations team, providing technical details to senior management.",
-        "Led my team for Black Friday 2024, targeting application optimization by improving SQL queries, decoupling unnecessary dependencies, monitoring application and VM metrics while also writing new scripts to load test our applications",
+        "Led my team for Black Friday 2024, targeting application optimization by improving SQL queries, decoupling unnecessary dependencies and load testing our applications — delivering zero critical incidents during the highest-traffic trading window of the year",
         "Developed strong expertise in SQL & Jenkins to deploy applications on Kubernetes & Linux based VMs",
         "Collaborated with various teams to develop solutions for new clients while ensuring backward compatibility for existing clients.",
         "Efficiently managed escalated incidents from clients, briefed senior management with concise reports on impacts, and provided effective solutions to resolve them promptly."

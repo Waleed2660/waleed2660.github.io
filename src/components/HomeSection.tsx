@@ -1,3 +1,4 @@
+import { ChevronDown } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 const TYPING_TEXT = "Software Engineer @ Sainsbury's";
@@ -101,6 +102,11 @@ const HomeSection = () => {
               ))}
             </div>
           </div>
+        </div>
+
+        {/* Scroll hint */}
+        <div className={`mt-8 flex justify-center transition-opacity duration-700 ${typingDone ? 'opacity-100' : 'opacity-0'}`}>
+          <ChevronDown className="w-6 h-6 text-white/25 animate-bounce" />
         </div>
       </div>
     </section>

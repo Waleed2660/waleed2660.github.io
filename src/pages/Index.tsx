@@ -1,5 +1,6 @@
 
-import { lazy, Suspense, useEffect, useMemo } from 'react';
+import { lazy, Suspense, useEffect, useMemo, useRef, useState } from 'react';
+import { ChevronUp } from 'lucide-react';
 import Navigation from '@/components/Navigation';
 import HomeSection from '@/components/HomeSection';
 import FadeIn from '@/components/FadeIn';
@@ -38,6 +39,23 @@ const Index = () => {
     delay: `-${Math.random() * 30}s`,
   })), []);
 
+  const progressBarRef = useRef<HTMLDivElement>(null);
+  const [showBackToTop, setShowBackToTop] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => {
+      const scrollY = window.scrollY;
+      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+      // Update progress bar directly on DOM — no React re-render, no jank
+      if (progressBarRef.current) {
+        progressBarRef.current.style.width = maxScroll > 0 ? `${(scrollY / maxScroll) * 100}%` : '0%';
+      }
+      setShowBackToTop(scrollY > window.innerHeight);
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
   useEffect(() => {
     // Handle hash navigation (e.g., from dissertation page back button)
     const hash = window.location.hash.slice(1); // Remove the # symbol
@@ -66,6 +84,28 @@ const Index = () => {
   }, []);
 
   return (
+    <>
+    {/* Scroll progress bar — outside overflow-hidden so it's never clipped */}
+    <div className="fixed top-0 left-0 right-0 z-[100] h-0.5 pointer-events-none">
+      <div
+        ref={progressBarRef}
+        className="h-full bg-gradient-to-r from-blue-400 to-purple-400"
+        style={{ width: '0%' }}
+      />
+    </div>
+
+    {/* Back to top — outside overflow-hidden so it's never clipped */}
+    <button
+      onClick={() => scrollToSection('home')}
+      className={`fixed bottom-8 right-8 z-[100] p-3 rounded-full border border-white/20 text-white/70 hover:text-white hover:border-white/40 hover:scale-110 transition-all duration-300 ${
+        showBackToTop ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'
+      }`}
+      style={{ background: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(20px)' }}
+      aria-label="Back to top"
+    >
+      <ChevronUp className="w-5 h-5" />
+    </button>
+
     <div className="min-h-screen relative overflow-hidden">
       {/* Background gradient overlay */}
       <div className="fixed inset-0 bg-gradient-to-br from-blue-900/20 via-purple-900/20 to-slate-900/20 pointer-events-none" />
@@ -123,6 +163,7 @@ const Index = () => {
         © {new Date().getFullYear()} Waleed Tariq. All rights reserved.
       </footer>
     </div>
+    </>
   );
 };
 
