@@ -181,12 +181,12 @@ const ExperienceSection = () => {
                 >
                   {expandedCard === index ? (
                     <>
-                      <span className="font-medium">Show Less</span>
+                      <span className="font-medium">Hide Details</span>
                       <ChevronUp className="w-4 h-4 group-hover:-translate-y-0.5 transition-transform" />
                     </>
                   ) : (
                     <>
-                      <span className="font-medium">Show More</span>
+                      <span className="font-medium">View Details</span>
                       <ChevronDown className="w-4 h-4 group-hover:translate-y-0.5 transition-transform" />
                     </>
                   )}

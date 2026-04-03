@@ -37,7 +37,7 @@ const HomeSection = () => {
 
   return (
     <section 
-      className="min-h-screen flex items-center justify-center px-6"
+      className="min-h-screen flex items-center justify-center px-6 pt-12 sm:pt-0"
     >
       <div className="w-full max-w-4xl text-center relative">
         <div 
