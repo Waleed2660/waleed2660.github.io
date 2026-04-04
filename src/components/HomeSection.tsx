@@ -42,14 +42,14 @@ const HomeSection = () => {
     >
       <div className="w-full max-w-4xl text-center relative">
         <div 
-          className="glass-strong rounded-3xl p-8 sm:p-12 md:p-16 relative overflow-hidden border border-white/10"
+          className="glass-strong rounded-3xl p-8 sm:p-12 md:p-16 relative overflow-hidden"
           onMouseMove={handleMouseMove}
         >
           {/* Spotlight effect */}
           <div 
             className="pointer-events-none absolute inset-0 opacity-0 hover:opacity-100 transition-opacity duration-300"
             style={{
-              background: `radial-gradient(600px circle at ${mousePos.x}px ${mousePos.y}px, rgba(96, 165, 250, 0.15), transparent 70%)`,
+              background: `radial-gradient(350px circle at ${mousePos.x}px ${mousePos.y}px, rgba(96, 165, 250, 0.04), transparent 70%)`,
             }}
           />
 
