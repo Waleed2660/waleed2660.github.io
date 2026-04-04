@@ -259,7 +259,7 @@ const ConferencesSection = () => {
             <div
               key={index}
               className="glass-strong rounded-3xl overflow-hidden hover:bg-white/10 hover:scale-[1.02] transition-all duration-500 group will-change-transform"
-              style={{ contentVisibility: index > 0 ? 'auto' : 'visible' }}
+              style={{ contentVisibility: index > 0 ? 'auto' : 'visible', containIntrinsicSize: '0 600px' }}
             >
               {/* Header band */}
               <div className={`bg-gradient-to-r ${conf.accentColor} px-8 py-5 flex flex-wrap items-center justify-between gap-4 border-b border-white/5`}>

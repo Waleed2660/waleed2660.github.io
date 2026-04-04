@@ -135,7 +135,7 @@ const ContactSection = () => {
               <button
                 onClick={handleResumeClick}
                 className="w-full p-8 flex items-start gap-4 text-left group cursor-pointer rounded-2xl border border-white/10 hover:border-white/20 hover:bg-white/10 transition-colors duration-300"
-                style={{ backfaceVisibility: 'hidden', background: 'rgba(255,255,255,0.10)' }}
+                style={{ backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden', background: 'rgba(255,255,255,0.10)' }}
               >
                 <div className="text-white/80 group-hover:text-white transition-colors duration-300 group-hover:scale-110">
                   <FileText className="w-8 h-8" />
@@ -152,7 +152,7 @@ const ContactSection = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="absolute inset-0 p-8 flex items-start gap-4 text-left group cursor-pointer rounded-2xl bg-gradient-to-br from-green-500/20 to-emerald-500/20 hover:from-green-500/30 hover:to-emerald-500/30 border border-green-500/30 transition-colors duration-300"
-                style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
+                style={{ backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
               >
                 <div className="text-green-400 group-hover:text-green-300 transition-colors duration-300 group-hover:scale-110">
                   <Download className="w-8 h-8" />

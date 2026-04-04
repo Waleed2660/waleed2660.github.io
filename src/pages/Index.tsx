@@ -88,10 +88,15 @@ const Index = () => {
 
   useEffect(() => {
     let rafId: number;
+    let cards: HTMLElement[] = [];
+    // Cache once after mount; refresh on resize to catch dynamically added elements
+    const refreshCards = () => { cards = Array.from(document.querySelectorAll<HTMLElement>('.glass-strong')); };
+    refreshCards();
+    window.addEventListener('resize', refreshCards, { passive: true });
     const handler = (e: MouseEvent) => {
       cancelAnimationFrame(rafId);
       rafId = requestAnimationFrame(() => {
-        document.querySelectorAll<HTMLElement>('.glass-strong').forEach(card => {
+        cards.forEach(card => {
           const rect = card.getBoundingClientRect();
           const scaleX = rect.width / card.offsetWidth;
           const scaleY = rect.height / card.offsetHeight;
@@ -103,6 +108,7 @@ const Index = () => {
     window.addEventListener('mousemove', handler, { passive: true });
     return () => {
       window.removeEventListener('mousemove', handler);
+      window.removeEventListener('resize', refreshCards);
       cancelAnimationFrame(rafId);
     };
   }, []);

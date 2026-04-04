@@ -64,6 +64,7 @@ const Navigation = ({ onSectionClick, activeSection, showBackToTop, onScrollToTo
                 key={section.id}
                 ref={(el) => { buttonRefs.current[index] = el; }}
                 onClick={() => onSectionClick(section.id)}
+                aria-current={activeSection === section.id ? 'page' : undefined}
                 className={`px-3 lg:px-6 py-2.5 lg:py-3 rounded-xl text-xs lg:text-sm font-medium transition-colors duration-300 relative z-10 whitespace-nowrap ${
                   activeSection === section.id
                     ? 'text-white'
@@ -99,6 +100,7 @@ const Navigation = ({ onSectionClick, activeSection, showBackToTop, onScrollToTo
                 className="relative flex items-center justify-center w-11 h-11 rounded-full transition-colors duration-200"
                 style={{ color: isActive ? '#fff' : 'rgba(255,255,255,0.35)' }}
                 aria-label={section.label}
+                aria-current={isActive ? 'page' : undefined}
               >
                 {isActive && (
                   <span
