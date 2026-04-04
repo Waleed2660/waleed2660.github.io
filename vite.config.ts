@@ -6,6 +6,7 @@ import { execSync } from "child_process";
 import { readdirSync, statSync, readFileSync } from "fs";
 
 const getGitCommits = (): number => {
+  if (process.env.GIT_COMMIT_COUNT) return parseInt(process.env.GIT_COMMIT_COUNT, 10);
   try { return parseInt(execSync("git rev-list --count HEAD", { encoding: "utf8" }).trim()); }
   catch { return 0; }
 };
