@@ -110,7 +110,7 @@ const Index = () => {
   return (
     <>
     {/* Scroll progress bar — outside overflow-hidden so it's never clipped */}
-    <div className="fixed top-0 left-0 right-0 z-[100] h-0.5 pointer-events-none">
+    <div className="fixed top-0 left-0 right-0 z-[100] h-0.5 pointer-events-none md:hidden">
       <div
         ref={progressBarRef}
         className="h-full bg-gradient-to-r from-blue-400 to-purple-400"

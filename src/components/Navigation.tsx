@@ -50,9 +50,9 @@ const Navigation = ({ onSectionClick, activeSection, showBackToTop, onScrollToTo
   return (
     <>
       {/* Desktop nav */}
-      <nav className="fixed top-6 left-1/2 transform -translate-x-1/2 z-50 hidden md:block">
-        <div className="rounded-2xl p-2" style={{ background: 'rgba(12,12,28,0.92)', border: '1px solid rgba(255,255,255,0.1)', boxShadow: '0 8px 32px rgba(0,0,0,0.4)' }}>
-          <div ref={containerRef} className="flex space-x-2 relative">
+      <nav className="fixed top-6 left-1/2 transform -translate-x-1/2 z-50 hidden md:block max-w-[calc(100vw-2rem)]">
+        <div className="rounded-2xl p-1.5 lg:p-2 overflow-x-auto" style={{ background: 'rgba(12,12,28,0.92)', border: '1px solid rgba(255,255,255,0.1)', boxShadow: '0 8px 32px rgba(0,0,0,0.4)' }}>
+          <div ref={containerRef} className="flex space-x-1 lg:space-x-2 relative">
             {pillStyle && (
               <div
                 className="absolute inset-y-0 rounded-xl bg-white/15 transition-all duration-300 ease-out pointer-events-none"
@@ -64,7 +64,7 @@ const Navigation = ({ onSectionClick, activeSection, showBackToTop, onScrollToTo
                 key={section.id}
                 ref={(el) => { buttonRefs.current[index] = el; }}
                 onClick={() => onSectionClick(section.id)}
-                className={`px-6 py-3 rounded-xl text-sm font-medium transition-colors duration-300 relative z-10 ${
+                className={`px-3 lg:px-6 py-2.5 lg:py-3 rounded-xl text-xs lg:text-sm font-medium transition-colors duration-300 relative z-10 whitespace-nowrap ${
                   activeSection === section.id
                     ? 'text-white'
                     : 'text-white/80 hover:text-white hover:bg-white/5'
