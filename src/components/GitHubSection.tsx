@@ -46,10 +46,13 @@ const GitHubSection = () => {
       .catch(() => {});
 
     // Lazy-load chart only when section scrolls into view
+    // Skip fetch on localhost (ghchart.rshah.org blocks CORS from non-production origins)
+    const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
           observer.disconnect();
+          if (isLocalhost) return; // fall through to <img> fallback
           fetch(`https://ghchart.rshah.org/${CHART_COLOR}/${USERNAME}`)
             .then((r) => r.text())
             .then((svg) => {

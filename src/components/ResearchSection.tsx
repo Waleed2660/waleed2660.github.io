@@ -108,6 +108,8 @@ const ResearchSection = () => {
                 <img
                   src="/dissertation/drone_landfill_site.webp"
                   alt="Drone with mounted camera performing object detection over a landfill site"
+                  width="1408"
+                  height="768"
                   className="w-full object-cover"
                   loading="lazy"
                 />

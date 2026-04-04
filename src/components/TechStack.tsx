@@ -68,6 +68,8 @@ const TechStack = () => {
               <img 
                 src={tech.iconPath} 
                 alt={tech.name}
+                width="48"
+                height="48"
                 loading="lazy"
                 className="w-12 h-12 object-contain"
               />
