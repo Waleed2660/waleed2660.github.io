@@ -170,6 +170,12 @@
   animation: shine-border 3s linear infinite;
 }
 
+@media (max-width: 767px) {
+  .featured-card::after {
+    animation: none;
+  }
+}
+
 @keyframes shine-border {
   to { --shine-angle: 360deg; }
 }

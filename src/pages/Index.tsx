@@ -140,15 +140,15 @@ const Index = () => {
       {/* Ambient orbs — large blurred blobs that create atmospheric depth */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
         {/* Top-left: cool blue */}
-        <div className="absolute -top-48 -left-48 w-[700px] h-[700px] rounded-full bg-blue-600/20 blur-[120px]" />
+        <div className="absolute -top-48 -left-48 w-[700px] h-[700px] rounded-full bg-blue-600/20 blur-[60px] md:blur-[120px] will-change-transform" />
         {/* Top-right: indigo/violet */}
-        <div className="absolute -top-32 -right-64 w-[600px] h-[600px] rounded-full bg-violet-600/15 blur-[100px]" />
-        {/* Center: deep teal */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] rounded-full bg-cyan-700/10 blur-[140px]" />
+        <div className="absolute -top-32 -right-64 w-[600px] h-[600px] rounded-full bg-violet-600/15 blur-[50px] md:blur-[100px] will-change-transform" />
+        {/* Center: deep teal — hidden on mobile, too expensive */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] rounded-full bg-cyan-700/10 blur-[140px] hidden md:block will-change-transform" />
         {/* Bottom-left: purple */}
-        <div className="absolute -bottom-64 -left-32 w-[600px] h-[600px] rounded-full bg-purple-700/15 blur-[110px]" />
-        {/* Bottom-right: blue accent */}
-        <div className="absolute -bottom-32 -right-32 w-[500px] h-[500px] rounded-full bg-blue-500/10 blur-[90px]" />
+        <div className="absolute -bottom-64 -left-32 w-[600px] h-[600px] rounded-full bg-purple-700/15 blur-[55px] md:blur-[110px] will-change-transform" />
+        {/* Bottom-right: blue accent — hidden on mobile */}
+        <div className="absolute -bottom-32 -right-32 w-[500px] h-[500px] rounded-full bg-blue-500/10 blur-[90px] hidden md:block will-change-transform" />
       </div>
 
       {/* Floating particles effect */}
