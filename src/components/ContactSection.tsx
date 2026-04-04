@@ -3,15 +3,9 @@ import { useState } from "react";
 
 const ContactSection = () => {
   const [resumeRevealed, setResumeRevealed] = useState(false);
-  const [isDisintegrating, setIsDisintegrating] = useState(false);
   const [copied, setCopied] = useState(false);
 
-  const handleResumeClick = () => {
-    setIsDisintegrating(true);
-    setTimeout(() => {
-      setResumeRevealed(true);
-    }, 800);
-  };
+  const handleResumeClick = () => setResumeRevealed(true);
 
   const contactCards = [
     {
@@ -125,74 +119,52 @@ const ContactSection = () => {
             </a>
           ))}
 
-          {/* Resume Card - Gated with Disintegration Effect */}
-          <div className={`relative glass-strong rounded-2xl p-8 border border-white/10 overflow-hidden transition-all duration-700
-            ${resumeRevealed 
-              ? 'bg-gradient-to-br from-green-500/20 to-emerald-500/20 border-green-500/30' 
-              : 'bg-gradient-to-br from-orange-500/20 to-red-500/20'
-            }`}>
-            {!resumeRevealed ? (
+          {/* Resume Card — 3D flip */}
+          <div
+            className="relative rounded-2xl"
+            style={{ perspective: '1000px' }}
+          >
+            <div
+              className="relative w-full transition-transform duration-700 ease-in-out rounded-2xl"
+              style={{
+                transformStyle: 'preserve-3d',
+                transform: resumeRevealed ? 'rotateY(180deg)' : 'rotateY(0deg)',
+              }}
+            >
+              {/* Front face — defines height, normal flow */}
               <button
                 onClick={handleResumeClick}
-                disabled={isDisintegrating}
-                className={`w-full h-full flex items-start gap-4 text-left group cursor-pointer transition-all duration-300 hover:scale-[1.02] hover:-translate-y-1 relative
-                  ${isDisintegrating ? 'pointer-events-none' : ''}`}
+                className="w-full p-8 flex items-start gap-4 text-left group cursor-pointer rounded-2xl border border-white/10 hover:border-white/20 hover:bg-white/10 transition-colors duration-300"
+                style={{ backfaceVisibility: 'hidden', background: 'rgba(255,255,255,0.10)' }}
               >
-                {/* Disintegration particles */}
-                {isDisintegrating && (
-                  <div className="absolute inset-0 pointer-events-none overflow-hidden">
-                    {Array.from({ length: 100 }).map((_, i) => {
-                      const tx = (Math.random() * 200 - 100);
-                      const ty = (Math.random() * 200 - 100);
-                      return (
-                        <div
-                          key={i}
-                          className="absolute w-2 h-2 bg-orange-400 rounded-full animate-disintegrate"
-                          style={{
-                            left: `${Math.random() * 100}%`,
-                            top: `${Math.random() * 100}%`,
-                            animationDelay: `${Math.random() * 0.2}s`,
-                            '--tx': `${tx}px`,
-                            '--ty': `${ty}px`,
-                          } as React.CSSProperties}
-                        />
-                      );
-                    })}
-                  </div>
-                )}
-                
-                <div className={`flex items-start gap-4 w-full transition-all duration-700 ${isDisintegrating ? 'opacity-0 scale-75 blur-sm' : 'opacity-100'}`}>
-                  <div className="text-white/80 group-hover:text-white transition-colors group-hover:scale-110 duration-300">
-                    <FileText className="w-8 h-8" />
-                  </div>
-                  <div className="flex-1 text-left">
-                    <h3 className="text-2xl font-bold text-white mb-1 group-hover:text-white transition-colors">
-                      Resume
-                    </h3>
-                    <p className="text-white/60 group-hover:text-white/80 transition-colors">
-                      Click to reveal
-                    </p>
-                  </div>
+                <div className="text-white/80 group-hover:text-white transition-colors duration-300 group-hover:scale-110">
+                  <FileText className="w-8 h-8" />
+                </div>
+                <div className="flex-1 text-left">
+                  <h3 className="text-2xl font-bold text-white mb-1">Resume</h3>
+                  <p className="text-white/60 group-hover:text-white/80 transition-colors">Click to reveal</p>
                 </div>
               </button>
-            ) : (
+
+              {/* Back face — absolute, same dimensions */}
               <a
                 href="/resume.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full h-full flex items-start gap-4 text-left group cursor-pointer transition-all duration-300 hover:scale-[1.02] hover:-translate-y-1 animate-[fadeIn_1.5s_ease-out] hover:from-green-500/40 hover:to-emerald-500/40"
+                className="absolute inset-0 p-8 flex items-start gap-4 text-left group cursor-pointer rounded-2xl bg-gradient-to-br from-green-500/20 to-emerald-500/20 hover:from-green-500/30 hover:to-emerald-500/30 border border-green-500/30 transition-colors duration-300"
+                style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
               >
-                <div className="text-green-400 group-hover:text-green-300 transition-colors group-hover:scale-110 duration-300">
+                <div className="text-green-400 group-hover:text-green-300 transition-colors duration-300 group-hover:scale-110">
                   <Download className="w-8 h-8" />
                 </div>
                 <div className="flex-1 text-left">
-                  <h3 className="text-2xl font-bold text-green-200/80 group-hover:text-green-200 mb-1 transition-colors">
+                  <h3 className="text-lg md:text-2xl font-bold text-green-200/80 group-hover:text-green-200 mb-1 transition-colors">
                     View my experience (PDF)
                   </h3>
                 </div>
                 <Send className="w-5 h-5 text-green-400/60 group-hover:text-green-300 group-hover:translate-x-1 transition-all duration-300" />
               </a>
-            )}
+            </div>
           </div>
         </div>
       </div>

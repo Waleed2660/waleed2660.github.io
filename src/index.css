@@ -117,19 +117,9 @@
     50% { opacity: 1; }
   }
 
-  @keyframes disintegrate {
-    0% {
-      transform: translate(0, 0) scale(1);
-      opacity: 1;
-    }
-    100% {
-      transform: translate(var(--tx), var(--ty)) scale(0);
-      opacity: 0;
-    }
-  }
-
-  .animate-disintegrate {
-    animation: disintegrate 0.8s ease-out forwards;
+  @keyframes dropIn {
+    0%   { opacity: 0; transform: translateY(-24px) scale(0.97); }
+    100% { opacity: 1; transform: translateY(0)    scale(1);    }
   }
 
   @keyframes drift1 {
