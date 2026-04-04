@@ -1,21 +1,19 @@
 
-import { lazy, Suspense, useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { ChevronUp } from 'lucide-react';
 import Navigation from '@/components/Navigation';
 import HomeSection from '@/components/HomeSection';
 import FadeIn from '@/components/FadeIn';
 import { useActiveSection } from '@/hooks/use-active-section';
-
 import SiteStats from '@/components/SiteStats';
-
-const ExperienceSection = lazy(() => import('@/components/ExperienceSection'));
-const ProjectsSection = lazy(() => import('@/components/ProjectsSection'));
-const GitHubSection = lazy(() => import('@/components/GitHubSection'));
-const TechStack = lazy(() => import('@/components/TechStack'));
-const ContactSection = lazy(() => import('@/components/ContactSection'));
-const CurrentlySection = lazy(() => import('@/components/CurrentlySection'));
-const ConferencesSection = lazy(() => import('@/components/ConferencesSection'));
-const ResearchSection = lazy(() => import('@/components/ResearchSection'));
+import ExperienceSection from '@/components/ExperienceSection';
+import ProjectsSection from '@/components/ProjectsSection';
+import GitHubSection from '@/components/GitHubSection';
+import TechStack from '@/components/TechStack';
+import ContactSection from '@/components/ContactSection';
+import CurrentlySection from '@/components/CurrentlySection';
+import ConferencesSection from '@/components/ConferencesSection';
+import ResearchSection from '@/components/ResearchSection';
 
 const SECTION_IDS = ['home', 'experience', 'projects', 'research', 'conferences', 'github', 'tools', 'currently', 'contact'];
 
@@ -23,22 +21,12 @@ const Index = () => {
   const activeSection = useActiveSection(SECTION_IDS);
 
   const scrollToSection = (sectionId: string) => {
-    const attempt = (tries: number) => {
+    document.fonts.ready.then(() => {
       const element = document.getElementById(sectionId);
       if (!element) return;
-      element.scrollIntoView({ behavior: tries === 0 ? 'smooth' : 'auto', block: 'start' });
-      // Re-check after lazy components may have finished rendering
-      if (tries < 3) {
-        setTimeout(() => {
-          const el = document.getElementById(sectionId);
-          if (el) {
-            const top = el.getBoundingClientRect().top;
-            if (Math.abs(top) > 10) el.scrollIntoView({ behavior: 'auto', block: 'start' });
-          }
-        }, 400 + tries * 300);
-      }
-    };
-    attempt(0);
+      const top = element.getBoundingClientRect().top + window.scrollY - 80;
+      window.scrollTo({ top, behavior: 'smooth' });
+    });
   };
 
   const starCount = window.innerWidth < 768 ? 0 : 20;
@@ -53,6 +41,8 @@ const Index = () => {
   const progressBarRef = useRef<HTMLDivElement>(null);
   const [showBackToTop, setShowBackToTop] = useState(false);
   const [showSiteStats, setShowSiteStats] = useState(false);
+
+
 
   useEffect(() => {
     const onScroll = () => {
@@ -173,40 +163,48 @@ const Index = () => {
         <div id="home" className="scroll-mt-0">
           <HomeSection />
         </div>
-        <Suspense fallback={null}>
-          <div className="h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent mx-8 sm:mx-24" />
-          <div id="experience" className="scroll-mt-32">
-            <FadeIn><ExperienceSection /></FadeIn>
-          </div>
-          <div className="h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent mx-8 sm:mx-24" />
-          <div id="projects" className="scroll-mt-0">
-            <FadeIn><ProjectsSection /></FadeIn>
-          </div>
-          <div className="h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent mx-8 sm:mx-24" />
-          <div id="research" className="scroll-mt-0">
-            <FadeIn><ResearchSection /></FadeIn>
-          </div>
-          <div className="h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent mx-8 sm:mx-24" />
-          <div id="conferences" className="scroll-mt-0">
-            <FadeIn><ConferencesSection /></FadeIn>
-          </div>
-          <div className="h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent mx-8 sm:mx-24" />
-          <div id="github" className="scroll-mt-0">
-            <FadeIn><GitHubSection /></FadeIn>
-          </div>
-          <div className="h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent mx-8 sm:mx-24" />
-          <div id="tools" className="scroll-mt-0">
-            <FadeIn><TechStack /></FadeIn>
-          </div>
-          <div className="h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent mx-8 sm:mx-24" />
-          <div id="currently" className="scroll-mt-0">
-            <FadeIn><CurrentlySection /></FadeIn>
-          </div>
-          <div className="h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent mx-8 sm:mx-24" />
-          <div id="contact" className="scroll-mt-10">
-            <FadeIn><ContactSection /></FadeIn>
-          </div>
-        </Suspense>
+
+        {/* id wrappers are always in the DOM — no Suspense, no lazy loading */}
+        <div className="h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent mx-8 sm:mx-24" />
+        <div id="experience">
+          <FadeIn><ExperienceSection /></FadeIn>
+        </div>
+
+        <div className="h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent mx-8 sm:mx-24" />
+        <div id="projects">
+          <FadeIn><ProjectsSection /></FadeIn>
+        </div>
+
+        <div className="h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent mx-8 sm:mx-24" />
+        <div id="research">
+          <FadeIn><ResearchSection /></FadeIn>
+        </div>
+
+        <div className="h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent mx-8 sm:mx-24" />
+        <div id="conferences">
+          <FadeIn><ConferencesSection /></FadeIn>
+        </div>
+
+        <div className="h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent mx-8 sm:mx-24" />
+        <div id="github">
+          <FadeIn><GitHubSection /></FadeIn>
+        </div>
+
+        <div className="h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent mx-8 sm:mx-24" />
+        <div id="tools">
+          <FadeIn><TechStack /></FadeIn>
+        </div>
+
+        <div className="h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent mx-8 sm:mx-24" />
+        <div id="currently">
+          <FadeIn><CurrentlySection /></FadeIn>
+        </div>
+
+        <div className="h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent mx-8 sm:mx-24" />
+        <div id="contact">
+          <FadeIn><ContactSection /></FadeIn>
+        </div>
+
       </main>
       <footer className="relative z-10 text-center py-6 pb-28 md:pb-6 text-sm text-white/40">
         © {new Date().getFullYear()} Waleed Tariq. All rights reserved.
