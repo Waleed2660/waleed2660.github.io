@@ -3,8 +3,6 @@ import { useEffect, useRef, useState } from "react";
 // Contribution colour — violet-600, rich and visible against dark background
 const USERNAME = "Waleed2660";
 const CHART_COLOR = "7c3aed";
-// Empty cell colour used by ghchart in inline styles
-const EMPTY_CELL_COLOR = "#EEEEEE";
 
 const LANGUAGE_COLORS: Record<string, string> = {
   Java: "#b07219",
@@ -36,7 +34,6 @@ interface GitHubStats {
 
 const GitHubSection = () => {
   const [stats, setStats] = useState<GitHubStats | null>(null);
-  const [chartSvg, setChartSvg] = useState<string | null>(null);
   const chartRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -44,30 +41,6 @@ const GitHubSection = () => {
       .then((r) => r.json())
       .then((data: GitHubStats) => setStats(data))
       .catch(() => {});
-
-    // Lazy-load chart only when section scrolls into view
-    // Skip fetch on localhost (ghchart.rshah.org blocks CORS from non-production origins)
-    const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          observer.disconnect();
-          if (isLocalhost) return; // fall through to <img> fallback
-          fetch(`https://ghchart.rshah.org/${CHART_COLOR}/${USERNAME}`)
-            .then((r) => r.text())
-            .then((svg) => {
-              const modified = svg
-                .split(`fill:${EMPTY_CELL_COLOR}`)
-                .join(`fill:#14112a`);
-              setChartSvg(modified);
-            })
-            .catch(() => {});
-        }
-      },
-      { threshold: 0.1 }
-    );
-    if (chartRef.current) observer.observe(chartRef.current);
-    return () => observer.disconnect();
   }, []);
 
   return (
@@ -165,24 +138,17 @@ const GitHubSection = () => {
           <p className="text-white/40 text-xs uppercase tracking-widest mb-4">
             Contribution Graph
           </p>
-          {chartSvg ? (
-            <div
-              className="w-full rounded-xl overflow-hidden opacity-80 hover:opacity-100 transition-opacity duration-300 [&_svg]:w-full [&_svg]:h-auto"
-              dangerouslySetInnerHTML={{ __html: chartSvg }}
-            />
-          ) : (
-            <img
-              src={`https://ghchart.rshah.org/${CHART_COLOR}/${USERNAME}`}
-              alt="GitHub contribution graph"
-              width="800"
-              height="128"
-              loading="lazy"
-              className="w-full rounded-xl opacity-75 hover:opacity-100 transition-opacity duration-300"
-              onError={(e) => {
-                (e.target as HTMLImageElement).parentElement!.style.display = "none";
-              }}
-            />
-          )}
+          <img
+            src={`https://ghchart.rshah.org/${CHART_COLOR}/${USERNAME}`}
+            alt="GitHub contribution graph"
+            width="800"
+            height="128"
+            loading="lazy"
+            className="w-full rounded-xl opacity-75 hover:opacity-100 transition-opacity duration-300"
+            onError={(e) => {
+              (e.target as HTMLImageElement).parentElement!.style.display = "none";
+            }}
+          />
         </div>
       </div>
     </section>
