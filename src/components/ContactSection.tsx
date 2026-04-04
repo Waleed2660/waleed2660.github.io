@@ -120,7 +120,7 @@ const ContactSection = () => {
                     {card.title === "Email" && copied ? "✓ Copied to clipboard!" : card.subtitle}
                   </p>
                 </div>
-                <Send className={`w-5 h-5 text-white/40 group-hover:translate-x-1 transition-all duration-300 ${card.hoverColor}`} />
+                {card.title !== "Email" && <Send className={`w-5 h-5 text-white/40 group-hover:translate-x-1 transition-all duration-300 ${card.hoverColor}`} />}
               </div>
             </a>
           ))}
@@ -186,12 +186,9 @@ const ContactSection = () => {
                   <Download className="w-8 h-8" />
                 </div>
                 <div className="flex-1 text-left">
-                  <h3 className="text-2xl font-bold text-white mb-1 group-hover:text-white transition-colors">
-                    Download Resume
-                  </h3>
-                  <p className="text-green-200/80 group-hover:text-green-200 transition-colors">
+                  <h3 className="text-2xl font-bold text-green-200/80 group-hover:text-green-200 mb-1 transition-colors">
                     View my experience (PDF)
-                  </p>
+                  </h3>
                 </div>
                 <Send className="w-5 h-5 text-green-400/60 group-hover:text-green-300 group-hover:translate-x-1 transition-all duration-300" />
               </a>
