@@ -75,7 +75,29 @@ const ContactSection = () => {
               rel={card.isExternal ? "noopener noreferrer" : undefined}
               onClick={card.title === "Email" ? (e) => {
                 e.preventDefault();
-                navigator.clipboard.writeText('me@waleedtariq.com');
+                const email = 'me@waleedtariq.com';
+                if (navigator.clipboard) {
+                  navigator.clipboard.writeText(email).catch(() => {
+                    // fallback for mobile browsers that deny clipboard API
+                    const ta = document.createElement('textarea');
+                    ta.value = email;
+                    ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0';
+                    document.body.appendChild(ta);
+                    ta.focus();
+                    ta.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(ta);
+                  });
+                } else {
+                  const ta = document.createElement('textarea');
+                  ta.value = email;
+                  ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0';
+                  document.body.appendChild(ta);
+                  ta.focus();
+                  ta.select();
+                  document.execCommand('copy');
+                  document.body.removeChild(ta);
+                }
                 setCopied(true);
                 setTimeout(() => setCopied(false), 2500);
               } : undefined}

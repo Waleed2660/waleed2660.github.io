@@ -6,6 +6,8 @@ import HomeSection from '@/components/HomeSection';
 import FadeIn from '@/components/FadeIn';
 import { useActiveSection } from '@/hooks/use-active-section';
 
+import SiteStats from '@/components/SiteStats';
+
 const ExperienceSection = lazy(() => import('@/components/ExperienceSection'));
 const ProjectsSection = lazy(() => import('@/components/ProjectsSection'));
 const GitHubSection = lazy(() => import('@/components/GitHubSection'));
@@ -21,16 +23,25 @@ const Index = () => {
   const activeSection = useActiveSection(SECTION_IDS);
 
   const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ 
-        behavior: 'smooth',
-        block: 'start'
-      });
-    }
+    const attempt = (tries: number) => {
+      const element = document.getElementById(sectionId);
+      if (!element) return;
+      element.scrollIntoView({ behavior: tries === 0 ? 'smooth' : 'auto', block: 'start' });
+      // Re-check after lazy components may have finished rendering
+      if (tries < 3) {
+        setTimeout(() => {
+          const el = document.getElementById(sectionId);
+          if (el) {
+            const top = el.getBoundingClientRect().top;
+            if (Math.abs(top) > 10) el.scrollIntoView({ behavior: 'auto', block: 'start' });
+          }
+        }, 400 + tries * 300);
+      }
+    };
+    attempt(0);
   };
 
-  const starCount = window.innerWidth < 768 ? 8 : 20;
+  const starCount = window.innerWidth < 768 ? 0 : 20;
   const stars = useMemo(() => Array.from({ length: starCount }, (_, i) => ({
     id: i,
     left: `${Math.random() * 100}%`,
@@ -41,6 +52,7 @@ const Index = () => {
 
   const progressBarRef = useRef<HTMLDivElement>(null);
   const [showBackToTop, setShowBackToTop] = useState(false);
+  const [showSiteStats, setShowSiteStats] = useState(false);
 
   useEffect(() => {
     const onScroll = () => {
@@ -67,6 +79,16 @@ const Index = () => {
         }
       }, 100);
     }
+  }, []);
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === '`' && !e.ctrlKey && !e.metaKey && !e.altKey) {
+        setShowSiteStats(v => !v);
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
   }, []);
 
   useEffect(() => {
@@ -101,13 +123,13 @@ const Index = () => {
       />
     </div>
 
-    {/* Back to top — outside overflow-hidden so it's never clipped */}
+    {/* Back to top — desktop only, mobile handled inside nav pill */}
     <button
       onClick={() => scrollToSection('home')}
-      className={`fixed bottom-8 md:bottom-8 right-8 z-[100] p-3 rounded-full border border-white/20 text-white/70 hover:text-white hover:border-white/40 hover:scale-110 transition-all duration-300 ${
+      className={`fixed bottom-8 right-8 z-[100] p-3 rounded-full border border-white/20 text-white/70 hover:text-white hover:border-white/40 hover:scale-110 transition-all duration-300 hidden md:flex items-center justify-center ${
         showBackToTop ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'
       }`}
-      style={{ background: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(20px)', bottom: 'calc(env(safe-area-inset-bottom) + 7rem)' }}
+      style={{ background: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(20px)' }}
       aria-label="Back to top"
     >
       <ChevronUp className="w-5 h-5" />
@@ -117,15 +139,15 @@ const Index = () => {
       {/* Ambient orbs — large blurred blobs that create atmospheric depth */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
         {/* Top-left: cool blue */}
-        <div className="absolute -top-48 -left-48 w-[700px] h-[700px] rounded-full bg-blue-600/20 blur-[120px] animate-[drift1_22s_ease-in-out_infinite]" />
+        <div className="absolute -top-48 -left-48 w-[700px] h-[700px] rounded-full bg-blue-600/20 blur-[120px] md:animate-[drift1_22s_ease-in-out_infinite]" style={{ willChange: 'transform' }} />
         {/* Top-right: indigo/violet */}
-        <div className="absolute -top-32 -right-64 w-[600px] h-[600px] rounded-full bg-violet-600/15 blur-[100px] animate-[drift2_28s_ease-in-out_infinite]" />
+        <div className="absolute -top-32 -right-64 w-[600px] h-[600px] rounded-full bg-violet-600/15 blur-[100px] md:animate-[drift2_28s_ease-in-out_infinite]" style={{ willChange: 'transform' }} />
         {/* Center: deep teal */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] rounded-full bg-cyan-700/10 blur-[140px] animate-[drift3_35s_ease-in-out_infinite]" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] rounded-full bg-cyan-700/10 blur-[140px] md:animate-[drift3_35s_ease-in-out_infinite]" style={{ willChange: 'transform' }} />
         {/* Bottom-left: purple */}
-        <div className="absolute -bottom-64 -left-32 w-[600px] h-[600px] rounded-full bg-purple-700/15 blur-[110px] animate-[drift2_30s_ease-in-out_infinite_-10s]" />
+        <div className="absolute -bottom-64 -left-32 w-[600px] h-[600px] rounded-full bg-purple-700/15 blur-[110px] md:animate-[drift2_30s_ease-in-out_infinite_-10s]" style={{ willChange: 'transform' }} />
         {/* Bottom-right: blue accent */}
-        <div className="absolute -bottom-32 -right-32 w-[500px] h-[500px] rounded-full bg-blue-500/10 blur-[90px] animate-[drift1_25s_ease-in-out_infinite_-5s]" />
+        <div className="absolute -bottom-32 -right-32 w-[500px] h-[500px] rounded-full bg-blue-500/10 blur-[90px] md:animate-[drift1_25s_ease-in-out_infinite_-5s]" style={{ willChange: 'transform' }} />
       </div>
 
       {/* Floating particles effect */}
@@ -144,7 +166,8 @@ const Index = () => {
         ))}
       </div>
       
-      <Navigation onSectionClick={scrollToSection} activeSection={activeSection} />
+      <Navigation onSectionClick={scrollToSection} activeSection={activeSection} showBackToTop={showBackToTop} onScrollToTop={() => scrollToSection('home')} />
+      <SiteStats open={showSiteStats} onClose={() => setShowSiteStats(false)} />
       
       <main className="relative z-10 pb-28 md:pb-0">
         <div id="home" className="scroll-mt-0">
@@ -185,7 +208,7 @@ const Index = () => {
           </div>
         </Suspense>
       </main>
-      <footer className="relative z-10 text-center py-6 text-sm text-white/40">
+      <footer className="relative z-10 text-center py-6 pb-28 md:pb-6 text-sm text-white/40">
         © {new Date().getFullYear()} Waleed Tariq. All rights reserved.
       </footer>
     </div>

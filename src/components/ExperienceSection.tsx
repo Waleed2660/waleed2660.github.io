@@ -2,6 +2,28 @@ import { ChevronDown, ChevronUp, CircleDot } from "lucide-react";
 import { useState } from "react";
 import FadeIn from "./FadeIn";
 
+const MONTHS: Record<string, number> = {
+  Jan: 0, Feb: 1, Mar: 2, Apr: 3, May: 4, Jun: 5,
+  Jul: 6, Aug: 7, Sep: 8, Oct: 9, Nov: 10, Dec: 11,
+};
+
+const getDuration = (period: string): string => {
+  const [startStr, endStr] = period.split(' - ');
+  const parseDate = (s: string) => {
+    if (s.trim() === 'Present') return new Date();
+    const [mon, yr] = s.trim().split(' ');
+    return new Date(parseInt(yr), MONTHS[mon]);
+  };
+  const start = parseDate(startStr);
+  const end = parseDate(endStr);
+  const totalMonths = (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth()) + 1;
+  const yrs = Math.floor(totalMonths / 12);
+  const mos = totalMonths % 12;
+  if (yrs === 0) return `${mos} mo`;
+  if (mos === 0) return `${yrs} yr`;
+  return `${yrs} yr ${mos} mo`;
+};
+
 interface Promotion {
   title: string;
   period: string;
@@ -28,7 +50,7 @@ const ExperienceSection = () => {
       company: "Sainsbury's Tech",
       location: "Manchester, UK",
       logo: "/work_exp/sainsburys.webp",
-      period: "2025 - Present",
+      period: "Mar 2025 - Present",
       tech: ["Java", "Spring Boot", "Apache Kafka", "Kubernetes", "AWS"],
       brandColor: "bg-gradient-to-br from-orange-500/10 to-amber-500/10 border-orange-500/30 hover:border-orange-500/50",
       description: [
@@ -45,12 +67,12 @@ const ExperienceSection = () => {
       company: "The Hut Group",
       location: "Manchester, UK",
       logo: "/work_exp/thg.webp",
-      period: "2022 - 2025",
+      period: "Jul 2022 - Mar 2025",
       tech: ["Java", "Spring Boot", "Apache ActiveMQ"],
       brandColor: "bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border-cyan-500/40 hover:border-cyan-400/60",
       promotions: [
-        { title: "Software Engineer", period: "2024 - 2025" },
-        { title: "Graduate Software Engineer", period: "2022 - 2024" },
+        { title: "Software Engineer", period: "Jul 2024 - Mar 2025" },
+        { title: "Graduate Software Engineer", period: "Jul 2022 - Jul 2024" },
       ],
       description: [
         "Part of Order Processing Team responsible for microservices that process orders and allocate & generate shipments for warehouses, serving THG's global brand portfolio including Myprotein and LOOKFANTASTIC — leveraging Java, Spring Boot, Apache ActiveMQ, Tomcat, Docker, and MSSQL",
@@ -66,7 +88,7 @@ const ExperienceSection = () => {
       company: "Lancaster University",
       location: "Lancaster, UK",
       logo: "/work_exp/lancaster-uni.webp",
-      period: "2022 - 2022",
+      period: "Jun 2022 - Sep 2022",
       tech: ["Python", "Machine Learning", "OpenCV", "PyTorch", "Data Annotations"],
       brandColor: "bg-gradient-to-br from-red-500/10 to-rose-500/10 border-red-500/30 hover:border-red-500/50",
       description: [
@@ -120,9 +142,12 @@ const ExperienceSection = () => {
                         <p className="text-xl text-white/80">{exp.company}</p>
                         <p className="text-white/50 text-sm mt-1">{exp.location}</p>
                       </div>
-                      <div className="flex-shrink-0">
-                        <span className="glass px-4 py-2 rounded-lg text-blue-300 text-sm font-semibold whitespace-nowrap inline-block">
+                      <div className="flex-shrink-0 text-right">
+                        <span className="text-white/40 text-sm font-medium whitespace-nowrap tabular-nums">
                           {exp.period}
+                        </span>
+                        <span className="block text-white/25 text-xs mt-0.5 tabular-nums">
+                          {getDuration(exp.period)}
                         </span>
                       </div>
                     </div>

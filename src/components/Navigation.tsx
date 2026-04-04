@@ -1,12 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
-import { Home, Briefcase, Code2, Calendar, Mail } from 'lucide-react';
+import { Home, Briefcase, Code2, Calendar, Mail, ChevronUp } from 'lucide-react';
 
 interface NavigationProps {
   onSectionClick: (section: string) => void;
   activeSection: string;
+  showBackToTop?: boolean;
+  onScrollToTop?: () => void;
 }
 
-const Navigation = ({ onSectionClick, activeSection }: NavigationProps) => {
+const Navigation = ({ onSectionClick, activeSection, showBackToTop, onScrollToTop }: NavigationProps) => {
   const sections = [
     { id: 'home', label: 'Home' },
     { id: 'experience', label: 'Experience' },
@@ -75,26 +77,62 @@ const Navigation = ({ onSectionClick, activeSection }: NavigationProps) => {
         </div>
       </nav>
 
-      {/* Mobile bottom nav */}
-      <nav className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 md:hidden">
+      {/* Mobile bottom nav — compact icon-only floating pill */}
+      <nav
+        className="fixed z-50 md:hidden"
+        style={{ bottom: 'calc(env(safe-area-inset-bottom) + 1.5rem)', left: '50%', transform: 'translateX(-50%)' }}
+      >
         <div
-          className="flex items-center gap-1 px-3 py-2 rounded-2xl"
-          style={{ background: 'rgba(15,15,35,0.50)', backdropFilter: 'blur(24px)', border: '1px solid rgba(255,255,255,0.10)' }}
+          className="flex items-center gap-1 px-3 py-3 rounded-full"
+          style={{
+            background: 'rgba(12,12,28,0.75)',
+            backdropFilter: 'blur(24px)',
+            WebkitBackdropFilter: 'blur(24px)',
+            border: '1px solid rgba(255,255,255,0.08)',
+            boxShadow: '0 8px 32px rgba(0,0,0,0.4)',
+          }}
         >
-          {mobileSections.map((section) => (
+          {mobileSections.map((section) => {
+            const isActive = activeSection === section.id;
+            return (
+              <button
+                key={section.id}
+                onClick={() => onSectionClick(section.id)}
+                className="relative flex items-center justify-center w-11 h-11 rounded-full transition-colors duration-200"
+                style={{ color: isActive ? '#fff' : 'rgba(255,255,255,0.35)' }}
+                aria-label={section.label}
+              >
+                {isActive && (
+                  <span
+                    className="absolute inset-0 rounded-full"
+                    style={{ background: 'rgba(255,255,255,0.12)' }}
+                  />
+                )}
+                <span className="relative">{section.icon}</span>
+                {isActive && (
+                  <span
+                    className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full"
+                    style={{ background: 'rgba(255,255,255,0.7)' }}
+                  />
+                )}
+              </button>
+            );
+          })}
+
+          {/* Back to top — appears as extra icon when scrolled down */}
+          <div
+            className="overflow-hidden transition-all duration-300"
+            style={{ width: showBackToTop ? '2.75rem' : '0px', opacity: showBackToTop ? 1 : 0 }}
+          >
             <button
-              key={section.id}
-              onClick={() => onSectionClick(section.id)}
-              className={`flex flex-col items-center gap-1 px-4 py-2 rounded-xl transition-all duration-200 ${
-                activeSection === section.id
-                  ? 'text-white bg-white/10'
-                  : 'text-white/40 hover:text-white/70'
-              }`}
+              onClick={onScrollToTop}
+              className="flex items-center justify-center w-11 h-11 rounded-full transition-colors duration-200"
+              style={{ color: 'rgba(255,255,255,0.35)' }}
+              aria-label="Back to top"
             >
-              {section.icon}
-              <span className="text-[10px] font-medium">{section.label}</span>
+              <ChevronUp className="w-5 h-5" />
             </button>
-          ))}
+          </div>
         </div>
       </nav>
     </>
