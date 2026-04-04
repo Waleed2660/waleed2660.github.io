@@ -40,6 +40,7 @@ const Index = () => {
 
   const progressBarRef = useRef<HTMLDivElement>(null);
   const [showBackToTop, setShowBackToTop] = useState(false);
+  const showBackToTopRef = useRef(false);
   const [showSiteStats, setShowSiteStats] = useState(false);
 
 
@@ -52,7 +53,11 @@ const Index = () => {
       if (progressBarRef.current) {
         progressBarRef.current.style.width = maxScroll > 0 ? `${(scrollY / maxScroll) * 100}%` : '0%';
       }
-      setShowBackToTop(scrollY > window.innerHeight);
+      const shouldShow = scrollY > window.innerHeight;
+      if (shouldShow !== showBackToTopRef.current) {
+        showBackToTopRef.current = shouldShow;
+        setShowBackToTop(shouldShow);
+      }
     };
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
@@ -119,7 +124,7 @@ const Index = () => {
       className={`fixed bottom-8 right-8 z-[100] p-3 rounded-full border border-white/20 text-white/70 hover:text-white hover:border-white/40 hover:scale-110 transition-all duration-300 hidden md:flex items-center justify-center ${
         showBackToTop ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'
       }`}
-      style={{ background: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(20px)' }}
+      style={{ background: 'rgba(30,30,50,0.9)' }}
       aria-label="Back to top"
     >
       <ChevronUp className="w-5 h-5" />
@@ -129,15 +134,15 @@ const Index = () => {
       {/* Ambient orbs — large blurred blobs that create atmospheric depth */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
         {/* Top-left: cool blue */}
-        <div className="absolute -top-48 -left-48 w-[700px] h-[700px] rounded-full bg-blue-600/20 blur-[120px] md:animate-[drift1_22s_ease-in-out_infinite]" style={{ willChange: 'transform' }} />
+        <div className="absolute -top-48 -left-48 w-[700px] h-[700px] rounded-full bg-blue-600/20 blur-[120px]" />
         {/* Top-right: indigo/violet */}
-        <div className="absolute -top-32 -right-64 w-[600px] h-[600px] rounded-full bg-violet-600/15 blur-[100px] md:animate-[drift2_28s_ease-in-out_infinite]" style={{ willChange: 'transform' }} />
+        <div className="absolute -top-32 -right-64 w-[600px] h-[600px] rounded-full bg-violet-600/15 blur-[100px]" />
         {/* Center: deep teal */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] rounded-full bg-cyan-700/10 blur-[140px] md:animate-[drift3_35s_ease-in-out_infinite]" style={{ willChange: 'transform' }} />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] rounded-full bg-cyan-700/10 blur-[140px]" />
         {/* Bottom-left: purple */}
-        <div className="absolute -bottom-64 -left-32 w-[600px] h-[600px] rounded-full bg-purple-700/15 blur-[110px] md:animate-[drift2_30s_ease-in-out_infinite_-10s]" style={{ willChange: 'transform' }} />
+        <div className="absolute -bottom-64 -left-32 w-[600px] h-[600px] rounded-full bg-purple-700/15 blur-[110px]" />
         {/* Bottom-right: blue accent */}
-        <div className="absolute -bottom-32 -right-32 w-[500px] h-[500px] rounded-full bg-blue-500/10 blur-[90px] md:animate-[drift1_25s_ease-in-out_infinite_-5s]" style={{ willChange: 'transform' }} />
+        <div className="absolute -bottom-32 -right-32 w-[500px] h-[500px] rounded-full bg-blue-500/10 blur-[90px]" />
       </div>
 
       {/* Floating particles effect */}

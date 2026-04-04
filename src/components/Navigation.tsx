@@ -51,7 +51,7 @@ const Navigation = ({ onSectionClick, activeSection, showBackToTop, onScrollToTo
     <>
       {/* Desktop nav */}
       <nav className="fixed top-6 left-1/2 transform -translate-x-1/2 z-50 hidden md:block">
-        <div className="glass-strong rounded-2xl p-2">
+        <div className="rounded-2xl p-2" style={{ background: 'rgba(12,12,28,0.92)', border: '1px solid rgba(255,255,255,0.1)', boxShadow: '0 8px 32px rgba(0,0,0,0.4)' }}>
           <div ref={containerRef} className="flex space-x-2 relative">
             {pillStyle && (
               <div
@@ -85,9 +85,7 @@ const Navigation = ({ onSectionClick, activeSection, showBackToTop, onScrollToTo
         <div
           className="flex items-center gap-1 px-3 py-3 rounded-full"
           style={{
-            background: 'rgba(12,12,28,0.75)',
-            backdropFilter: 'blur(24px)',
-            WebkitBackdropFilter: 'blur(24px)',
+            background: 'rgba(12,12,28,0.92)',
             border: '1px solid rgba(255,255,255,0.08)',
             boxShadow: '0 8px 32px rgba(0,0,0,0.4)',
           }}

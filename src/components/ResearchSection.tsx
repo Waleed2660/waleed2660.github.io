@@ -15,10 +15,12 @@ const ResearchSection = () => {
         </p>
 
         <div 
-          className="glass-strong rounded-3xl overflow-hidden hover:bg-white/10 hover:scale-[1.02] transition-all duration-500 group cursor-pointer"
-          onClick={() => navigate("/dissertation")}
+          className="glass-strong rounded-3xl overflow-hidden transition-all duration-500"
         >
-          <div className="bg-gradient-to-r from-blue-500/20 to-purple-500/10 px-8 py-5 flex flex-wrap items-center justify-between gap-4 border-b border-white/5">
+          <div
+            className="bg-gradient-to-r from-blue-500/20 to-purple-500/10 px-8 py-5 flex flex-wrap items-center justify-between gap-4 border-b border-white/5 cursor-pointer hover:bg-white/5 transition-colors duration-300 group"
+            onClick={() => navigate("/dissertation")}
+          >
             <div className="flex items-center gap-4">
               <div className="glass rounded-2xl p-3">
                 <span className="text-3xl">🎓</span>
@@ -88,11 +90,29 @@ const ResearchSection = () => {
                   </span>
                 ))}
               </div>
+
+              {/* View Full Paper button — left column */}
+              <button
+                onClick={() => navigate("/dissertation")}
+                className="flex items-center justify-center gap-2 glass rounded-xl px-6 py-3 text-white/80 hover:text-blue-300 hover:bg-white/10 transition-all group/btn mt-auto"
+              >
+                <ExternalLink className="w-4 h-4" />
+                <span>View Full Research Paper</span>
+                <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
+              </button>
             </div>
 
-            {/* Right: Visual highlight */}
+            {/* Right: Image + Research Impact */}
             <div className="flex flex-col gap-4">
-              <div className="glass rounded-2xl p-6 h-full flex flex-col justify-center">
+              <div className="glass rounded-2xl overflow-hidden">
+                <img
+                  src="/dissertation/drone_landfill_site.webp"
+                  alt="Drone with mounted camera performing object detection over a landfill site"
+                  className="w-full object-cover"
+                  loading="lazy"
+                />
+              </div>
+              <div className="glass rounded-2xl p-6 flex flex-col justify-center">
                 <h5 className="text-white/60 text-xs uppercase tracking-widest font-semibold mb-4">
                   Research Impact
                 </h5>
@@ -137,18 +157,6 @@ const ResearchSection = () => {
                   </div>
                 </div>
               </div>
-
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  navigate("/dissertation");
-                }}
-                className="flex items-center justify-center gap-2 glass rounded-xl px-6 py-3 text-white/80 hover:text-blue-300 hover:bg-white/10 transition-all group/btn"
-              >
-                <ExternalLink className="w-4 h-4" />
-                <span>View Full Research Paper</span>
-                <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
-              </button>
             </div>
           </div>
         </div>
