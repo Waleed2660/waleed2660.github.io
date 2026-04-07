@@ -4,9 +4,10 @@ import { useEffect, useState } from 'react';
 const TYPING_TEXTS = [
   "Software Engineer @ Sainsbury's",
   "Java · Kafka · Kubernetes",
-  "Spring Boot · AWS · PostgreSQL",
-  "Event-driven microservices",
-  "Manchester, UK",
+  "Spring Boot · AWS · Docker",
+  "K6 · Grafana · JMeter",
+  "PostgreSQL · MongoDB · Redis",
+  "Event-driven microservices"
 ];
 const CAREER_START = new Date(2022, 6, 1); // July 2022 — THG start
 const SHOW_AVAILABILITY = false; // Feature flag for availability status
