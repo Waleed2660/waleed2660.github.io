@@ -1,9 +1,16 @@
 import { ChevronDown } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
-const TYPING_TEXT = "Software Engineer @ Sainsbury's";
+const TYPING_TEXTS = [
+  "Software Engineer @ Sainsbury's",
+  "Java · Kafka · Kubernetes",
+  "Spring Boot · AWS · PostgreSQL",
+  "Event-driven microservices",
+  "Manchester, UK",
+];
 const CAREER_START = new Date(2022, 6, 1); // July 2022 — THG start
 const SHOW_AVAILABILITY = false; // Feature flag for availability status
+const NAME = "Waleed Tariq";
 
 function getYOE(): string {
   const now = new Date();
@@ -15,18 +22,36 @@ function getYOE(): string {
 const HomeSection = () => {
   const [displayed, setDisplayed] = useState('');
   const [typingDone, setTypingDone] = useState(false);
+  const [phase, setPhase] = useState<'typing' | 'erasing'>('typing');
+  const [phraseIndex, setPhraseIndex] = useState(0);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [hoveredLetterIdx, setHoveredLetterIdx] = useState<number | null>(null);
 
   useEffect(() => {
-    if (displayed.length < TYPING_TEXT.length) {
-      const timer = setTimeout(() => {
-        setDisplayed(TYPING_TEXT.slice(0, displayed.length + 1));
-      }, 55);
-      return () => clearTimeout(timer);
+    const currentText = TYPING_TEXTS[phraseIndex];
+    if (phase === 'typing') {
+      if (displayed.length < currentText.length) {
+        const timer = setTimeout(() => {
+          setDisplayed(currentText.slice(0, displayed.length + 1));
+        }, 55);
+        return () => clearTimeout(timer);
+      } else {
+        if (!typingDone) setTypingDone(true);
+        const timer = setTimeout(() => setPhase('erasing'), 2500);
+        return () => clearTimeout(timer);
+      }
     } else {
-      setTypingDone(true);
+      if (displayed.length > 0) {
+        const timer = setTimeout(() => {
+          setDisplayed(prev => prev.slice(0, -1));
+        }, 25);
+        return () => clearTimeout(timer);
+      } else {
+        setPhraseIndex(i => (i + 1) % TYPING_TEXTS.length);
+        setPhase('typing');
+      }
     }
-  }, [displayed]);
+  }, [displayed, phase, phraseIndex, typingDone]);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -62,14 +87,34 @@ const HomeSection = () => {
               </div>
             )}
 
-            <h1 className={`text-5xl sm:text-6xl md:text-7xl font-bold mb-6 text-glow ${!SHOW_AVAILABILITY ? 'mt-0' : ''}`}>
-              Waleed Tariq
+            <h1
+              className={`text-4xl sm:text-6xl md:text-7xl font-bold mb-6 text-glow ${!SHOW_AVAILABILITY ? 'mt-0' : ''}`}
+              onMouseLeave={() => setHoveredLetterIdx(null)}
+            >
+              {NAME.split('').map((char, i) => {
+                const dist = hoveredLetterIdx !== null ? Math.abs(i - hoveredLetterIdx) : Infinity;
+                const translateY = dist === 0 ? -14 : dist === 1 ? -8 : dist === 2 ? -3 : 0;
+                return (
+                  <span
+                    key={i}
+                    className="inline-block"
+                    onMouseEnter={() => setHoveredLetterIdx(i)}
+                    style={{
+                      whiteSpace: char === ' ' ? 'pre' : 'normal',
+                      transform: `translateY(${translateY}px)`,
+                      transition: 'transform 150ms ease-out',
+                    }}
+                  >
+                    {char}
+                  </span>
+                );
+              })}
             </h1>
             
             <div className="text-xl sm:text-2xl md:text-3xl text-white/50 italic mb-4 flex items-center justify-center gap-2 flex-wrap min-h-[2.5rem]">
               <span>
                 {displayed}
-                {!typingDone && <span className="animate-blink ml-0.5">|</span>}
+                <span className="animate-blink ml-0.5">|</span>
               </span>
             </div>
 
@@ -79,7 +124,7 @@ const HomeSection = () => {
             </div>
 
             <p className="text-xl sm:text-2xl text-white/70 mb-12 max-w-3xl mx-auto leading-relaxed">
-              Backend engineer obsessed with scale and performance ~ Java, Kafka, Kubernetes, and the satisfaction of a system that holds under pressure
+              Backend engineer building reliable, high-throughput systems. Focused on Java, Kafka, and Kubernetes in production.
             </p>
 
             <div className="flex justify-center flex-wrap gap-3">

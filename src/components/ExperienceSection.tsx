@@ -1,4 +1,4 @@
-import { ChevronDown, ChevronUp, CircleDot } from "lucide-react";
+import { ChevronDown, CircleDot } from "lucide-react";
 import { useState } from "react";
 import FadeIn from "./FadeIn";
 
@@ -39,10 +39,11 @@ interface Experience {
   description: string[];
   promotions?: Promotion[];
   brandColor: string;
+  bulletColor: string;
 }
 
 const ExperienceSection = () => {
-  const [expandedCard, setExpandedCard] = useState<number | null>(null);
+  const [expandedCards, setExpandedCards] = useState<Set<number>>(new Set());
 
   const experiences: Experience[] = [
     {
@@ -53,6 +54,7 @@ const ExperienceSection = () => {
       period: "Mar 2025 - Present",
       tech: ["Java", "Spring Boot", "Apache Kafka", "Kubernetes", "AWS"],
       brandColor: "bg-gradient-to-br from-orange-500/10 to-amber-500/10 border-orange-500/30 hover:border-orange-500/50",
+      bulletColor: "text-orange-400/80",
       description: [
         "Part of Digital Fulfilment team, developing critical backend services that calculate accurate delivery timelines for customer orders — contributing to Sainsbury's online platform serving millions of weekly shoppers across the UK",
         "Currently developing a new order reservation proposition, enabling advanced inventory management and improved customer experience through real-time stock availability",
@@ -70,6 +72,7 @@ const ExperienceSection = () => {
       period: "Jul 2022 - Mar 2025",
       tech: ["Java", "Spring Boot", "Apache ActiveMQ"],
       brandColor: "bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border-cyan-500/40 hover:border-cyan-400/60",
+      bulletColor: "text-cyan-400/80",
       promotions: [
         { title: "Software Engineer", period: "Jul 2024 - Mar 2025" },
         { title: "Graduate Software Engineer", period: "Jul 2022 - Jul 2024" },
@@ -91,6 +94,7 @@ const ExperienceSection = () => {
       period: "Jun 2022 - Sep 2022",
       tech: ["Python", "Machine Learning", "OpenCV", "PyTorch", "Data Annotations"],
       brandColor: "bg-gradient-to-br from-red-500/10 to-rose-500/10 border-red-500/30 hover:border-red-500/50",
+      bulletColor: "text-red-400/80",
       description: [
         "This research project was offered to me as an extension to my Final Year Project. My research was aimed at fine tuning & evaluating YOLOv3 and YOLOv5 machine learning models to detect landfills from both satellite and drone imagery.",
         "These models were trained on Google cloud for weeks while being tested & evaluated regularly to fine tune training parameters.",
@@ -100,7 +104,11 @@ const ExperienceSection = () => {
   ];
 
   const toggleCard = (index: number) => {
-    setExpandedCard(expandedCard === index ? null : index);
+    setExpandedCards(prev => {
+      const next = new Set(prev);
+      next.has(index) ? next.delete(index) : next.add(index);
+      return next;
+    });
   };
 
   return (
@@ -117,9 +125,10 @@ const ExperienceSection = () => {
             <div className="group">
               {/* Card */}
               <div
-                className={`glass-strong rounded-2xl p-8 transition-all duration-300 border
+                className={`glass-strong rounded-2xl p-8 transition-all duration-300 border cursor-pointer
                   ${exp.brandColor}
-                  ${expandedCard === index ? 'scale-[1.01]' : 'hover:scale-[1.01] hover:-translate-y-1'}`}
+                  ${expandedCards.has(index) ? 'scale-[1.01]' : 'hover:scale-[1.01] hover:-translate-y-1'}`}
+                onClick={() => toggleCard(index)}
               >
                 <div className="flex flex-col lg:flex-row gap-6">
                   {/* Logo */}
@@ -142,13 +151,18 @@ const ExperienceSection = () => {
                         <p className="text-xl text-white/80">{exp.company}</p>
                         <p className="text-white/50 text-sm mt-1">{exp.location}</p>
                       </div>
-                      <div className="flex-shrink-0 text-right">
+                      <div className="flex-shrink-0 text-right flex flex-col items-end gap-1">
                         <span className="text-white/40 text-sm font-medium whitespace-nowrap tabular-nums">
                           {exp.period}
                         </span>
-                        <span className="block text-white/25 text-xs mt-0.5 tabular-nums">
+                        <span className="block text-white/25 text-xs tabular-nums">
                           {getDuration(exp.period)}
                         </span>
+                        <ChevronDown
+                          className={`w-4 h-4 text-white/30 transition-transform duration-300 mt-1 ${
+                            expandedCards.has(index) ? 'rotate-180 text-white/60' : ''
+                          }`}
+                        />
                       </div>
                     </div>
 
@@ -185,13 +199,13 @@ const ExperienceSection = () => {
 
                     {/* Description - shows when expanded */}
                     <div className={`overflow-hidden transition-all duration-500 ${
-                      expandedCard === index ? 'max-h-[1000px] opacity-100 mt-4' : 'max-h-0 opacity-0'
+                      expandedCards.has(index) ? 'max-h-[1000px] opacity-100 mt-4' : 'max-h-0 opacity-0'
                     }`}>
                       <div className="border-t border-white/10 pt-4">
                         <ul className="space-y-3">
                           {exp.description.map((item, i) => (
                             <li key={i} className="flex items-start gap-3">
-                              <CircleDot className="w-4 h-4 mt-1 text-blue-400/70 flex-shrink-0" />
+                              <CircleDot className={`w-4 h-4 mt-1 ${exp.bulletColor} flex-shrink-0`} />
                               <span className="text-white/70 text-sm leading-relaxed">{item}</span>
                             </li>
                           ))}
@@ -201,23 +215,9 @@ const ExperienceSection = () => {
                   </div>
                 </div>
 
-                {/* Expand/Collapse Button */}
-                <button
-                  onClick={() => toggleCard(index)}
-                  className="mt-3 mx-auto flex items-center gap-2 text-white/50 hover:text-white/90 transition-all hover:bg-white/5 px-4 py-1.5 rounded-lg text-sm group"
-                >
-                  {expandedCard === index ? (
-                    <>
-                      <span className="font-medium">Hide Details</span>
-                      <ChevronUp className="w-4 h-4 group-hover:-translate-y-0.5 transition-transform" />
-                    </>
-                  ) : (
-                    <>
-                      <span className="font-medium">View Details</span>
-                      <ChevronDown className="w-4 h-4 group-hover:translate-y-0.5 transition-transform" />
-                    </>
-                  )}
-                </button>
+                <p className="mt-3 text-center text-white/25 text-xs">
+                  {expandedCards.has(index) ? 'Click to collapse' : 'Click to expand'}
+                </p>
               </div>
             </div>
             </FadeIn>
