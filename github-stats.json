@@ -1,19 +1,23 @@
 {
   "followers": 12,
-  "public_repos": 15,
-  "stars": 119,
+  "public_repos": 16,
+  "stars": 121,
   "languages": [
     {
       "name": "Java",
-      "percentage": 40
+      "percentage": 33
     },
     {
       "name": "Python",
-      "percentage": 40
+      "percentage": 33
+    },
+    {
+      "name": "Go",
+      "percentage": 17
     },
     {
       "name": "TypeScript",
-      "percentage": 20
+      "percentage": 17
     }
   ]
 }
