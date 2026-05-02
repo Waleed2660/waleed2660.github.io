@@ -16,7 +16,7 @@ const getDuration = (period: string): string => {
   };
   const start = parseDate(startStr);
   const end = parseDate(endStr);
-  const totalMonths = (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth()) + 1;
+  const totalMonths = (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth());
   const yrs = Math.floor(totalMonths / 12);
   const mos = totalMonths % 12;
   if (yrs === 0) return `${mos} mo`;

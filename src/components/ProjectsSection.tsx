@@ -51,6 +51,13 @@ const ProjectsSection = () => {
       ]
     },
     {
+      title: "xk6-kafka-rest",
+      description: "A k6 extension for publishing JSON messages to Confluent Kafka via the Confluent REST Proxy with full OAuth 2.0 (Client Credentials) support. Created as an alternative to xk6-kafka, whose underlying go-kafka library lacks OAuth 2.0 support.",
+      tech: ["Go", "k6", "Kafka", "OAuth 2.0", "REST"],
+      github: "https://github.com/Waleed2660/xk6-kafka-rest",
+      image: "/tech_icons/k6-logo.svg.webp"
+    },
+    {
       title: "Nimbus",
       description: "Personal Cloud Storage webapp built with JS, React, Tailwind CSS. Allows file upload, download & directory navigation. Backend application is built with Java SpringBoot which uses Amazon S3 to store files.",
       tech: ["React", "Tailwind CSS", "Spring Boot", "AWS S3"],
