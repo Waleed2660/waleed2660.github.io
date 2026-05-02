@@ -74,8 +74,8 @@ const ExperienceSection = () => {
       brandColor: "bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border-cyan-500/40 hover:border-cyan-400/60",
       bulletColor: "text-cyan-400/80",
       promotions: [
-        { title: "Software Engineer", period: "Jul 2024 - Mar 2025" },
         { title: "Graduate Software Engineer", period: "Jul 2022 - Jul 2024" },
+        { title: "Software Engineer", period: "Jul 2024 - Mar 2025" },
       ],
       description: [
         "Part of Order Processing Team responsible for microservices that process orders and allocate & generate shipments for warehouses, serving THG's global brand portfolio including Myprotein and LOOKFANTASTIC — leveraging Java, Spring Boot, Apache ActiveMQ, Tomcat, Docker, and MSSQL",
