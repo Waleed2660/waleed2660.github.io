@@ -34,26 +34,60 @@ type Conference = {
 
 const conferences: Conference[] = [
   {
+    name: "Sainsbury's Tech Hackathon",
+    shortName: "HACKATHON",
+    edition: "2026",
+    date: "June 2026",
+    location: "Coventry, UK",
+    emoji: "⚡",
+    accentColor: "from-orange-500/20 to-amber-500/10",
+    tagline: "Sainsbury's internal innovation hackathon",
+    summary:
+      "Our team made it to the grand finale. One of just four teams selected from a field of 24, where we presented live in front of CEO Simon Roberts and CTOs and Directors from Sainsbury's and Argos. We built an AI-powered tool to help store managers reduce fresh food wastage in real time. A close finish; there was only one winner on the day, but reaching the final and pitching to the executive team made it an experience to remember.",
+    talks: [
+      {
+        title: "Grand Finale Presentation",
+        takeaway:
+          "Presenting our fresh food wastage reduction tool to Simon Roberts and senior leadership was a genuine highlight — distilling a complex AI solution into a compelling pitch under pressure, and getting direct feedback from the top.",
+      },
+      {
+        title: "Building the AI Wastage Tool",
+        takeaway:
+          "Rapid prototyping under hackathon constraints pushed us to make fast, pragmatic decisions. The problem of fresh food wastage is genuinely hard — balancing sales forecasts, stock levels, and expiry windows — and AI turned out to be a natural fit.",
+      },
+    ],
+    tags: ["Sainsbury's", "Hackathon", "AI", "Innovation", "Finalist", "Food Wastage"],
+    links: [
+      { label: "Sainsbury's Tech", url: "https://www.sainsburys.jobs/teams/technology" },
+    ],
+    photos: [
+      { src: "/conferences/hackathon_2026/hackathon_4.webp", alt: "Hackathon finale", span: "row" },
+      { src: "/conferences/hackathon_2026/hackathon_2.webp", alt: "Team at the hackathon", span: "col" },
+      { src: "/conferences/hackathon_2026/hackathon_3.webp", alt: "Hackathon presentation" },
+      { src: "/conferences/hackathon_2026/hackathon_1.webp", alt: "Sainsbury's Tech Hackathon 2026" },
+    ],
+  },
+  {
     name: "Capital Connections",
     shortName: "CAP CON",
-    edition: "2025",
-    date: "March 2025",
+    edition: "2026",
+    date: "March 2026",
     location: "Manchester, UK",
     emoji: "https://www.lancaster.ac.uk/media/wdp/style-assets/images/foundation/lu-shield.svg",
-    accentColor: "from-red-500/20 to-orange-500/10",
+    accentColor: "from-emerald-500/20 to-teal-500/10",
     tagline: "Lancaster University alumni networking",
     summary:
-      "Was invited by the Grow Your Future team as a Lancaster alumnus to come and share my experiences with current students. Spent the evening going around chatting with students about the realities of the job hunt — what the process actually looks like, how to manage the pressure, and what to genuinely expect from your first role. Lots of great questions and good conversations; it was rewarding to help in the same way others helped me when I was starting out.",
+      "Invited again by the Grow Your Future team as a Lancaster alumnus to share my experiences with current students. Spent the evening chatting with students one-on-one, fielding questions about the job hunt, what work is actually like day-to-day, managing expectations around salary and culture, and dealing with the pressure of breaking into industry. Always a great event to be part of.",
     talks: [
       {
         title: "Alumni Speaker",
         takeaway:
-          "Shared my journey from graduating at Lancaster to landing a full-time engineering role — the highs, the rejections, and the practical things that actually made a difference.",
+          "Shared my own journey from Lancaster to full-time software engineering — the job search grind, what I wish I'd known, and how to stand out without burning out.",
       },
       {
         title: "Student Q&A",
         takeaway:
-          "Walked through questions on job hunting strategy, what work pressure looks like in practice, salary expectations, and how to build confidence going into interviews and early in your career.",
+          "Answered a lot of honest questions: how to handle rejection in the job hunt, what work pressure really feels like, what to actually expect from a first role, and how to make the most of the time left at university.",
       },
     ],
     tags: ["Networking", "Alumni", "Lancaster University", "Grow Your Future", "Career Development"],
@@ -61,8 +95,45 @@ const conferences: Conference[] = [
       { label: "Grow Your Future", url: "https://portal.lancaster.ac.uk/ask/grow-your-future/", icon: "https://www.lancaster.ac.uk/media/wdp/style-assets/images/foundation/lu-shield.svg" },
     ],
     photos: [
-      { src: "/conferences/gyf/gyf_talk_2025.webp", alt: "Talk at Capital Connections 2025" },
-      { src: "/conferences/gyf/students_2025.webp", alt: "Students at Capital Connections 2025" },
+      { src: "/conferences/gyf/students_2026.webp", alt: "Students at Capital Connections 2026" },
+      { src: "/conferences/gyf/gyf_2026.webp", alt: "Capital Connections 2026" },
+    ],
+  },
+  {
+    name: "Sainsbury's Tech Con",
+    shortName: "TECH CON",
+    edition: "2025",
+    date: "June 2025",
+    location: "Birmingham, UK",
+    emoji: "🏆",
+    accentColor: "from-orange-500/20 to-yellow-500/10",
+    tagline: "Sainsbury's Digital, Tech and Data Conference",
+    summary: (
+      <>
+        My first ever internal tech conference and what a way to experience it. My team walked away with the{" "}
+        <span className="text-yellow-300 font-semibold">Strategic Team of the Year</span>{" "}
+        award. Heard from a brilliant lineup of speakers including Bruce Daisley and Kimberly Wilson across a range of topics, and spent time exploring stands from various companies showcasing their latest work.
+      </>
+    ),
+    talks: [
+      {
+        title: "Bruce Daisley & Kimberly Wilson",
+        takeaway:
+          "Compelling talks on culture, performance, and what it actually takes to build teams that do great work — the kind of perspective that sticks with you well after the conference ends.",
+      },
+      {
+        title: "Industry Stands & Showcases",
+        takeaway:
+          "Explored stands from a wide range of companies showing off their latest tech and achievements — a good reminder of just how fast things are moving across the industry.",
+      },
+    ],
+    tags: ["Sainsbury's", "Tech Conference", "Internal Event", "Award", "Digital", "Data"],
+    links: [
+      { label: "Sainsbury's Tech", url: "https://www.sainsburys.jobs/teams/technology" },
+    ],
+    photos: [
+      { src: "/conferences/tech_con/team.webp", alt: "Team at Sainsbury's Tech Con", span: "col" },
+      { src: "/conferences/tech_con/award.webp", alt: "Strategic Team of the Year award" }
     ],
   },
   {
@@ -113,63 +184,26 @@ const conferences: Conference[] = [
     ],
   },
   {
-    name: "Sainsbury's Tech Con",
-    shortName: "TECH CON",
-    edition: "2025",
-    date: "June 2025",
-    location: "Birmingham, UK",
-    emoji: "🏆",
-    accentColor: "from-orange-500/20 to-yellow-500/10",
-    tagline: "Sainsbury's Digital, Tech and Data Conference",
-    summary: (
-      <>
-        My first ever internal tech conference and what a way to experience it. My team walked away with the{" "}
-        <span className="text-yellow-300 font-semibold">Strategic Team of the Year</span>{" "}
-        award. Heard from a brilliant lineup of speakers including Bruce Daisley and Kimberly Wilson across a range of topics, and spent time exploring stands from various companies showcasing their latest work.
-      </>
-    ),
-    talks: [
-      {
-        title: "Bruce Daisley & Kimberly Wilson",
-        takeaway:
-          "Compelling talks on culture, performance, and what it actually takes to build teams that do great work — the kind of perspective that sticks with you well after the conference ends.",
-      },
-      {
-        title: "Industry Stands & Showcases",
-        takeaway:
-          "Explored stands from a wide range of companies showing off their latest tech and achievements — a good reminder of just how fast things are moving across the industry.",
-      },
-    ],
-    tags: ["Sainsbury's", "Tech Conference", "Internal Event", "Award", "Digital", "Data"],
-    links: [
-      { label: "Sainsbury's Tech", url: "https://www.sainsburys.jobs/teams/technology" },
-    ],
-    photos: [
-      { src: "/conferences/tech_con/team.webp", alt: "Team at Sainsbury's Tech Con", span: "col" },
-      { src: "/conferences/tech_con/award.webp", alt: "Strategic Team of the Year award" }
-    ],
-  },
-  {
     name: "Capital Connections",
     shortName: "CAP CON",
-    edition: "2026",
-    date: "March 2026",
+    edition: "2025",
+    date: "March 2025",
     location: "Manchester, UK",
     emoji: "https://www.lancaster.ac.uk/media/wdp/style-assets/images/foundation/lu-shield.svg",
-    accentColor: "from-emerald-500/20 to-teal-500/10",
+    accentColor: "from-red-500/20 to-orange-500/10",
     tagline: "Lancaster University alumni networking",
     summary:
-      "Invited again by the Grow Your Future team as a Lancaster alumnus to share my experiences with current students. Spent the evening chatting with students one-on-one, fielding questions about the job hunt, what work is actually like day-to-day, managing expectations around salary and culture, and dealing with the pressure of breaking into industry. Always a great event to be part of.",
+      "Was invited by the Grow Your Future team as a Lancaster alumnus to come and share my experiences with current students. Spent the evening going around chatting with students about the realities of the job hunt — what the process actually looks like, how to manage the pressure, and what to genuinely expect from your first role. Lots of great questions and good conversations; it was rewarding to help in the same way others helped me when I was starting out.",
     talks: [
       {
         title: "Alumni Speaker",
         takeaway:
-          "Shared my own journey from Lancaster to full-time software engineering — the job search grind, what I wish I'd known, and how to stand out without burning out.",
+          "Shared my journey from graduating at Lancaster to landing a full-time engineering role — the highs, the rejections, and the practical things that actually made a difference.",
       },
       {
         title: "Student Q&A",
         takeaway:
-          "Answered a lot of honest questions: how to handle rejection in the job hunt, what work pressure really feels like, what to actually expect from a first role, and how to make the most of the time left at university.",
+          "Walked through questions on job hunting strategy, what work pressure looks like in practice, salary expectations, and how to build confidence going into interviews and early in your career.",
       },
     ],
     tags: ["Networking", "Alumni", "Lancaster University", "Grow Your Future", "Career Development"],
@@ -177,8 +211,8 @@ const conferences: Conference[] = [
       { label: "Grow Your Future", url: "https://portal.lancaster.ac.uk/ask/grow-your-future/", icon: "https://www.lancaster.ac.uk/media/wdp/style-assets/images/foundation/lu-shield.svg" },
     ],
     photos: [
-      { src: "/conferences/gyf/students_2026.webp", alt: "Students at Capital Connections 2026" },
-      { src: "/conferences/gyf/gyf_2026.webp", alt: "Capital Connections 2026" },
+      { src: "/conferences/gyf/gyf_talk_2025.webp", alt: "Talk at Capital Connections 2025" },
+      { src: "/conferences/gyf/students_2025.webp", alt: "Students at Capital Connections 2025" },
     ],
   },
 ];
@@ -243,6 +277,9 @@ const PhotoGrid = ({ photos, accent, gridHeight = "h-64" }: { photos: PhotoSlot[
 
 const ConferencesSection = () => {
   const [expandedTalks, setExpandedTalks] = useState<Record<number, boolean>>({});
+  const [showAll, setShowAll] = useState(false);
+
+  const visibleConferences = showAll ? conferences : conferences.slice(0, 3);
 
   return (
     <section className="flex items-center justify-center px-6 py-24 relative z-20">
@@ -255,7 +292,7 @@ const ConferencesSection = () => {
         </p>
 
         <div className="flex flex-col gap-10">
-          {conferences.map((conf, index) => (
+          {visibleConferences.map((conf, index) => (
             <div
               key={index}
               className="glass-strong rounded-3xl overflow-hidden hover:bg-white/10 hover:scale-[1.02] transition-all duration-500 group will-change-transform"
@@ -372,6 +409,27 @@ const ConferencesSection = () => {
             </div>
           ))}
         </div>
+
+        {conferences.length > 3 && (
+          <div className="flex justify-center mt-10">
+            <button
+              onClick={() => setShowAll((p) => !p)}
+              className="flex items-center gap-2 glass-strong rounded-2xl px-6 py-3 text-white/60 text-sm font-medium hover:text-white hover:bg-white/10 transition-all duration-300 group"
+            >
+              {showAll ? (
+                <>
+                  <ChevronUp className="w-4 h-4 transition-transform duration-300" />
+                  Show less
+                </>
+              ) : (
+                <>
+                  <ChevronDown className="w-4 h-4 transition-transform duration-300 group-hover:translate-y-0.5" />
+                  Show {conferences.length - 3} older event{conferences.length - 3 !== 1 ? "s" : ""}
+                </>
+              )}
+            </button>
+          </div>
+        )}
       </div>
     </section>
   );
