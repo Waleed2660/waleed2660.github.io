@@ -45,7 +45,6 @@
     --radius: 0.5rem;
 
     --html-bg: #0f0f23;
-    --body-gradient: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
     --glass-bg: rgba(255, 255, 255, 0.04);
     --glass-strong-bg: rgba(255, 255, 255, 0.05);
     --glass-border: rgba(255, 255, 255, 0.07);
@@ -108,7 +107,6 @@
     --sidebar-ring: 217.2 91.2% 59.8%;
 
     --html-bg: #f4f5fd;
-    --body-gradient: linear-gradient(135deg, #eef1fc 0%, #e9edfb 45%, #ede8fa 100%);
     --glass-bg: rgba(79, 70, 229, 0.05);
     --glass-strong-bg: rgba(79, 70, 229, 0.065);
     --glass-border: rgba(79, 70, 229, 0.16);
@@ -137,17 +135,51 @@
 @layer base {
   * {
     @apply border-border;
+    transition-property: background-color, border-color, color, box-shadow, fill, stroke;
+    transition-timing-function: ease;
+    transition-duration: 350ms;
   }
 
   html {
     background: var(--html-bg);
+    transition: background-color 350ms ease;
   }
 
   body {
     @apply bg-background text-foreground;
-    background: var(--body-gradient);
+    background: transparent;
     min-height: 100vh;
+    position: relative;
   }
+}
+
+/* Crossfading full-viewport background layers so switching themes fades
+   smoothly between the dark and light gradients instead of snapping —
+   background-image/gradients can't be transitioned directly. */
+.theme-bg-layer {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  transition: opacity 450ms ease;
+}
+
+.theme-bg-layer--dark {
+  background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+  opacity: 1;
+}
+
+.theme-bg-layer--light {
+  background: linear-gradient(135deg, #eef1fc 0%, #e9edfb 45%, #ede8fa 100%);
+  opacity: 0;
+}
+
+html:not(.dark) .theme-bg-layer--dark {
+  opacity: 0;
+}
+
+html:not(.dark) .theme-bg-layer--light {
+  opacity: 1;
 }
 
 @layer utilities {
