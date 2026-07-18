@@ -19,5 +19,11 @@
       "name": "Go",
       "percentage": 17
     }
-  ]
+  ],
+  "repos": {
+    "springboot-learning-kit": {
+      "stars": 124,
+      "forks": 65
+    }
+  }
 }
