@@ -2,6 +2,26 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <script>
+      (function () {
+        try {
+          var stored = localStorage.getItem('theme');
+          var isDark = stored === 'dark' || stored === 'light'
+            ? stored === 'dark'
+            : !window.matchMedia || window.matchMedia('(prefers-color-scheme: dark)').matches;
+          if (isDark) {
+            document.documentElement.classList.add('dark');
+          }
+          var meta = document.querySelector('meta[name="theme-color"]');
+          if (meta) {
+            meta.setAttribute('content', isDark ? '#0f0f23' : '#eef0fc');
+          }
+        } catch (e) {
+          document.documentElement.classList.add('dark');
+        }
+      })();
+    </script>
+    <meta name="theme-color" content="#0f0f23" />
     <link rel="shortcut icon" href="/favicon.ico" />
     <link rel="icon" type="image/png" sizes="192x192" href="/favicon_io/android-chrome-192x192.png" />
     <link rel="icon" type="image/x-icon" href="/favicon_io/favicon.ico" />
@@ -56,12 +76,14 @@
       ]
     }
     </script>
-    <script type="module" crossorigin src="/assets/index-BqrYBbmZ.js"></script>
+    <script type="module" crossorigin src="/assets/index-DGhbMLRv.js"></script>
     <link rel="modulepreload" crossorigin href="/assets/vendor-CQeHmLAp.js">
-    <link rel="stylesheet" crossorigin href="/assets/index-BMoh5XTe.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-Boq9VAQG.css">
   </head>
 
   <body>
+    <div class="theme-bg-layer theme-bg-layer--dark" aria-hidden="true"></div>
+    <div class="theme-bg-layer theme-bg-layer--light" aria-hidden="true"></div>
     <div id="root"></div>
     <!-- SPA redirect handler for GitHub Pages 404.html -->
     <script>
