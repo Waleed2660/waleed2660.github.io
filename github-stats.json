@@ -1,7 +1,7 @@
 {
   "followers": 12,
   "public_repos": 16,
-  "stars": 129,
+  "stars": 131,
   "languages": [
     {
       "name": "Java",
@@ -19,5 +19,11 @@
       "name": "Go",
       "percentage": 17
     }
-  ]
+  ],
+  "repos": {
+    "springboot-learning-kit": {
+      "stars": 124,
+      "forks": 65
+    }
+  }
 }
