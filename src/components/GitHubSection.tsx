@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { useTheme } from '@/hooks/use-theme';
 
 // Contribution colour — violet-600, rich and visible against dark background
 const USERNAME = 'Waleed2660';
@@ -35,6 +36,11 @@ interface GitHubStats {
 const GitHubSection = () => {
   const [stats, setStats] = useState<GitHubStats | null>(null);
   const chartRef = useRef<HTMLDivElement>(null);
+  const { theme } = useTheme();
+
+  const streakStatsUrl = theme === 'dark'
+    ? 'https://streak-stats.demolab.com?user=Waleed2660&theme=transparent&hide_border=true&stroke=ffffff20&ring=818cf8&fire=818cf8&currStreakLabel=ffffff99&sideLabels=ffffff99&currStreakNum=ffffff&sideNums=ffffff&dates=ffffff40&background=00000000'
+    : 'https://streak-stats.demolab.com?user=Waleed2660&theme=transparent&hide_border=true&stroke=1e293b33&ring=6366f1&fire=6366f1&currStreakLabel=475569&sideLabels=475569&currStreakNum=1e293b&sideNums=1e293b&dates=64748b&background=00000000';
 
   useEffect(() => {
     fetch('/github-stats.json')
@@ -79,7 +85,7 @@ const GitHubSection = () => {
             <div className="mt-6">
               <p className="text-slate-400 dark:text-white/40 text-xs uppercase tracking-widest mb-3">Streak</p>
               <img
-                src="https://streak-stats.demolab.com?user=Waleed2660&theme=transparent&hide_border=true&stroke=ffffff20&ring=818cf8&fire=818cf8&currStreakLabel=ffffff99&sideLabels=ffffff99&currStreakNum=ffffff&sideNums=ffffff&dates=ffffff40&background=00000000"
+                src={streakStatsUrl}
                 alt="GitHub streak stats"
                 width="800"
                 height="200"
