@@ -48,6 +48,7 @@
     --glass-bg: rgba(255, 255, 255, 0.04);
     --glass-strong-bg: rgba(255, 255, 255, 0.05);
     --glass-border: rgba(255, 255, 255, 0.07);
+    --glass-shadow: 0 20px 45px -18px rgba(0, 0, 0, 0.5), 0 4px 14px -6px rgba(96, 165, 250, 0.12);
 
     --nav-bg: rgba(12, 12, 28, 0.92);
     --nav-border: rgba(255, 255, 255, 0.1);
@@ -107,9 +108,10 @@
     --sidebar-ring: 217.2 91.2% 59.8%;
 
     --html-bg: #f4f5fd;
-    --glass-bg: rgba(79, 70, 229, 0.05);
-    --glass-strong-bg: rgba(79, 70, 229, 0.065);
-    --glass-border: rgba(79, 70, 229, 0.16);
+    --glass-bg: rgba(79, 70, 229, 0.07);
+    --glass-strong-bg: rgba(79, 70, 229, 0.09);
+    --glass-border: rgba(79, 70, 229, 0.22);
+    --glass-shadow: 0 20px 45px -14px rgba(79, 70, 229, 0.35), 0 4px 14px -4px rgba(79, 70, 229, 0.18);
 
     --nav-bg: rgba(246, 247, 253, 0.88);
     --nav-border: rgba(99, 102, 241, 0.22);
@@ -186,11 +188,13 @@ html:not(.dark) .theme-bg-layer--light {
   .glass {
     background: var(--glass-bg);
     border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
   }
 
   .glass-strong {
     background: var(--glass-strong-bg);
     border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
     position: relative;
     transform: translateZ(0);
   }
