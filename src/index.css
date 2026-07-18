@@ -113,22 +113,22 @@
     --glass-border: rgba(79, 70, 229, 0.22);
     --glass-shadow: 0 20px 45px -14px rgba(79, 70, 229, 0.35), 0 4px 14px -4px rgba(79, 70, 229, 0.18);
 
-    --nav-bg: rgba(246, 247, 253, 0.88);
-    --nav-border: rgba(99, 102, 241, 0.22);
-    --nav-mobile-border: rgba(99, 102, 241, 0.18);
-    --nav-shadow: 0 12px 36px rgba(79, 70, 229, 0.14);
+    --nav-bg: rgba(224, 225, 250, 0.85);
+    --nav-border: rgba(99, 102, 241, 0.25);
+    --nav-mobile-border: rgba(99, 102, 241, 0.2);
+    --nav-shadow: 0 12px 36px rgba(79, 70, 229, 0.18);
     --nav-icon-inactive: rgba(67, 56, 130, 0.55);
-    --nav-icon-active-bg: rgba(79, 70, 229, 0.1);
+    --nav-icon-active-bg: rgba(79, 70, 229, 0.12);
     --nav-icon-dot: rgba(67, 56, 130, 0.7);
-    --nav-toggle-bg: rgba(79, 70, 229, 0.07);
-    --nav-toggle-hover-bg: rgba(79, 70, 229, 0.14);
+    --nav-toggle-bg: rgba(79, 70, 229, 0.09);
+    --nav-toggle-hover-bg: rgba(79, 70, 229, 0.16);
     --nav-toggle-icon: rgba(55, 48, 130, 0.85);
 
-    --site-stats-bg: rgba(246, 247, 253, 0.92);
-    --site-stats-border: rgba(99, 102, 241, 0.2);
-    --site-stats-shadow: 0 24px 64px rgba(79, 70, 229, 0.18);
+    --site-stats-bg: rgba(224, 225, 250, 0.9);
+    --site-stats-border: rgba(99, 102, 241, 0.22);
+    --site-stats-shadow: 0 24px 64px rgba(79, 70, 229, 0.2);
 
-    --floating-action-bg: rgba(246, 247, 253, 0.92);
+    --floating-action-bg: rgba(224, 225, 250, 0.88);
     --tooltip-bg: rgba(49, 46, 90, 0.85);
     --resume-card-bg: rgba(79, 70, 229, 0.08);
   }
