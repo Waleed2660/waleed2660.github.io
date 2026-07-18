@@ -62,7 +62,7 @@ const GitHubSection = () => {
             <p className="text-slate-400 dark:text-white/40 text-xs uppercase tracking-widest mb-5">Stats</p>
             <div className="grid grid-cols-3 gap-4 text-center">
               <div className="glass rounded-2xl py-4 px-2">
-                <div className="text-2xl font-bold text-yellow-500 dark:text-yellow-300">
+                <div className="text-2xl font-bold text-yellow-700 dark:text-yellow-300">
                   {stats ? stats.stars : '—'}
                 </div>
                 <div className="text-slate-500 dark:text-white/50 text-xs mt-1">Stars</div>
