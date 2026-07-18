@@ -107,30 +107,30 @@
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
 
-    --html-bg: #f8fafc;
-    --body-gradient: linear-gradient(135deg, #f8fafc 0%, #eef2f7 50%, #e8edf3 100%);
-    --glass-bg: rgba(15, 23, 42, 0.035);
-    --glass-strong-bg: rgba(15, 23, 42, 0.045);
-    --glass-border: rgba(15, 23, 42, 0.08);
+    --html-bg: #f4f5fd;
+    --body-gradient: linear-gradient(135deg, #eef1fc 0%, #e9edfb 45%, #ede8fa 100%);
+    --glass-bg: rgba(79, 70, 229, 0.05);
+    --glass-strong-bg: rgba(79, 70, 229, 0.065);
+    --glass-border: rgba(79, 70, 229, 0.16);
 
-    --nav-bg: rgba(248, 250, 252, 0.9);
-    --nav-border: rgba(148, 163, 184, 0.28);
-    --nav-mobile-border: rgba(148, 163, 184, 0.24);
-    --nav-shadow: 0 12px 36px rgba(15, 23, 42, 0.12);
-    --nav-icon-inactive: rgba(51, 65, 85, 0.6);
-    --nav-icon-active-bg: rgba(15, 23, 42, 0.08);
-    --nav-icon-dot: rgba(51, 65, 85, 0.7);
-    --nav-toggle-bg: rgba(15, 23, 42, 0.05);
-    --nav-toggle-hover-bg: rgba(15, 23, 42, 0.1);
-    --nav-toggle-icon: rgba(30, 41, 59, 0.85);
+    --nav-bg: rgba(246, 247, 253, 0.88);
+    --nav-border: rgba(99, 102, 241, 0.22);
+    --nav-mobile-border: rgba(99, 102, 241, 0.18);
+    --nav-shadow: 0 12px 36px rgba(79, 70, 229, 0.14);
+    --nav-icon-inactive: rgba(67, 56, 130, 0.55);
+    --nav-icon-active-bg: rgba(79, 70, 229, 0.1);
+    --nav-icon-dot: rgba(67, 56, 130, 0.7);
+    --nav-toggle-bg: rgba(79, 70, 229, 0.07);
+    --nav-toggle-hover-bg: rgba(79, 70, 229, 0.14);
+    --nav-toggle-icon: rgba(55, 48, 130, 0.85);
 
-    --site-stats-bg: rgba(248, 250, 252, 0.94);
-    --site-stats-border: rgba(148, 163, 184, 0.24);
-    --site-stats-shadow: 0 24px 64px rgba(15, 23, 42, 0.16);
+    --site-stats-bg: rgba(246, 247, 253, 0.92);
+    --site-stats-border: rgba(99, 102, 241, 0.2);
+    --site-stats-shadow: 0 24px 64px rgba(79, 70, 229, 0.18);
 
-    --floating-action-bg: rgba(248, 250, 252, 0.92);
-    --tooltip-bg: rgba(15, 23, 42, 0.78);
-    --resume-card-bg: rgba(15, 23, 42, 0.06);
+    --floating-action-bg: rgba(246, 247, 253, 0.92);
+    --tooltip-bg: rgba(49, 46, 90, 0.85);
+    --resume-card-bg: rgba(79, 70, 229, 0.08);
   }
 }
 
