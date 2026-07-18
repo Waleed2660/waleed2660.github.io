@@ -3,15 +3,15 @@ import { useEffect, useState } from 'react';
 
 const TYPING_TEXTS = [
   "Software Engineer @ Sainsbury's",
-  "Java · Kafka · Kubernetes",
-  "Spring Boot · AWS · Docker",
-  "K6 · Grafana · JMeter",
-  "PostgreSQL · MongoDB · Redis",
-  "Event-driven microservices"
+  'Java · Kafka · Kubernetes',
+  'Spring Boot · AWS · Docker',
+  'K6 · Grafana · JMeter',
+  'PostgreSQL · MongoDB · Redis',
+  'Event-driven microservices'
 ];
 const CAREER_START = new Date(2022, 6, 1); // July 2022 — THG start
 const SHOW_AVAILABILITY = false; // Feature flag for availability status
-const NAME = "Waleed Tariq";
+const NAME = 'Waleed Tariq';
 
 function getYOE(): string {
   const now = new Date();
@@ -63,16 +63,14 @@ const HomeSection = () => {
   };
 
   return (
-    <section 
-      className="min-h-screen flex items-center justify-center px-4 sm:px-6 py-20 md:py-0"
-    >
+    <section className="min-h-screen flex items-center justify-center px-4 sm:px-6 py-20 md:py-0">
       <div className="w-full max-w-4xl text-center relative">
-        <div 
+        <div
           className="glass-strong rounded-3xl p-8 sm:p-12 md:p-16 relative overflow-hidden"
           onMouseMove={handleMouseMove}
         >
           {/* Spotlight effect */}
-          <div 
+          <div
             className="pointer-events-none absolute inset-0 opacity-0 hover:opacity-100 transition-opacity duration-300"
             style={{
               background: `radial-gradient(350px circle at ${mousePos.x}px ${mousePos.y}px, rgba(96, 165, 250, 0.04), transparent 70%)`,
@@ -84,7 +82,7 @@ const HomeSection = () => {
             {SHOW_AVAILABILITY && (
               <div className="inline-flex items-center gap-2 mb-8 glass rounded-full px-4 py-2 border border-green-500/30">
                 <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-                <span className="text-green-300/90 text-sm font-medium">Available for opportunities</span>
+                <span className="text-green-700 dark:text-green-300/90 text-sm font-medium">Available for opportunities</span>
               </div>
             )}
 
@@ -111,20 +109,20 @@ const HomeSection = () => {
                 );
               })}
             </h1>
-            
-            <div className="text-xl sm:text-2xl md:text-3xl text-white/50 italic mb-4 flex items-center justify-center gap-2 flex-wrap min-h-[2.5rem]">
+
+            <div className="text-xl sm:text-2xl md:text-3xl text-slate-500 dark:text-white/50 italic mb-4 flex items-center justify-center gap-2 flex-wrap min-h-[2.5rem]">
               <span>
                 {displayed}
                 <span className="animate-blink ml-0.5">|</span>
               </span>
             </div>
 
-            <div className={`inline-flex items-center gap-2 mb-8 text-white/40 transition-opacity duration-500 ${typingDone ? 'opacity-100' : 'opacity-0'}`}>
+            <div className={`inline-flex items-center gap-2 mb-8 text-slate-400 dark:text-white/40 transition-opacity duration-500 ${typingDone ? 'opacity-100' : 'opacity-0'}`}>
               <span>📍</span>
               <span className="text-lg">Manchester, UK</span>
             </div>
 
-            <p className="text-xl sm:text-2xl text-white/70 mb-12 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-xl sm:text-2xl text-slate-600 dark:text-white/70 mb-12 max-w-3xl mx-auto leading-relaxed">
               Backend engineer building reliable, high-throughput systems. Focused on Java, Kafka, and Kubernetes in production.
             </p>
 
@@ -138,9 +136,9 @@ const HomeSection = () => {
               ].map((badge, index) => (
                 <div
                   key={index}
-                  className="glass rounded-2xl px-5 py-3 hover:scale-110 hover:-translate-y-1 hover:bg-white/10 transition-all duration-300 cursor-default group border border-white/5 hover:border-white/20"
+                  className="glass rounded-2xl px-5 py-3 hover:scale-110 hover:-translate-y-1 hover:bg-slate-900/5 dark:hover:bg-white/10 transition-all duration-300 cursor-default group border border-slate-200 dark:border-white/5 hover:border-slate-300 dark:hover:border-white/20"
                 >
-                  <span className="text-white/80 group-hover:text-white transition-colors flex items-center gap-2">
+                  <span className="text-slate-700 dark:text-white/80 group-hover:text-slate-900 dark:group-hover:text-white transition-colors flex items-center gap-2">
                     <span className="text-lg">{badge.icon}</span>
                     <span className="font-medium">{badge.label}</span>
                   </span>
@@ -152,7 +150,7 @@ const HomeSection = () => {
 
         {/* Scroll hint */}
         <div className={`mt-8 flex justify-center transition-opacity duration-700 ${typingDone ? 'opacity-100' : 'opacity-0'}`}>
-          <ChevronDown className="w-6 h-6 text-white/25 animate-bounce" />
+          <ChevronDown className="w-6 h-6 text-slate-400 dark:text-white/25 animate-bounce" />
         </div>
       </div>
     </section>

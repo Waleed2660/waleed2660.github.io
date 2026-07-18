@@ -1,4 +1,3 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -44,34 +43,158 @@
     --sidebar-ring: 217.2 91.2% 59.8%;
 
     --radius: 0.5rem;
+
+    --html-bg: #0f0f23;
+    --glass-bg: rgba(255, 255, 255, 0.04);
+    --glass-strong-bg: rgba(255, 255, 255, 0.05);
+    --glass-border: rgba(255, 255, 255, 0.07);
+    --glass-shadow: 0 20px 45px -18px rgba(0, 0, 0, 0.5), 0 4px 14px -6px rgba(96, 165, 250, 0.12);
+
+    --nav-bg: rgba(12, 12, 28, 0.92);
+    --nav-border: rgba(255, 255, 255, 0.1);
+    --nav-mobile-border: rgba(255, 255, 255, 0.08);
+    --nav-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    --nav-icon-inactive: rgba(255, 255, 255, 0.35);
+    --nav-icon-active-bg: rgba(255, 255, 255, 0.12);
+    --nav-icon-dot: rgba(255, 255, 255, 0.7);
+    --nav-toggle-bg: rgba(255, 255, 255, 0.06);
+    --nav-toggle-hover-bg: rgba(255, 255, 255, 0.12);
+    --nav-toggle-icon: rgba(255, 255, 255, 0.8);
+
+    --site-stats-bg: rgba(12, 12, 28, 0.92);
+    --site-stats-border: rgba(255, 255, 255, 0.1);
+    --site-stats-shadow: 0 24px 64px rgba(0, 0, 0, 0.6);
+
+    --floating-action-bg: rgba(30, 30, 50, 0.9);
+    --tooltip-bg: rgba(0, 0, 0, 0.75);
+    --resume-card-bg: rgba(255, 255, 255, 0.1);
+  }
+
+  html:not(.dark) {
+    --background: 210 40% 98%;
+    --foreground: 222.2 47.4% 11.2%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 47.4% 11.2%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 47.4% 11.2%;
+
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+
+    --destructive: 0 72.2% 50.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 221.2 83.2% 53.3%;
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+
+    --html-bg: #f4f5fd;
+    --glass-bg: rgba(79, 70, 229, 0.07);
+    --glass-strong-bg: rgba(79, 70, 229, 0.09);
+    --glass-border: rgba(79, 70, 229, 0.22);
+    --glass-shadow: 0 20px 45px -14px rgba(79, 70, 229, 0.35), 0 4px 14px -4px rgba(79, 70, 229, 0.18);
+
+    --nav-bg: rgba(224, 225, 250, 0.85);
+    --nav-border: rgba(99, 102, 241, 0.25);
+    --nav-mobile-border: rgba(99, 102, 241, 0.2);
+    --nav-shadow: 0 12px 36px rgba(79, 70, 229, 0.18);
+    --nav-icon-inactive: rgba(67, 56, 130, 0.55);
+    --nav-icon-active-bg: rgba(79, 70, 229, 0.12);
+    --nav-icon-dot: rgba(67, 56, 130, 0.7);
+    --nav-toggle-bg: rgba(79, 70, 229, 0.09);
+    --nav-toggle-hover-bg: rgba(79, 70, 229, 0.16);
+    --nav-toggle-icon: rgba(55, 48, 130, 0.85);
+
+    --site-stats-bg: rgba(224, 225, 250, 0.9);
+    --site-stats-border: rgba(99, 102, 241, 0.22);
+    --site-stats-shadow: 0 24px 64px rgba(79, 70, 229, 0.2);
+
+    --floating-action-bg: rgba(224, 225, 250, 0.88);
+    --tooltip-bg: rgba(49, 46, 90, 0.85);
+    --resume-card-bg: rgba(79, 70, 229, 0.08);
   }
 }
 
 @layer base {
   * {
     @apply border-border;
+    transition-property: background-color, border-color, color, box-shadow, fill, stroke;
+    transition-timing-function: ease;
+    transition-duration: 350ms;
   }
 
   html {
-    background: #0f0f23;
+    background: var(--html-bg);
+    transition: background-color 350ms ease;
   }
 
   body {
     @apply bg-background text-foreground;
-    background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+    background: transparent;
     min-height: 100vh;
+    position: relative;
   }
+}
+
+/* Crossfading full-viewport background layers so switching themes fades
+   smoothly between the dark and light gradients instead of snapping —
+   background-image/gradients can't be transitioned directly. */
+.theme-bg-layer {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  transition: opacity 450ms ease;
+}
+
+.theme-bg-layer--dark {
+  background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+  opacity: 1;
+}
+
+.theme-bg-layer--light {
+  background: linear-gradient(135deg, #eef1fc 0%, #e9edfb 45%, #ede8fa 100%);
+  opacity: 0;
+}
+
+html:not(.dark) .theme-bg-layer--dark {
+  opacity: 0;
+}
+
+html:not(.dark) .theme-bg-layer--light {
+  opacity: 1;
 }
 
 @layer utilities {
   .glass {
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.07);
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
   }
-  
-.glass-strong {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.07);
+
+  .glass-strong {
+    background: var(--glass-strong-bg);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
     position: relative;
     transform: translateZ(0);
   }
@@ -97,16 +220,16 @@
   .glass-strong:hover::before {
     opacity: 1;
   }
-  
+
   .text-glow {
     text-shadow: 0 0 20px rgba(147, 197, 253, 0.5);
   }
-  
+
   .animate-float {
     animation: float 6s ease-in-out infinite;
     will-change: transform;
   }
-  
+
   @keyframes float {
     0%, 100% { transform: translateY(0px); }
     50% { transform: translateY(-10px); }
