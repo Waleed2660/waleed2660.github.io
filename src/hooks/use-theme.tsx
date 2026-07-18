@@ -29,6 +29,11 @@ const getPreferredTheme = (): Theme => {
 const applyTheme = (theme: Theme) => {
   const root = document.documentElement;
   root.classList.toggle('dark', theme === 'dark');
+
+  const meta = document.querySelector('meta[name="theme-color"]');
+  if (meta) {
+    meta.setAttribute('content', theme === 'dark' ? '#0f0f23' : '#eef0fc');
+  }
 };
 
 export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {

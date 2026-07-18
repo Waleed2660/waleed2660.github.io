@@ -54,7 +54,7 @@ const ExperienceSection = () => {
       period: "Mar 2025 - Present",
       tech: ["Java", "Spring Boot", "Apache Kafka", "Kubernetes", "AWS"],
       brandColor: "bg-gradient-to-br from-orange-500/10 to-amber-500/10 border-orange-500/30 hover:border-orange-500/50",
-      bulletColor: "text-orange-400/80",
+      bulletColor: "text-orange-600 dark:text-orange-400/80",
       description: [
         "Part of Digital Fulfilment team, developing critical backend services that calculate accurate delivery timelines for customer orders — contributing to Sainsbury's online platform serving millions of weekly shoppers across the UK",
         "Currently developing a new order reservation proposition, enabling advanced inventory management and improved customer experience through real-time stock availability",
@@ -72,7 +72,7 @@ const ExperienceSection = () => {
       period: "Jul 2022 - Mar 2025",
       tech: ["Java", "Spring Boot", "Apache ActiveMQ"],
       brandColor: "bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border-cyan-500/40 hover:border-cyan-400/60",
-      bulletColor: "text-cyan-400/80",
+      bulletColor: "text-cyan-600 dark:text-cyan-400/80",
       promotions: [
         { title: "Graduate Software Engineer", period: "Jul 2022 - Jul 2024" },
         { title: "Software Engineer", period: "Jul 2024 - Mar 2025" },
@@ -94,7 +94,7 @@ const ExperienceSection = () => {
       period: "Jun 2022 - Sep 2022",
       tech: ["Python", "Machine Learning", "OpenCV", "PyTorch", "Data Annotations"],
       brandColor: "bg-gradient-to-br from-red-500/10 to-rose-500/10 border-red-500/30 hover:border-red-500/50",
-      bulletColor: "text-red-400/80",
+      bulletColor: "text-red-600 dark:text-red-400/80",
       description: [
         "This research project was offered to me as an extension to my Final Year Project. My research was aimed at fine tuning & evaluating YOLOv3 and YOLOv5 machine learning models to detect landfills from both satellite and drone imagery.",
         "These models were trained on Google cloud for weeks while being tested & evaluated regularly to fine tune training parameters.",
@@ -181,7 +181,7 @@ const ExperienceSection = () => {
                                 <span className="text-slate-400 dark:text-white/40 text-[10px]">{p.period}</span>
                               </div>
                               {i < exp.promotions!.length - 1 && (
-                                <span className="text-green-400 text-lg">→</span>
+                                <span className="text-green-600 dark:text-green-400 text-lg">→</span>
                               )}
                             </div>
                           ))}

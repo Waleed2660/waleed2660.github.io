@@ -355,7 +355,7 @@ const ConferencesSection = () => {
                         {conf.talks.map((talk, ti) => (
                           <div
                             key={ti}
-                            className="glass rounded-2xl px-4 py-3 border-l-2 border-blue-400/30"
+                            className="glass rounded-2xl px-4 py-3 border-l-2 border-blue-600/50 dark:border-blue-400/30"
                           >
                             <p className="text-slate-900 dark:text-white/90 text-sm font-medium mb-1">{talk.title}</p>
                             {talk.speaker && (

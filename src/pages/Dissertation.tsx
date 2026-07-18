@@ -126,7 +126,7 @@ const Dissertation = () => {
           <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-8">Key Findings & Methodology</h2>
           
           <div className="grid md:grid-cols-2 gap-6">
-            <div className="glass rounded-2xl p-6 border-l-4 border-blue-400/50 hover:border-blue-400 transition-all hover:scale-[1.02] duration-300">
+            <div className="glass rounded-2xl p-6 border-l-4 border-blue-600/70 dark:border-blue-400/50 hover:border-blue-700 dark:hover:border-blue-400 transition-all hover:scale-[1.02] duration-300">
               <div className="flex items-start gap-4 mb-3">
                 <div className="glass rounded-xl p-3 bg-blue-500/10">
                   <span className="text-3xl">🚨</span>
@@ -146,7 +146,7 @@ const Dissertation = () => {
               </p>
             </div>
 
-            <div className="glass rounded-2xl p-6 border-l-4 border-green-400/50 hover:border-green-400 transition-all hover:scale-[1.02] duration-300">
+            <div className="glass rounded-2xl p-6 border-l-4 border-green-600/70 dark:border-green-400/50 hover:border-green-700 dark:hover:border-green-400 transition-all hover:scale-[1.02] duration-300">
               <div className="flex items-start gap-4 mb-3">
                 <div className="glass rounded-xl p-3 bg-green-500/10">
                   <span className="text-3xl">🎯</span>
@@ -165,7 +165,7 @@ const Dissertation = () => {
               </p>
             </div>
 
-            <div className="glass rounded-2xl p-6 border-l-4 border-purple-400/50 hover:border-purple-400 transition-all hover:scale-[1.02] duration-300">
+            <div className="glass rounded-2xl p-6 border-l-4 border-purple-600/70 dark:border-purple-400/50 hover:border-purple-700 dark:hover:border-purple-400 transition-all hover:scale-[1.02] duration-300">
               <div className="flex items-start gap-4 mb-3">
                 <div className="glass rounded-xl p-3 bg-purple-500/10">
                   <span className="text-3xl">🌍</span>
@@ -185,7 +185,7 @@ const Dissertation = () => {
               </p>
             </div>
 
-            <div className="glass rounded-2xl p-6 border-l-4 border-yellow-400/50 hover:border-yellow-400 transition-all hover:scale-[1.02] duration-300">
+            <div className="glass rounded-2xl p-6 border-l-4 border-yellow-600/70 dark:border-yellow-400/50 hover:border-yellow-700 dark:hover:border-yellow-400 transition-all hover:scale-[1.02] duration-300">
               <div className="flex items-start gap-4 mb-3">
                 <div className="glass rounded-xl p-3 bg-yellow-500/10">
                   <span className="text-3xl">📊</span>
@@ -391,7 +391,7 @@ const Dissertation = () => {
             </div>
           </div>
 
-          <div className="mt-6 glass rounded-2xl p-4 border-l-2 border-blue-400/30">
+          <div className="mt-6 glass rounded-2xl p-4 border-l-2 border-blue-600/50 dark:border-blue-400/30">
             <p className="text-slate-600 dark:text-white/70 text-sm leading-relaxed">
               <span className="font-semibold text-slate-900 dark:text-white">Key Insight:</span> This progression illustrates the 
               critical importance of adequate training iterations and the effectiveness of YOLOv3's architecture 
@@ -406,7 +406,7 @@ const Dissertation = () => {
           <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-8">Challenges & Key Learnings</h2>
           
           <div className="space-y-4">
-            <div className="glass rounded-2xl p-6 border-l-4 border-red-400/50 hover:border-red-400 transition-all hover:scale-[1.01] duration-300">
+            <div className="glass rounded-2xl p-6 border-l-4 border-red-600/70 dark:border-red-400/50 hover:border-red-700 dark:hover:border-red-400 transition-all hover:scale-[1.01] duration-300">
               <div className="flex items-start gap-4">
                 <div className="glass rounded-xl p-3 bg-red-500/10 flex-shrink-0">
                   <span className="text-2xl">📝</span>
@@ -414,13 +414,13 @@ const Dissertation = () => {
                 <div className="flex-1">
                   <h3 className="text-slate-900 dark:text-white font-semibold mb-3 text-lg">Quality of Annotations</h3>
                   <div className="flex items-center gap-2 mb-3">
-                    <div className="px-2 py-1 bg-red-500/10 rounded text-red-300 text-xs font-semibold">
+                    <div className="px-2 py-1 bg-red-500/10 rounded text-red-700 dark:text-red-300 text-xs font-semibold">
                       Critical Learning
                     </div>
                   </div>
                   <p className="text-slate-600 dark:text-white/70 text-sm leading-relaxed">
                     Initially, waste piles were labeled incorrectly without visible borders, causing the model to 
-                    misclassify neighboring mud piles as waste. <span className="text-red-300 font-semibold">Re-annotating the entire 
+                    misclassify neighboring mud piles as waste. <span className="text-red-700 dark:text-red-300 font-semibold">Re-annotating the entire 
                     dataset</span> with proper border visibility led to significant improvements in accuracy — proving that 
                     data quality trumps quantity.
                   </p>
@@ -428,7 +428,7 @@ const Dissertation = () => {
               </div>
             </div>
 
-            <div className="glass rounded-2xl p-6 border-l-4 border-orange-400/50 hover:border-orange-400 transition-all hover:scale-[1.01] duration-300">
+            <div className="glass rounded-2xl p-6 border-l-4 border-orange-600/70 dark:border-orange-400/50 hover:border-orange-700 dark:hover:border-orange-400 transition-all hover:scale-[1.01] duration-300">
               <div className="flex items-start gap-4">
                 <div className="glass rounded-xl p-3 bg-orange-500/10 flex-shrink-0">
                   <span className="text-2xl">⚖️</span>
@@ -459,7 +459,7 @@ const Dissertation = () => {
               </div>
             </div>
 
-            <div className="glass rounded-2xl p-6 border-l-4 border-blue-400/50 hover:border-blue-400 transition-all hover:scale-[1.01] duration-300">
+            <div className="glass rounded-2xl p-6 border-l-4 border-blue-600/70 dark:border-blue-400/50 hover:border-blue-700 dark:hover:border-blue-400 transition-all hover:scale-[1.01] duration-300">
               <div className="flex items-start gap-4">
                 <div className="glass rounded-xl p-3 bg-blue-500/10 flex-shrink-0">
                   <span className="text-2xl">🌏</span>
