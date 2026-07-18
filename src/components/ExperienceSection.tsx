@@ -106,7 +106,11 @@ const ExperienceSection = () => {
   const toggleCard = (index: number) => {
     setExpandedCards(prev => {
       const next = new Set(prev);
-      next.has(index) ? next.delete(index) : next.add(index);
+      if (next.has(index)) {
+        next.delete(index);
+      } else {
+        next.add(index);
+      }
       return next;
     });
   };
@@ -147,20 +151,20 @@ const ExperienceSection = () => {
                     {/* Header */}
                     <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-3">
                       <div className="flex-1">
-                        <h3 className="text-2xl font-bold text-white mb-1">{exp.title}</h3>
-                        <p className="text-xl text-white/80">{exp.company}</p>
-                        <p className="text-white/50 text-sm mt-1">{exp.location}</p>
+                        <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-1">{exp.title}</h3>
+                        <p className="text-xl text-slate-700 dark:text-white/80">{exp.company}</p>
+                        <p className="text-slate-500 dark:text-white/50 text-sm mt-1">{exp.location}</p>
                       </div>
                       <div className="flex-shrink-0 text-right flex flex-col items-end gap-1">
-                        <span className="text-white/40 text-sm font-medium whitespace-nowrap tabular-nums">
+                        <span className="text-slate-400 dark:text-white/40 text-sm font-medium whitespace-nowrap tabular-nums">
                           {exp.period}
                         </span>
-                        <span className="block text-white/25 text-xs tabular-nums">
+                        <span className="block text-slate-400 dark:text-white/25 text-xs tabular-nums">
                           {getDuration(exp.period)}
                         </span>
                         <ChevronDown
-                          className={`w-4 h-4 text-white/30 transition-transform duration-300 mt-1 ${
-                            expandedCards.has(index) ? 'rotate-180 text-white/60' : ''
+                          className={`w-4 h-4 text-slate-400 dark:text-white/30 transition-transform duration-300 mt-1 ${
+                            expandedCards.has(index) ? 'rotate-180 text-slate-500 dark:text-white/60' : ''
                           }`}
                         />
                       </div>
@@ -173,8 +177,8 @@ const ExperienceSection = () => {
                           {exp.promotions.map((p, i) => (
                             <div key={i} className="flex items-center gap-2">
                               <div className="flex flex-col">
-                                <span className="text-white/90 text-xs font-semibold">{p.title}</span>
-                                <span className="text-white/40 text-[10px]">{p.period}</span>
+                                <span className="text-slate-900 dark:text-white/90 text-xs font-semibold">{p.title}</span>
+                                <span className="text-slate-400 dark:text-white/40 text-[10px]">{p.period}</span>
                               </div>
                               {i < exp.promotions!.length - 1 && (
                                 <span className="text-green-400 text-lg">→</span>
@@ -190,7 +194,7 @@ const ExperienceSection = () => {
                       {exp.tech.map((tech, techIndex) => (
                         <span
                           key={techIndex}
-                          className="glass rounded-lg px-3 py-1 text-white/70 text-xs hover:text-white hover:bg-white/10 transition-all"
+                          className="glass rounded-lg px-3 py-1 text-slate-600 dark:text-white/70 text-xs hover:text-slate-900 dark:hover:text-white hover:bg-slate-900/5 dark:hover:bg-white/10 transition-all"
                         >
                           {tech}
                         </span>
@@ -201,12 +205,12 @@ const ExperienceSection = () => {
                     <div className={`overflow-hidden transition-all duration-500 ${
                       expandedCards.has(index) ? 'max-h-[1000px] opacity-100 mt-4' : 'max-h-0 opacity-0'
                     }`}>
-                      <div className="border-t border-white/10 pt-4">
+                      <div className="border-t border-slate-200 dark:border-white/10 pt-4">
                         <ul className="space-y-3">
                           {exp.description.map((item, i) => (
                             <li key={i} className="flex items-start gap-3">
                               <CircleDot className={`w-4 h-4 mt-1 ${exp.bulletColor} flex-shrink-0`} />
-                              <span className="text-white/70 text-sm leading-relaxed">{item}</span>
+                              <span className="text-slate-600 dark:text-white/70 text-sm leading-relaxed">{item}</span>
                             </li>
                           ))}
                         </ul>
@@ -215,7 +219,7 @@ const ExperienceSection = () => {
                   </div>
                 </div>
 
-                <p className="mt-3 text-center text-white/25 text-xs">
+                <p className="mt-3 text-center text-slate-400 dark:text-white/25 text-xs">
                   {expandedCards.has(index) ? 'Click to collapse' : 'Click to expand'}
                 </p>
               </div>

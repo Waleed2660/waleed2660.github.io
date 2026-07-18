@@ -1,4 +1,3 @@
-
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { ChevronUp } from 'lucide-react';
 import Navigation from '@/components/Navigation';
@@ -53,13 +52,10 @@ const Index = () => {
   const showBackToTopRef = useRef(false);
   const [showSiteStats, setShowSiteStats] = useState(false);
 
-
-
   useEffect(() => {
     const onScroll = () => {
       const scrollY = window.scrollY;
       const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-      // Update progress bar directly on DOM — no React re-render, no jank
       if (progressBarRef.current) {
         progressBarRef.current.style.width = maxScroll > 0 ? `${(scrollY / maxScroll) * 100}%` : '0%';
       }
@@ -74,8 +70,7 @@ const Index = () => {
   }, []);
 
   useEffect(() => {
-    // Handle hash navigation (e.g., from dissertation page back button)
-    const hash = window.location.hash.slice(1); // Remove the # symbol
+    const hash = window.location.hash.slice(1);
     if (hash) {
       setTimeout(() => {
         const element = document.getElementById(hash);
@@ -99,7 +94,6 @@ const Index = () => {
   useEffect(() => {
     let rafId: number;
     let cards: HTMLElement[] = [];
-    // Cache once after mount; refresh on resize to catch dynamically added elements
     const refreshCards = () => { cards = Array.from(document.querySelectorAll<HTMLElement>('.glass-strong')); };
     refreshCards();
     window.addEventListener('resize', refreshCards, { passive: true });
@@ -125,112 +119,101 @@ const Index = () => {
 
   return (
     <>
-    {/* Scroll progress bar — outside overflow-hidden so it's never clipped */}
-    <div className="fixed top-0 left-0 right-0 z-[100] h-0.5 pointer-events-none md:hidden">
-      <div
-        ref={progressBarRef}
-        className="h-full bg-gradient-to-r from-blue-400 to-purple-400"
-        style={{ width: '0%' }}
-      />
-    </div>
-
-    {/* Back to top — desktop only, mobile handled inside nav pill */}
-    <button
-      onClick={() => scrollToSection('home')}
-      className={`fixed bottom-8 right-8 z-[100] p-3 rounded-full border border-white/20 text-white/70 hover:text-white hover:border-white/40 hover:scale-110 transition-all duration-300 hidden md:flex items-center justify-center ${
-        showBackToTop ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'
-      }`}
-      style={{ background: 'rgba(30,30,50,0.9)' }}
-      aria-label="Back to top"
-    >
-      <ChevronUp className="w-5 h-5" />
-    </button>
-
-    <div className="min-h-screen relative overflow-hidden">
-      {/* Ambient orbs — large blurred blobs that create atmospheric depth */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        {/* Top-left: cool blue */}
-        <div className="absolute -top-48 -left-48 w-[700px] h-[700px] rounded-full bg-blue-600/20 blur-[60px] md:blur-[120px] will-change-transform" />
-        {/* Top-right: indigo/violet */}
-        <div className="absolute -top-32 -right-64 w-[600px] h-[600px] rounded-full bg-violet-600/15 blur-[50px] md:blur-[100px] will-change-transform" />
-        {/* Center: deep teal — hidden on mobile, too expensive */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] rounded-full bg-cyan-700/10 blur-[140px] hidden md:block will-change-transform" />
-        {/* Bottom-left: purple */}
-        <div className="absolute -bottom-64 -left-32 w-[600px] h-[600px] rounded-full bg-purple-700/15 blur-[55px] md:blur-[110px] will-change-transform" />
-        {/* Bottom-right: blue accent — hidden on mobile */}
-        <div className="absolute -bottom-32 -right-32 w-[500px] h-[500px] rounded-full bg-blue-500/10 blur-[90px] hidden md:block will-change-transform" />
+      <div className="fixed top-0 left-0 right-0 z-[100] h-0.5 pointer-events-none md:hidden">
+        <div
+          ref={progressBarRef}
+          className="h-full bg-gradient-to-r from-blue-400 to-purple-400"
+          style={{ width: '0%' }}
+        />
       </div>
 
-      {/* Floating particles effect */}
-      <div className="fixed inset-0 pointer-events-none">
-        {stars.map((s) => (
-          <div
-            key={s.id}
-            className="absolute w-1 h-1 bg-white rounded-full"
-            style={{
-              left: s.left,
-              top: s.top,
-              animation: `twinkle ${s.duration} ease-in-out infinite ${s.delay}`,
-              transform: 'translateZ(0)'
-            }}
-          />
-        ))}
+      <button
+        onClick={() => scrollToSection('home')}
+        className={`fixed bottom-8 right-8 z-[100] p-3 rounded-full border border-slate-300 dark:border-white/20 text-slate-500 dark:text-white/70 hover:text-slate-900 dark:hover:text-white hover:border-slate-400 dark:hover:border-white/40 hover:scale-110 transition-all duration-300 hidden md:flex items-center justify-center ${
+          showBackToTop ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'
+        }`}
+        style={{ background: 'var(--floating-action-bg)' }}
+        aria-label="Back to top"
+      >
+        <ChevronUp className="w-5 h-5" />
+      </button>
+
+      <div className="min-h-screen relative overflow-hidden">
+        <div className="fixed inset-0 pointer-events-none overflow-hidden">
+          <div className="absolute -top-48 -left-48 w-[700px] h-[700px] rounded-full bg-blue-600/20 blur-[60px] md:blur-[120px] will-change-transform" />
+          <div className="absolute -top-32 -right-64 w-[600px] h-[600px] rounded-full bg-violet-600/15 blur-[50px] md:blur-[100px] will-change-transform" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] rounded-full bg-cyan-700/10 blur-[140px] hidden md:block will-change-transform" />
+          <div className="absolute -bottom-64 -left-32 w-[600px] h-[600px] rounded-full bg-purple-700/15 blur-[55px] md:blur-[110px] will-change-transform" />
+          <div className="absolute -bottom-32 -right-32 w-[500px] h-[500px] rounded-full bg-blue-500/10 blur-[90px] hidden md:block will-change-transform" />
+        </div>
+
+        <div className="fixed inset-0 pointer-events-none">
+          {stars.map((s) => (
+            <div
+              key={s.id}
+              className="absolute w-1 h-1 bg-slate-300 dark:bg-white rounded-full"
+              style={{
+                left: s.left,
+                top: s.top,
+                animation: `twinkle ${s.duration} ease-in-out infinite ${s.delay}`,
+                transform: 'translateZ(0)'
+              }}
+            />
+          ))}
+        </div>
+
+        <Navigation onSectionClick={scrollToSection} activeSection={activeSection} showBackToTop={showBackToTop} onScrollToTop={() => scrollToSection('home')} />
+        <SiteStats open={showSiteStats} onClose={() => setShowSiteStats(false)} />
+
+        <main className="relative z-10 pb-28 md:pb-0">
+          <div id="home" className="scroll-mt-0">
+            <HomeSection />
+          </div>
+
+          <div className="h-px bg-gradient-to-r from-transparent via-slate-400/25 dark:via-white/[0.06] to-transparent mx-8 sm:mx-24" />
+          <div id="experience">
+            <FadeIn><ExperienceSection /></FadeIn>
+          </div>
+
+          <div className="h-px bg-gradient-to-r from-transparent via-slate-400/25 dark:via-white/[0.06] to-transparent mx-8 sm:mx-24" />
+          <div id="projects">
+            <FadeIn><ProjectsSection /></FadeIn>
+          </div>
+
+          <div className="h-px bg-gradient-to-r from-transparent via-slate-400/25 dark:via-white/[0.06] to-transparent mx-8 sm:mx-24" />
+          <div id="research">
+            <FadeIn><ResearchSection /></FadeIn>
+          </div>
+
+          <div className="h-px bg-gradient-to-r from-transparent via-slate-400/25 dark:via-white/[0.06] to-transparent mx-8 sm:mx-24" />
+          <div id="conferences">
+            <FadeIn><ConferencesSection /></FadeIn>
+          </div>
+
+          <div className="h-px bg-gradient-to-r from-transparent via-slate-400/25 dark:via-white/[0.06] to-transparent mx-8 sm:mx-24" />
+          <div id="github">
+            <FadeIn><GitHubSection /></FadeIn>
+          </div>
+
+          <div className="h-px bg-gradient-to-r from-transparent via-slate-400/25 dark:via-white/[0.06] to-transparent mx-8 sm:mx-24" />
+          <div id="tools">
+            <FadeIn><TechStack /></FadeIn>
+          </div>
+
+          <div className="h-px bg-gradient-to-r from-transparent via-slate-400/25 dark:via-white/[0.06] to-transparent mx-8 sm:mx-24" />
+          <div id="currently">
+            <FadeIn><CurrentlySection /></FadeIn>
+          </div>
+
+          <div className="h-px bg-gradient-to-r from-transparent via-slate-400/25 dark:via-white/[0.06] to-transparent mx-8 sm:mx-24" />
+          <div id="contact">
+            <FadeIn><ContactSection /></FadeIn>
+          </div>
+        </main>
+        <footer className="relative z-10 text-center py-6 pb-28 md:pb-6 text-sm text-slate-500 dark:text-white/40">
+          © {new Date().getFullYear()} Waleed Tariq. All rights reserved.
+        </footer>
       </div>
-      
-      <Navigation onSectionClick={scrollToSection} activeSection={activeSection} showBackToTop={showBackToTop} onScrollToTop={() => scrollToSection('home')} />
-      <SiteStats open={showSiteStats} onClose={() => setShowSiteStats(false)} />
-      
-      <main className="relative z-10 pb-28 md:pb-0">
-        <div id="home" className="scroll-mt-0">
-          <HomeSection />
-        </div>
-
-        {/* id wrappers are always in the DOM — no Suspense, no lazy loading */}
-        <div className="h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent mx-8 sm:mx-24" />
-        <div id="experience">
-          <FadeIn><ExperienceSection /></FadeIn>
-        </div>
-
-        <div className="h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent mx-8 sm:mx-24" />
-        <div id="projects">
-          <FadeIn><ProjectsSection /></FadeIn>
-        </div>
-
-        <div className="h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent mx-8 sm:mx-24" />
-        <div id="research">
-          <FadeIn><ResearchSection /></FadeIn>
-        </div>
-
-        <div className="h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent mx-8 sm:mx-24" />
-        <div id="conferences">
-          <FadeIn><ConferencesSection /></FadeIn>
-        </div>
-
-        <div className="h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent mx-8 sm:mx-24" />
-        <div id="github">
-          <FadeIn><GitHubSection /></FadeIn>
-        </div>
-
-        <div className="h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent mx-8 sm:mx-24" />
-        <div id="tools">
-          <FadeIn><TechStack /></FadeIn>
-        </div>
-
-        <div className="h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent mx-8 sm:mx-24" />
-        <div id="currently">
-          <FadeIn><CurrentlySection /></FadeIn>
-        </div>
-
-        <div className="h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent mx-8 sm:mx-24" />
-        <div id="contact">
-          <FadeIn><ContactSection /></FadeIn>
-        </div>
-
-      </main>
-      <footer className="relative z-10 text-center py-6 pb-28 md:pb-6 text-sm text-white/40">
-        © {new Date().getFullYear()} Waleed Tariq. All rights reserved.
-      </footer>
-    </div>
     </>
   );
 };

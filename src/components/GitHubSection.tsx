@@ -1,23 +1,23 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from 'react';
 
 // Contribution colour — violet-600, rich and visible against dark background
-const USERNAME = "Waleed2660";
-const CHART_COLOR = "7c3aed";
+const USERNAME = 'Waleed2660';
+const CHART_COLOR = '7c3aed';
 
 const LANGUAGE_COLORS: Record<string, string> = {
-  Java: "#b07219",
-  Python: "#3572A5",
-  JavaScript: "#f1e05a",
-  TypeScript: "#3178c6",
-  HTML: "#e34c26",
-  CSS: "#563d7c",
-  "C++": "#f34b7d",
-  C: "#555555",
-  Shell: "#89e051",
-  Kotlin: "#F18E33",
-  Swift: "#ffac45",
-  Go: "#00ADD8",
-  Rust: "#dea584",
+  Java: '#b07219',
+  Python: '#3572A5',
+  JavaScript: '#f1e05a',
+  TypeScript: '#3178c6',
+  HTML: '#e34c26',
+  CSS: '#563d7c',
+  'C++': '#f34b7d',
+  C: '#555555',
+  Shell: '#89e051',
+  Kotlin: '#F18E33',
+  Swift: '#ffac45',
+  Go: '#00ADD8',
+  Rust: '#dea584',
 };
 
 interface Language {
@@ -52,32 +52,32 @@ const GitHubSection = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Left: Stats */}
-          <div className="glass-strong rounded-3xl p-8 hover:scale-[1.02] hover:bg-white/10 transition-all duration-500">
-            <p className="text-white/40 text-xs uppercase tracking-widest mb-5">Stats</p>
+          <div className="glass-strong rounded-3xl p-8 hover:scale-[1.02] hover:bg-slate-900/5 dark:hover:bg-white/10 transition-all duration-500">
+            <p className="text-slate-400 dark:text-white/40 text-xs uppercase tracking-widest mb-5">Stats</p>
             <div className="grid grid-cols-3 gap-4 text-center">
               <div className="glass rounded-2xl py-4 px-2">
-                <div className="text-2xl font-bold text-yellow-300">
-                  {stats ? stats.stars : "—"}
+                <div className="text-2xl font-bold text-yellow-500 dark:text-yellow-300">
+                  {stats ? stats.stars : '—'}
                 </div>
-                <div className="text-white/50 text-xs mt-1">Stars</div>
+                <div className="text-slate-500 dark:text-white/50 text-xs mt-1">Stars</div>
               </div>
               <div className="glass rounded-2xl py-4 px-2">
-                <div className="text-2xl font-bold text-blue-300">
-                  {stats ? stats.followers : "—"}
+                <div className="text-2xl font-bold text-blue-600 dark:text-blue-300">
+                  {stats ? stats.followers : '—'}
                 </div>
-                <div className="text-white/50 text-xs mt-1">Followers</div>
+                <div className="text-slate-500 dark:text-white/50 text-xs mt-1">Followers</div>
               </div>
               <div className="glass rounded-2xl py-4 px-2">
-                <div className="text-2xl font-bold text-purple-300">
-                  {stats ? stats.public_repos : "—"}
+                <div className="text-2xl font-bold text-purple-600 dark:text-purple-300">
+                  {stats ? stats.public_repos : '—'}
                 </div>
-                <div className="text-white/50 text-xs mt-1">Repos</div>
+                <div className="text-slate-500 dark:text-white/50 text-xs mt-1">Repos</div>
               </div>
             </div>
 
             {/* Streak stats */}
             <div className="mt-6">
-              <p className="text-white/40 text-xs uppercase tracking-widest mb-3">Streak</p>
+              <p className="text-slate-400 dark:text-white/40 text-xs uppercase tracking-widest mb-3">Streak</p>
               <img
                 src="https://streak-stats.demolab.com?user=Waleed2660&theme=transparent&hide_border=true&stroke=ffffff20&ring=818cf8&fire=818cf8&currStreakLabel=ffffff99&sideLabels=ffffff99&currStreakNum=ffffff&sideNums=ffffff&dates=ffffff40&background=00000000"
                 alt="GitHub streak stats"
@@ -86,21 +86,21 @@ const GitHubSection = () => {
                 className="w-full rounded-xl opacity-90 hover:opacity-100 transition-opacity duration-300"
                 loading="lazy"
                 onError={(e) => {
-                  (e.target as HTMLImageElement).parentElement!.style.display = "none";
+                  (e.target as HTMLImageElement).parentElement!.style.display = 'none';
                 }}
               />
             </div>
           </div>
 
           {/* Right: Top Languages */}
-          <div className="glass-strong rounded-3xl p-8 hover:scale-[1.02] hover:bg-white/10 transition-all duration-500">
-            <p className="text-white/40 text-xs uppercase tracking-widest mb-5">
+          <div className="glass-strong rounded-3xl p-8 hover:scale-[1.02] hover:bg-slate-900/5 dark:hover:bg-white/10 transition-all duration-500">
+            <p className="text-slate-400 dark:text-white/40 text-xs uppercase tracking-widest mb-5">
               Top Languages
             </p>
             {!stats ? (
               <div className="space-y-3">
                 {[...Array(4)].map((_, i) => (
-                  <div key={i} className="h-4 bg-white/10 rounded-full animate-pulse" />
+                  <div key={i} className="h-4 bg-slate-900/5 dark:bg-white/10 rounded-full animate-pulse" />
                 ))}
               </div>
             ) : (
@@ -108,21 +108,21 @@ const GitHubSection = () => {
                 {stats.languages.map(({ name, percentage }) => (
                   <div key={name}>
                     <div className="flex justify-between text-sm mb-1.5">
-                      <span className="text-white/80 flex items-center gap-2">
+                      <span className="text-slate-700 dark:text-white/80 flex items-center gap-2">
                         <span
                           className="w-2.5 h-2.5 rounded-full inline-block flex-shrink-0"
-                          style={{ background: LANGUAGE_COLORS[name] ?? "#888" }}
+                          style={{ background: LANGUAGE_COLORS[name] ?? '#888' }}
                         />
                         {name}
                       </span>
-                      <span className="text-white/40">{percentage}%</span>
+                      <span className="text-slate-400 dark:text-white/40">{percentage}%</span>
                     </div>
-                    <div className="h-1.5 rounded-full bg-white/10 overflow-hidden">
+                    <div className="h-1.5 rounded-full bg-slate-900/5 dark:bg-white/10 overflow-hidden">
                       <div
                         className="h-full rounded-full transition-all duration-700"
                         style={{
                           width: `${percentage}%`,
-                          background: LANGUAGE_COLORS[name] ?? "#888",
+                          background: LANGUAGE_COLORS[name] ?? '#888',
                         }}
                       />
                     </div>
@@ -134,8 +134,8 @@ const GitHubSection = () => {
         </div>
 
         {/* Full-width Contribution Graph */}
-        <div ref={chartRef} className="glass-strong rounded-3xl p-8 mt-6 hover:scale-[1.02] hover:bg-white/10 transition-all duration-500">
-          <p className="text-white/40 text-xs uppercase tracking-widest mb-4">
+        <div ref={chartRef} className="glass-strong rounded-3xl p-8 mt-6 hover:scale-[1.02] hover:bg-slate-900/5 dark:hover:bg-white/10 transition-all duration-500">
+          <p className="text-slate-400 dark:text-white/40 text-xs uppercase tracking-widest mb-4">
             Contribution Graph
           </p>
           <img
@@ -146,7 +146,7 @@ const GitHubSection = () => {
             loading="lazy"
             className="w-full rounded-xl opacity-75 hover:opacity-100 transition-opacity duration-300"
             onError={(e) => {
-              (e.target as HTMLImageElement).parentElement!.style.display = "none";
+              (e.target as HTMLImageElement).parentElement!.style.display = 'none';
             }}
           />
         </div>

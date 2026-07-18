@@ -50,21 +50,21 @@ const SiteStats = ({ open, onClose }: SiteStatsProps) => {
       onTransitionEnd={() => { if (!open) setVisible(false); }}
     >
       {/* Backdrop */}
-      <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
+      <div className="absolute inset-0 bg-slate-950/20 dark:bg-black/40 backdrop-blur-sm" />
 
       {/* Panel */}
       <div
         className={`relative z-10 rounded-2xl p-6 w-full max-w-sm mx-4 transition-all duration-300 ${open ? 'translate-y-0 scale-100' : 'translate-y-6 scale-95'}`}
-        style={{ background: 'rgba(12,12,28,0.92)', border: '1px solid rgba(255,255,255,0.10)', boxShadow: '0 24px 64px rgba(0,0,0,0.6)' }}
+        style={{ background: 'var(--site-stats-bg)', border: '1px solid var(--site-stats-border)', boxShadow: 'var(--site-stats-shadow)' }}
         onClick={e => e.stopPropagation()}
       >
         {/* Header */}
         <div className="flex items-center justify-between mb-5">
-          <div className="flex items-center gap-2 text-white/60">
+          <div className="flex items-center gap-2 text-slate-500 dark:text-white/60">
             <Terminal className="w-4 h-4" />
             <span className="text-sm font-mono font-medium">site.stats</span>
           </div>
-          <button onClick={onClose} className="text-white/30 hover:text-white/60 transition-colors">
+          <button onClick={onClose} className="text-slate-400 dark:text-white/30 hover:text-slate-600 dark:hover:text-white/60 transition-colors">
             <X className="w-4 h-4" />
           </button>
         </div>
@@ -73,21 +73,21 @@ const SiteStats = ({ open, onClose }: SiteStatsProps) => {
         <div className="space-y-4">
           {stats.map((s, i) => (
             <div key={i} className="flex items-center justify-between">
-              <div className="flex items-center gap-2.5 text-white/40">
+              <div className="flex items-center gap-2.5 text-slate-500 dark:text-white/40">
                 {s.icon}
                 <span className="text-sm">{s.label}</span>
               </div>
               <div className="text-right">
-                <span className="text-white/90 text-sm font-mono font-medium">{s.value}</span>
-                {s.sub && <span className="block text-white/30 text-xs font-mono">{s.sub}</span>}
+                <span className="text-slate-900 dark:text-white/90 text-sm font-mono font-medium">{s.value}</span>
+                {s.sub && <span className="block text-slate-400 dark:text-white/30 text-xs font-mono">{s.sub}</span>}
               </div>
             </div>
           ))}
         </div>
 
         {/* Footer */}
-        <p className="mt-5 pt-4 border-t border-white/5 text-white/20 text-xs font-mono text-center">
-          press <kbd className="px-1 py-0.5 rounded bg-white/8 text-white/30">`</kbd> to toggle
+        <p className="mt-5 pt-4 border-t border-slate-200 dark:border-white/5 text-slate-400 dark:text-white/20 text-xs font-mono text-center">
+          press <kbd className="px-1 py-0.5 rounded bg-slate-900/5 dark:bg-white/8 text-slate-500 dark:text-white/30">`</kbd> to toggle
         </p>
       </div>
     </div>

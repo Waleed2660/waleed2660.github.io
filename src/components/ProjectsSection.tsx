@@ -99,7 +99,7 @@ const ProjectsSection = () => {
             return (
             <div
               key={`pinned-${index}`}
-              className="glass-strong featured-card rounded-3xl p-8 hover:bg-white/10 transition-all duration-500 hover:scale-[1.02] group"
+              className="glass-strong featured-card rounded-3xl p-8 hover:bg-slate-900/5 dark:hover:bg-white/10 transition-all duration-500 hover:scale-[1.02] group"
             >
               <div className="flex flex-col md:flex-row gap-8">
                 <div className="flex-shrink-0 flex flex-col items-center justify-center gap-3">
@@ -115,18 +115,18 @@ const ProjectsSection = () => {
                 </div>
                 <div className="flex flex-col flex-1">
                   <div className="flex items-center gap-3 mb-1 flex-wrap">
-                    <h3 className="text-2xl font-semibold text-white group-hover:text-blue-300 transition-colors">{project.title}</h3>
+                    <h3 className="text-2xl font-semibold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-300 transition-colors">{project.title}</h3>
                     {stats && <span className="glass rounded-xl px-3 py-1 text-sm text-yellow-300/90 whitespace-nowrap">★ {stats.stars}</span>}
                     {stats && stats.forks > 0 && (
-                      <span className="glass rounded-xl px-3 py-1 text-sm text-white/50 whitespace-nowrap">⑂ {stats.forks}</span>
+                      <span className="glass rounded-xl px-3 py-1 text-sm text-slate-500 dark:text-white/50 whitespace-nowrap">⑂ {stats.forks}</span>
                     )}
                   </div>
-                  <p className="text-white/70 mb-4 leading-relaxed">{project.description}</p>
+                  <p className="text-slate-600 dark:text-white/70 mb-4 leading-relaxed">{project.description}</p>
                   {project.highlights && (
                     <ul className="mb-6 grid sm:grid-cols-2 gap-x-6 gap-y-2">
                       {project.highlights.map((point, pi) => (
-                        <li key={pi} className="flex items-start gap-2 text-white/60 text-sm">
-                          <span className="text-blue-400/70 mt-0.5 flex-shrink-0">▸</span>
+                        <li key={pi} className="flex items-start gap-2 text-slate-500 dark:text-white/60 text-sm">
+                          <span className="text-blue-600/80 dark:text-blue-400/70 mt-0.5 flex-shrink-0">▸</span>
                           {point}
                         </li>
                       ))}
@@ -135,11 +135,11 @@ const ProjectsSection = () => {
                   <div className="flex justify-between items-end mt-auto">
                     <div className="flex flex-wrap gap-2">
                       {project.tech.map((tech, ti) => (
-                        <div key={ti} className="glass rounded-xl px-3 py-1 text-white/80 text-sm inline-block">{tech}</div>
+                        <div key={ti} className="glass rounded-xl px-3 py-1 text-slate-700 dark:text-white/80 text-sm inline-block">{tech}</div>
                       ))}
                     </div>
                     <a href={project.github} target="_blank" rel="noopener noreferrer"
-                      className="flex items-center gap-2 text-white/50 hover:text-blue-300 transition-colors group/link ml-4 flex-shrink-0">
+                      className="flex items-center gap-2 text-slate-500 dark:text-white/50 hover:text-blue-600 dark:hover:text-blue-300 transition-colors group/link ml-4 flex-shrink-0">
                       <span className="text-sm opacity-40 group-hover/link:opacity-100 transition-opacity">View Code</span>
                       <img src="/misc/github.webp" alt="GitHub" width="24" height="24" loading="lazy"
                         className="w-6 h-6 object-contain brightness-50 group-hover/link:brightness-100 transition-all" />
@@ -155,7 +155,7 @@ const ProjectsSection = () => {
           {projects.filter(p => !p.repoKey).map((project, index) => (
             <div
               key={index}
-              className={`glass-strong rounded-3xl p-8 hover:bg-white/10 transition-all duration-500 hover:scale-105 group`}
+              className={`glass-strong rounded-3xl p-8 hover:bg-slate-900/5 dark:hover:bg-white/10 transition-all duration-500 hover:scale-105 group`}
             >
               <div className="flex flex-col h-full">
                 <div className="flex items-center gap-4 mb-4">
@@ -168,12 +168,12 @@ const ProjectsSection = () => {
                     className="w-10 h-10 object-contain brightness-90 group-hover:brightness-100 transition-all"
                   />
                   <div className="flex items-center gap-2 flex-wrap">
-                    <h3 className="text-2xl font-semibold text-white group-hover:text-blue-300 transition-colors">
+                    <h3 className="text-2xl font-semibold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-300 transition-colors">
                       {project.title}
                     </h3>
                   </div>
                 </div>
-                <p className="text-white/70 mb-6 leading-relaxed">
+                <p className="text-slate-600 dark:text-white/70 mb-6 leading-relaxed">
                   {project.description}
                 </p>
                 <div className="mt-auto">
@@ -182,7 +182,7 @@ const ProjectsSection = () => {
                 {project.tech.map((tech, techIndex) => (
                   <div
                     key={techIndex}
-                    className="glass rounded-xl px-3 py-1 text-white/80 text-sm inline-block mr-2"
+                    className="glass rounded-xl px-3 py-1 text-slate-700 dark:text-white/80 text-sm inline-block mr-2"
                   >
                     {tech}
                   </div>
@@ -192,7 +192,7 @@ const ProjectsSection = () => {
                       href={project.github}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-2 text-white/50 hover:text-blue-300 transition-colors group/link"
+                      className="flex items-center gap-2 text-slate-500 dark:text-white/50 hover:text-blue-600 dark:hover:text-blue-300 transition-colors group/link"
                     >
                       <span className="text-sm opacity-40 group-hover/link:opacity-100 transition-opacity">View Code</span>
                       <img 
