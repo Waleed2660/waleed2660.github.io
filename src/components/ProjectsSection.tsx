@@ -116,7 +116,7 @@ const ProjectsSection = () => {
                 <div className="flex flex-col flex-1">
                   <div className="flex items-center gap-3 mb-1 flex-wrap">
                     <h3 className="text-2xl font-semibold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-300 transition-colors">{project.title}</h3>
-                    {stats && <span className="glass rounded-xl px-3 py-1 text-sm text-yellow-300/90 whitespace-nowrap">★ {stats.stars}</span>}
+                    {stats && <span className="glass rounded-xl px-3 py-1 text-sm text-yellow-700 dark:text-yellow-300/90 whitespace-nowrap">★ {stats.stars}</span>}
                     {stats && stats.forks > 0 && (
                       <span className="glass rounded-xl px-3 py-1 text-sm text-slate-500 dark:text-white/50 whitespace-nowrap">⑂ {stats.forks}</span>
                     )}

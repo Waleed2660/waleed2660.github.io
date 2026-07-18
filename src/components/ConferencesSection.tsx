@@ -111,7 +111,7 @@ const conferences: Conference[] = [
     summary: (
       <>
         My first ever internal tech conference and what a way to experience it. My team walked away with the{" "}
-        <span className="text-yellow-300 font-semibold">Strategic Team of the Year</span>{" "}
+        <span className="text-yellow-700 dark:text-yellow-300 font-semibold">Strategic Team of the Year</span>{" "}
         award. Heard from a brilliant lineup of speakers including Bruce Daisley and Kimberly Wilson across a range of topics, and spent time exploring stands from various companies showcasing their latest work.
       </>
     ),
