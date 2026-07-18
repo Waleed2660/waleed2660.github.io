@@ -1,7 +1,6 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
-import { componentTagger } from "lovable-tagger";
 import { execSync } from "child_process";
 import { readdirSync, statSync, readFileSync } from "fs";
 
@@ -27,16 +26,14 @@ const countLines = (dir: string, exts: string[]): number => {
 };
 
 // https://vitejs.dev/config/
-export default defineConfig(({ mode }) => ({
+export default defineConfig(() => ({
   server: {
     host: "::",
     port: 8080,
   },
   plugins: [
     react(),
-    mode === 'development' &&
-    componentTagger(),
-  ].filter(Boolean),
+  ],
   define: {
     __BUILD_TIME__: JSON.stringify(new Date().toISOString()),
     __GIT_COMMITS__: getGitCommits(),

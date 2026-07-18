@@ -14,9 +14,9 @@ const Navigation = ({ onSectionClick, activeSection, showBackToTop, onScrollToTo
     { id: 'experience', label: 'Experience' },
     { id: 'projects', label: 'Projects' },
     { id: 'research', label: 'Research' },
-    { id: 'conferences', label: 'Events' },
+    { id: 'conferences', label: 'On The Ground' },
     { id: 'github', label: 'GitHub' },
-    { id: 'tools', label: 'Stack' },
+    { id: 'tools', label: 'Tech Stack' },
     { id: 'currently', label: 'Exploring' },
     { id: 'contact', label: 'Contact' }
   ];

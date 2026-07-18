@@ -29,14 +29,24 @@ const Index = () => {
     });
   };
 
-  const starCount = window.innerWidth < 768 ? 0 : 20;
-  const stars = useMemo(() => Array.from({ length: starCount }, (_, i) => ({
-    id: i,
-    left: `${Math.random() * 100}%`,
-    top: `${Math.random() * 100}%`,
-    duration: `${10 + Math.random() * 18}s`,
-    delay: `-${Math.random() * 30}s`,
-  })), []);
+  const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 768);
+  useEffect(() => {
+    const mq = window.matchMedia('(min-width: 768px)');
+    const handler = (e: MediaQueryListEvent) => setIsDesktop(e.matches);
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, []);
+
+  const stars = useMemo(() => {
+    if (!isDesktop) return [];
+    return Array.from({ length: 20 }, (_, i) => ({
+      id: i,
+      left: `${Math.random() * 100}%`,
+      top: `${Math.random() * 100}%`,
+      duration: `${10 + Math.random() * 18}s`,
+      delay: `-${Math.random() * 30}s`,
+    }));
+  }, [isDesktop]);
 
   const progressBarRef = useRef<HTMLDivElement>(null);
   const [showBackToTop, setShowBackToTop] = useState(false);

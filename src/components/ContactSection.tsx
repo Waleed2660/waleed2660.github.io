@@ -68,11 +68,12 @@ const ContactSection = () => {
               target={card.isExternal ? "_blank" : undefined}
               rel={card.isExternal ? "noopener noreferrer" : undefined}
               onClick={card.title === "Email" ? (e) => {
+                const isMobile = window.matchMedia('(max-width: 768px)').matches || 'ontouchstart' in window;
+                if (isMobile) return; // let the mailto: link open natively
                 e.preventDefault();
                 const email = 'me@waleedtariq.com';
                 if (navigator.clipboard) {
                   navigator.clipboard.writeText(email).catch(() => {
-                    // fallback for mobile browsers that deny clipboard API
                     const ta = document.createElement('textarea');
                     ta.value = email;
                     ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0';

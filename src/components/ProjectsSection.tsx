@@ -7,27 +7,27 @@ type Project = {
   tech: string[];
   github: string;
   image: string;
+  repoKey?: string;
   stars?: number;
   forks?: number;
   highlights?: string[];
 };
 
+interface RepoStats {
+  stars: number;
+  forks: number;
+}
+
 const ProjectsSection = () => {
-  const [springbootStars, setSpringbootStars] = useState<number>(94);
-  const [springbootForks, setSpringbootForks] = useState<number>(0);
+  const [repoStats, setRepoStats] = useState<Record<string, RepoStats>>({});
 
   useEffect(() => {
-    fetch("https://api.github.com/repos/Waleed2660/springboot-learning-kit")
+    fetch("/github-stats.json")
       .then((res) => res.json())
       .then((data) => {
-        if (typeof data.stargazers_count === "number") {
-          setSpringbootStars(data.stargazers_count);
-        }
-        if (typeof data.forks_count === "number") {
-          setSpringbootForks(data.forks_count);
-        }
+        if (data.repos) setRepoStats(data.repos);
       })
-      .catch(() => {/* keep fallback */});
+      .catch(() => {});
   }, []);
 
   const projects: Project[] = [
@@ -37,8 +37,7 @@ const ProjectsSection = () => {
       tech: ["Spring Boot", "ActiveMQ", "PostgreSQL", "Prometheus", "GitHub Actions", "JMeter", "RabbitMQ", "Apache Camel"],
       github: "https://github.com/Waleed2660/springboot-learning-kit",
       image: "/tech_icons/springboot.svg",
-      stars: springbootStars,
-      forks: springbootForks,
+      repoKey: "springboot-learning-kit",
       highlights: [
         "Project setup with Spring Boot best practices & layered architecture",
         "Apache ActiveMQ integration with Apache Camel routing",
@@ -94,10 +93,12 @@ const ProjectsSection = () => {
           Projects
         </h2>
         <div className="flex flex-col gap-8">
-          {/* Featured project - full width */}
-          {projects.filter(p => p.stars).map((project, index) => (
+          {/* Pinned project - full width */}
+          {projects.filter(p => p.repoKey).map((project, index) => {
+            const stats = project.repoKey ? repoStats[project.repoKey] : undefined;
+            return (
             <div
-              key={`featured-${index}`}
+              key={`pinned-${index}`}
               className="glass-strong featured-card rounded-3xl p-8 hover:bg-white/10 transition-all duration-500 hover:scale-[1.02] group"
             >
               <div className="flex flex-col md:flex-row gap-8">
@@ -115,10 +116,9 @@ const ProjectsSection = () => {
                 <div className="flex flex-col flex-1">
                   <div className="flex items-center gap-3 mb-1 flex-wrap">
                     <h3 className="text-2xl font-semibold text-white group-hover:text-blue-300 transition-colors">{project.title}</h3>
-                    <span className="glass rounded-xl px-3 py-1 text-xs font-bold text-blue-300/80 tracking-widest uppercase">Featured</span>
-                    <span className="glass rounded-xl px-3 py-1 text-sm text-yellow-300/90 whitespace-nowrap">★ {project.stars}</span>
-                    {project.forks !== undefined && project.forks > 0 && (
-                      <span className="glass rounded-xl px-3 py-1 text-sm text-white/50 whitespace-nowrap">⑂ {project.forks}</span>
+                    {stats && <span className="glass rounded-xl px-3 py-1 text-sm text-yellow-300/90 whitespace-nowrap">★ {stats.stars}</span>}
+                    {stats && stats.forks > 0 && (
+                      <span className="glass rounded-xl px-3 py-1 text-sm text-white/50 whitespace-nowrap">⑂ {stats.forks}</span>
                     )}
                   </div>
                   <p className="text-white/70 mb-4 leading-relaxed">{project.description}</p>
@@ -148,13 +148,14 @@ const ProjectsSection = () => {
                 </div>
               </div>
             </div>
-          ))}
+            );
+          })}
           {/* Rest of projects grid */}
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {projects.filter(p => !p.stars).map((project, index) => (
+          {projects.filter(p => !p.repoKey).map((project, index) => (
             <div
               key={index}
-              className={`glass-strong rounded-3xl p-8 hover:bg-white/10 transition-all duration-500 hover:scale-105 group${project.stars ? " featured-card" : ""}`}
+              className={`glass-strong rounded-3xl p-8 hover:bg-white/10 transition-all duration-500 hover:scale-105 group`}
             >
               <div className="flex flex-col h-full">
                 <div className="flex items-center gap-4 mb-4">
@@ -170,11 +171,6 @@ const ProjectsSection = () => {
                     <h3 className="text-2xl font-semibold text-white group-hover:text-blue-300 transition-colors">
                       {project.title}
                     </h3>
-                    {project.stars && (
-                      <span className="glass rounded-xl px-3 py-1 text-sm text-yellow-300/90 whitespace-nowrap">
-                        ★ {project.stars}
-                      </span>
-                    )}
                   </div>
                 </div>
                 <p className="text-white/70 mb-6 leading-relaxed">
