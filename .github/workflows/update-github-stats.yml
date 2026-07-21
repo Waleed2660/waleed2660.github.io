@@ -49,10 +49,20 @@ jobs:
               for l, c in sorted_langs
           ]
 
+          pinned_repos = ['springboot-learning-kit']
+          repo_stats = {}
+          for r in own:
+              if r['name'] in pinned_repos:
+                  repo_stats[r['name']] = {
+                      'stars': r.get('stargazers_count', 0),
+                      'forks': r.get('forks_count', 0)
+                  }
+
           output = {
               'followers': user['followers'],
               'public_repos': user['public_repos'],
               'stars': stars,
+              'repos': repo_stats,
               'languages': languages
           }
 
