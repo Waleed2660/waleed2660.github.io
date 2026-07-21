@@ -2,6 +2,12 @@
   "followers": 12,
   "public_repos": 16,
   "stars": 131,
+  "repos": {
+    "springboot-learning-kit": {
+      "stars": 124,
+      "forks": 65
+    }
+  },
   "languages": [
     {
       "name": "Java",
