@@ -142,6 +142,13 @@
     transition-duration: 350ms;
   }
 
+  /* Opt out of the global * transition for the theme toggle — 
+     it manages its own inline transitions */
+  [data-theme-toggle],
+  [data-theme-toggle] * {
+    transition-property: none;
+  }
+
   html {
     background: var(--html-bg);
     transition: background-color 350ms ease;
@@ -182,6 +189,19 @@ html:not(.dark) .theme-bg-layer--dark {
 
 html:not(.dark) .theme-bg-layer--light {
   opacity: 1;
+}
+
+/* View Transitions API — smooth whole-page crossfade for theme switches */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 350ms;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Prevent per-element flicker while the view transition handles it,
+   but let the theme toggle keep its own animations */
+html.theme-switching *:not([data-theme-toggle]):not([data-theme-toggle] *) {
+  transition: none !important;
 }
 
 @layer utilities {

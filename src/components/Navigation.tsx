@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import { Home, Briefcase, Code2, Calendar, Mail, ChevronUp, Moon, Sun } from 'lucide-react';
-import { useTheme } from '@/hooks/use-theme';
+import { Home, Briefcase, Code2, Calendar, Mail, ChevronUp } from 'lucide-react';
+import ThemeToggle from '@/components/ThemeToggle';
 
 interface NavigationProps {
   onSectionClick: (section: string) => void;
@@ -10,7 +10,6 @@ interface NavigationProps {
 }
 
 const Navigation = ({ onSectionClick, activeSection, showBackToTop, onScrollToTop }: NavigationProps) => {
-  const { theme, toggleTheme } = useTheme();
   const sections = [
     { id: 'home', label: 'Home' },
     { id: 'experience', label: 'Experience' },
@@ -49,8 +48,6 @@ const Navigation = ({ onSectionClick, activeSection, showBackToTop, onScrollToTo
     { id: 'contact', label: 'Contact', icon: <Mail className="w-5 h-5" /> },
   ];
 
-  const ThemeIcon = theme === 'dark' ? Sun : Moon;
-
   return (
     <>
       {/* Desktop nav */}
@@ -79,15 +76,9 @@ const Navigation = ({ onSectionClick, activeSection, showBackToTop, onScrollToTo
               </button>
             ))}
             <div className="h-8 w-px bg-slate-300/70 dark:bg-white/10 mx-1 relative z-10" />
-            <button
-              type="button"
-              onClick={toggleTheme}
-              aria-label="Toggle theme"
-              className="relative z-10 flex items-center justify-center w-10 h-10 rounded-xl transition-colors duration-300 hover:bg-slate-900/5 dark:hover:bg-white/5"
-              style={{ background: 'var(--nav-toggle-bg)', color: 'var(--nav-toggle-icon)' }}
-            >
-              <ThemeIcon className="w-4 h-4" />
-            </button>
+            <div className="relative z-10 flex items-center justify-center">
+              <ThemeToggle size="sm" />
+            </div>
           </div>
         </div>
       </nav>
@@ -133,15 +124,9 @@ const Navigation = ({ onSectionClick, activeSection, showBackToTop, onScrollToTo
             );
           })}
 
-          <button
-            type="button"
-            onClick={toggleTheme}
-            className="relative flex items-center justify-center w-11 h-11 rounded-full transition-colors duration-200"
-            style={{ color: 'var(--nav-toggle-icon)', background: 'var(--nav-toggle-bg)' }}
-            aria-label="Toggle theme"
-          >
-            <ThemeIcon className="w-5 h-5" />
-          </button>
+          <div className="flex items-center justify-center px-1">
+            <ThemeToggle size="sm" />
+          </div>
 
           {/* Back to top — appears as extra icon when scrolled down */}
           <div

@@ -1,5 +1,5 @@
 /* eslint-disable react-refresh/only-export-components */
-import { createContext, useContext, useEffect, useLayoutEffect, useMemo, useState } from 'react';
+import { createContext, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 
 type Theme = 'dark' | 'light';
 
@@ -36,11 +36,43 @@ const applyTheme = (theme: Theme) => {
   }
 };
 
+/**
+ * Uses the View Transitions API (where supported) to crossfade the entire
+ * page as a single composited snapshot — eliminates per-element transition
+ * artifacts. Falls back to the normal class-based swap on older browsers.
+ */
+const applyThemeWithTransition = (theme: Theme) => {
+  if (!document.startViewTransition) {
+    applyTheme(theme);
+    return;
+  }
+
+  // Disable per-element transitions during the view transition to avoid
+  // double-animating and reduce compositor work.
+  const root = document.documentElement;
+  root.classList.add('theme-switching');
+
+  const transition = document.startViewTransition(() => {
+    applyTheme(theme);
+  });
+
+  transition.finished.then(() => {
+    root.classList.remove('theme-switching');
+  });
+};
+
 export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
-  const [theme, setTheme] = useState<Theme>(() => getPreferredTheme());
+  const [theme, setThemeState] = useState<Theme>(() => getPreferredTheme());
+  const isInitialMount = useRef(true);
 
   useLayoutEffect(() => {
-    applyTheme(theme);
+    // On initial mount, apply instantly (no animation needed)
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      applyTheme(theme);
+      return;
+    }
+    applyThemeWithTransition(theme);
   }, [theme]);
 
   useEffect(() => {
@@ -50,8 +82,8 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
   const value = useMemo<ThemeContextValue>(
     () => ({
       theme,
-      setTheme,
-      toggleTheme: () => setTheme((current) => (current === 'dark' ? 'light' : 'dark')),
+      setTheme: setThemeState,
+      toggleTheme: () => setThemeState((current) => (current === 'dark' ? 'light' : 'dark')),
     }),
     [theme],
   );
