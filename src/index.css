@@ -107,30 +107,30 @@
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
 
-    --html-bg: #f4f5fd;
-    --glass-bg: rgba(79, 70, 229, 0.07);
-    --glass-strong-bg: rgba(79, 70, 229, 0.09);
-    --glass-border: rgba(79, 70, 229, 0.22);
-    --glass-shadow: 0 20px 45px -14px rgba(79, 70, 229, 0.35), 0 4px 14px -4px rgba(79, 70, 229, 0.18);
+    --html-bg: #f2f5fb;
+    --glass-bg: rgba(240, 245, 255, 0.65);
+    --glass-strong-bg: rgba(245, 248, 255, 0.80);
+    --glass-border: rgba(180, 195, 225, 0.35);
+    --glass-shadow: 0 20px 45px -14px rgba(30, 58, 138, 0.08), 0 4px 14px -4px rgba(30, 58, 138, 0.05);
 
-    --nav-bg: rgba(224, 225, 250, 0.85);
-    --nav-border: rgba(99, 102, 241, 0.25);
-    --nav-mobile-border: rgba(99, 102, 241, 0.2);
-    --nav-shadow: 0 12px 36px rgba(79, 70, 229, 0.18);
-    --nav-icon-inactive: rgba(67, 56, 130, 0.55);
-    --nav-icon-active-bg: rgba(79, 70, 229, 0.12);
-    --nav-icon-dot: rgba(67, 56, 130, 0.7);
-    --nav-toggle-bg: rgba(79, 70, 229, 0.09);
-    --nav-toggle-hover-bg: rgba(79, 70, 229, 0.16);
-    --nav-toggle-icon: rgba(55, 48, 130, 0.85);
+    --nav-bg: rgba(255, 255, 255, 0.88);
+    --nav-border: rgba(0, 0, 0, 0.08);
+    --nav-mobile-border: rgba(0, 0, 0, 0.06);
+    --nav-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+    --nav-icon-inactive: rgba(30, 41, 59, 0.45);
+    --nav-icon-active-bg: rgba(30, 41, 59, 0.08);
+    --nav-icon-dot: rgba(30, 41, 59, 0.65);
+    --nav-toggle-bg: rgba(30, 41, 59, 0.06);
+    --nav-toggle-hover-bg: rgba(30, 41, 59, 0.10);
+    --nav-toggle-icon: rgba(15, 23, 42, 0.80);
 
-    --site-stats-bg: rgba(224, 225, 250, 0.9);
-    --site-stats-border: rgba(99, 102, 241, 0.22);
-    --site-stats-shadow: 0 24px 64px rgba(79, 70, 229, 0.2);
+    --site-stats-bg: rgba(255, 255, 255, 0.92);
+    --site-stats-border: rgba(0, 0, 0, 0.08);
+    --site-stats-shadow: 0 24px 64px rgba(0, 0, 0, 0.12);
 
-    --floating-action-bg: rgba(224, 225, 250, 0.88);
-    --tooltip-bg: rgba(49, 46, 90, 0.85);
-    --resume-card-bg: rgba(79, 70, 229, 0.08);
+    --floating-action-bg: rgba(255, 255, 255, 0.88);
+    --tooltip-bg: rgba(15, 23, 42, 0.80);
+    --resume-card-bg: rgba(0, 0, 0, 0.04);
   }
 }
 
@@ -179,7 +179,7 @@
 }
 
 .theme-bg-layer--light {
-  background: linear-gradient(135deg, #eef1fc 0%, #e9edfb 45%, #ede8fa 100%);
+  background: linear-gradient(135deg, #edf2fd 0%, #e8edf8 45%, #eaedf9 100%);
   opacity: 0;
 }
 
@@ -237,12 +237,35 @@ html.theme-switching *:not([data-theme-toggle]):not([data-theme-toggle] *) {
     z-index: 0;
   }
 
+  html:not(.dark) .glass-strong::before {
+    background: radial-gradient(
+      220px circle at var(--mouse-x, -999px) var(--mouse-y, -999px),
+      rgba(15, 23, 42, 0.06) 0%,
+      rgba(15, 23, 42, 0.03) 40%,
+      rgba(15, 23, 42, 0.01) 65%,
+      transparent 80%
+    );
+  }
+
+  /* In light mode keep the card white on hover — the ::before spotlight is the only highlight */
+  html:not(.dark) .glass-strong:hover {
+    background: var(--glass-strong-bg);
+  }
+
+  html:not(.dark) .glass:hover {
+    background: var(--glass-bg);
+  }
+
   .glass-strong:hover::before {
     opacity: 1;
   }
 
   .text-glow {
     text-shadow: 0 0 20px rgba(147, 197, 253, 0.5);
+  }
+
+  html:not(.dark) .text-glow {
+    text-shadow: none;
   }
 
   .animate-float {

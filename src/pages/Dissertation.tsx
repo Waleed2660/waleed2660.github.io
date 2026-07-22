@@ -28,10 +28,10 @@ const Dissertation = () => {
     <div className="min-h-screen relative overflow-hidden">
       {/* Ambient orbs — matches the vibrancy of the Home page background */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute -top-48 -left-48 w-[700px] h-[700px] rounded-full bg-blue-500/35 dark:bg-blue-600/20 blur-[60px] md:blur-[120px] will-change-transform" />
-        <div className="absolute -top-32 -right-64 w-[600px] h-[600px] rounded-full bg-violet-500/30 dark:bg-violet-600/15 blur-[50px] md:blur-[100px] will-change-transform" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] rounded-full bg-cyan-500/20 dark:bg-cyan-700/10 blur-[140px] hidden md:block will-change-transform" />
-        <div className="absolute -bottom-64 -left-32 w-[600px] h-[600px] rounded-full bg-purple-500/30 dark:bg-purple-700/15 blur-[55px] md:blur-[110px] will-change-transform" />
+        <div className="absolute -top-48 -left-48 w-[700px] h-[700px] rounded-full bg-blue-500/10 dark:bg-blue-600/20 blur-[60px] md:blur-[120px] will-change-transform" />
+        <div className="absolute -top-32 -right-64 w-[600px] h-[600px] rounded-full bg-violet-500/8 dark:bg-violet-600/15 blur-[50px] md:blur-[100px] will-change-transform" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] rounded-full bg-cyan-500/5 dark:bg-cyan-700/10 blur-[140px] hidden md:block will-change-transform" />
+        <div className="absolute -bottom-64 -left-32 w-[600px] h-[600px] rounded-full bg-purple-500/8 dark:bg-purple-700/15 blur-[55px] md:blur-[110px] will-change-transform" />
       </div>
       {isVisible && (
         <div className="fixed inset-0 pointer-events-none opacity-30">
