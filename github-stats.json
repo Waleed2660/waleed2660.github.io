@@ -1,11 +1,11 @@
 {
   "followers": 12,
   "public_repos": 16,
-  "stars": 131,
+  "stars": 135,
   "repos": {
     "springboot-learning-kit": {
-      "stars": 124,
-      "forks": 65
+      "stars": 128,
+      "forks": 66
     }
   },
   "languages": [
