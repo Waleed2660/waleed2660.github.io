@@ -7,6 +7,7 @@ on:
 
 permissions:
   contents: write
+  actions: write
 
 jobs:
   update-stats:
@@ -79,5 +80,16 @@ jobs:
           git config user.name "Waleed2660"
           git config user.email "$GIT_EMAIL"
           git add public/github-stats.json
-          git diff --staged --quiet || git commit -m "chore: update github stats"
-          git push
+          if git diff --staged --quiet; then
+            echo "changed=false" >> "$GITHUB_ENV"
+          else
+            git commit -m "chore: update github stats"
+            git push
+            echo "changed=true" >> "$GITHUB_ENV"
+          fi
+
+      - name: Trigger deploy
+        if: env.changed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh workflow run deploy.yml --ref main
