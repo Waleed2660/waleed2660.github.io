@@ -86,29 +86,44 @@ const HomeSection = () => {
               </div>
             )}
 
-            <h1
-              className={`text-4xl sm:text-6xl md:text-7xl font-bold mb-6 text-glow ${!SHOW_AVAILABILITY ? 'mt-0' : ''}`}
+            <div
+              className={`flex items-center justify-center gap-4 sm:gap-6 mb-6 ${!SHOW_AVAILABILITY ? 'mt-0' : ''}`}
               onMouseLeave={() => setHoveredLetterIdx(null)}
             >
-              {NAME.split('').map((char, i) => {
-                const dist = hoveredLetterIdx !== null ? Math.abs(i - hoveredLetterIdx) : Infinity;
-                const translateY = dist === 0 ? -14 : dist === 1 ? -8 : dist === 2 ? -3 : 0;
-                return (
-                  <span
-                    key={i}
-                    className="inline-block"
-                    onMouseEnter={() => setHoveredLetterIdx(i)}
-                    style={{
-                      whiteSpace: char === ' ' ? 'pre' : 'normal',
-                      transform: `translateY(${translateY}px)`,
-                      transition: 'transform 150ms ease-out',
-                    }}
-                  >
-                    {char}
-                  </span>
-                );
-              })}
-            </h1>
+              <img
+                src="/avatar-320.webp"
+                srcSet="/avatar-160.webp 160w, /avatar-320.webp 320w"
+                sizes="144px"
+                alt={NAME}
+                width={128}
+                height={128}
+                loading="eager"
+                fetchPriority="high"
+                decoding="async"
+                className="shrink-0 w-16 h-16 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-full object-cover border-2 border-slate-200 dark:border-white/10 shadow-lg"
+              />
+
+              <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-glow">
+                {NAME.split('').map((char, i) => {
+                  const dist = hoveredLetterIdx !== null ? Math.abs(i - hoveredLetterIdx) : Infinity;
+                  const translateY = dist === 0 ? -14 : dist === 1 ? -8 : dist === 2 ? -3 : 0;
+                  return (
+                    <span
+                      key={i}
+                      className="inline-block"
+                      onMouseEnter={() => setHoveredLetterIdx(i)}
+                      style={{
+                        whiteSpace: char === ' ' ? 'pre' : 'normal',
+                        transform: `translateY(${translateY}px)`,
+                        transition: 'transform 150ms ease-out',
+                      }}
+                    >
+                      {char}
+                    </span>
+                  );
+                })}
+              </h1>
+            </div>
 
             <div className="text-xl sm:text-2xl md:text-3xl text-slate-500 dark:text-white/50 italic mb-4 flex items-center justify-center gap-2 flex-wrap min-h-[2.5rem]">
               <span>
