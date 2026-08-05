@@ -22,7 +22,8 @@ const educationHistory: Education[] = [
     modules: [
       "Distributed auctioning system (Java RMI, active replication for reliability & availability)",
       "Led a team building an OpenGL-based 2D platform fighter game using SFML in Java",
-      "Dissertation: ML model processing drone & satellite imagery to detect littering across the UK",
+      "Artificial Intelligence: search algorithms, neural networks, and machine learning fundamentals",
+      "Advanced Networking: protocol design, network security, and distributed systems architecture",
     ],
   },
   {
@@ -92,27 +93,14 @@ const ResearchSection = () => {
                 <p className="text-slate-500 dark:text-white/40 text-xs uppercase tracking-widest font-semibold mb-2">
                   Relevant Coursework
                 </p>
-                {edu.modules.every((m) => m.length < 40) ? (
-                  <div className="flex flex-wrap gap-2">
-                    {edu.modules.map((mod, j) => (
-                      <span
-                        key={j}
-                        className="glass rounded-lg px-3 py-1 text-slate-600 dark:text-white/70 text-xs"
-                      >
-                        {mod}
-                      </span>
-                    ))}
-                  </div>
-                ) : (
-                  <ul className="space-y-1.5">
-                    {edu.modules.map((mod, j) => (
-                      <li key={j} className="flex items-start gap-2 text-slate-600 dark:text-white/70 text-sm leading-relaxed">
-                        <span className="text-slate-400 dark:text-white/30 mt-1">•</span>
-                        <span>{mod}</span>
-                      </li>
-                    ))}
-                  </ul>
-                )}
+                <ul className="space-y-1.5">
+                  {edu.modules.map((mod, j) => (
+                    <li key={j} className="flex items-start gap-2 text-slate-600 dark:text-white/70 text-sm leading-relaxed">
+                      <span className="text-slate-400 dark:text-white/30 mt-1">•</span>
+                      <span>{mod}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
             </div>
           ))}
