@@ -43,17 +43,17 @@ const conferences: Conference[] = [
     accentColor: "from-orange-500/20 to-amber-500/10",
     tagline: "Sainsbury's internal innovation hackathon",
     summary:
-      "Our team made it to the grand finale. One of just four teams selected from a field of 24, where we presented live in front of CEO Simon Roberts and CTOs and Directors from Sainsbury's and Argos. We built an AI-powered tool to help store managers reduce fresh food wastage in real time. A close finish; there was only one winner on the day, but reaching the final and pitching to the executive team made it an experience to remember.",
+      "Our team made it to the grand finale. One of just four teams selected from a field of 24, where we presented live in front of CEO Simon Roberts and CTOs and Directors from Sainsbury's and Argos. We built an AI-powered tool to help store managers reduce fresh food wastage in real time. It was a close finish, and there was only one winner on the day, but reaching the final and pitching to the executive team made it an experience to remember.",
     talks: [
       {
         title: "Grand Finale Presentation",
         takeaway:
-          "Presenting our fresh food wastage reduction tool to Simon Roberts and senior leadership was a genuine highlight — distilling a complex AI solution into a compelling pitch under pressure, and getting direct feedback from the top.",
+          "Presenting our fresh food wastage reduction tool to Simon Roberts and senior leadership was a genuine highlight, distilling a complex AI solution into a compelling pitch under pressure and getting direct feedback from the top.",
       },
       {
         title: "Building the AI Wastage Tool",
         takeaway:
-          "Rapid prototyping under hackathon constraints pushed us to make fast, pragmatic decisions. The problem of fresh food wastage is genuinely hard — balancing sales forecasts, stock levels, and expiry windows — and AI turned out to be a natural fit.",
+          "Rapid prototyping under hackathon constraints pushed us to make fast, pragmatic decisions. The problem of fresh food wastage is genuinely hard, balancing sales forecasts, stock levels, and expiry windows, and AI turned out to be a natural fit.",
       },
     ],
     tags: ["Sainsbury's", "Hackathon", "AI", "Innovation", "Finalist", "Food Wastage"],
@@ -82,7 +82,7 @@ const conferences: Conference[] = [
       {
         title: "Alumni Speaker",
         takeaway:
-          "Shared my own journey from Lancaster to full-time software engineering — the job search grind, what I wish I'd known, and how to stand out without burning out.",
+          "Shared my own journey from Lancaster to full-time software engineering: the job search grind, what I wish I'd known, and how to stand out without burning out.",
       },
       {
         title: "Student Q&A",
@@ -119,12 +119,12 @@ const conferences: Conference[] = [
       {
         title: "Bruce Daisley & Kimberly Wilson",
         takeaway:
-          "Compelling talks on culture, performance, and what it actually takes to build teams that do great work — the kind of perspective that sticks with you well after the conference ends.",
+          "Compelling talks on culture, performance, and what it actually takes to build teams that do great work: the kind of perspective that sticks with you well after the conference ends.",
       },
       {
         title: "Industry Stands & Showcases",
         takeaway:
-          "Explored stands from a wide range of companies showing off their latest tech and achievements — a good reminder of just how fast things are moving across the industry.",
+          "Explored stands from a wide range of companies showing off their latest tech and achievements: a good reminder of just how fast things are moving across the industry.",
       },
     ],
     tags: ["Sainsbury's", "Tech Conference", "Internal Event", "Award", "Digital", "Data"],
@@ -152,7 +152,7 @@ const conferences: Conference[] = [
         title: "Virtual Threads & Structured Concurrency",
         speaker: "JDK Core Team",
         takeaway:
-          "Project Loom's virtual threads finally make thread-per-request viable at scale — the mental model shift from reactive to sequential code with the same throughput is genuinely exciting.",
+          "Project Loom's virtual threads finally make thread-per-request viable at scale: the mental model shift from reactive to sequential code with the same throughput is genuinely exciting.",
       },
       {
         title: "Kafka at the Edge",
@@ -162,7 +162,7 @@ const conferences: Conference[] = [
       {
         title: "AI-Augmented Development",
         takeaway:
-          "Real talk on where LLMs actually help in a professional engineering workflow and where they don't — code generation, test writing, and documentation are useful; architecture decisions still need humans.",
+          "Real talk on where LLMs actually help in a professional engineering workflow and where they don't. Code generation, test writing, and documentation are useful, but architecture decisions still need humans.",
       },
       {
         title: "Kubernetes Cost Optimisation",
@@ -193,12 +193,12 @@ const conferences: Conference[] = [
     accentColor: "from-red-500/20 to-orange-500/10",
     tagline: "Lancaster University alumni networking",
     summary:
-      "Was invited by the Grow Your Future team as a Lancaster alumnus to come and share my experiences with current students. Spent the evening going around chatting with students about the realities of the job hunt — what the process actually looks like, how to manage the pressure, and what to genuinely expect from your first role. Lots of great questions and good conversations; it was rewarding to help in the same way others helped me when I was starting out.",
+      "Was invited by the Grow Your Future team as a Lancaster alumnus to come and share my experiences with current students. Spent the evening going around chatting with students about the realities of the job hunt, what the process actually looks like, how to manage the pressure, and what to genuinely expect from your first role. Lots of great questions and good conversations, and it was rewarding to help in the same way others helped me when I was starting out.",
     talks: [
       {
         title: "Alumni Speaker",
         takeaway:
-          "Shared my journey from graduating at Lancaster to landing a full-time engineering role — the highs, the rejections, and the practical things that actually made a difference.",
+          "Shared my journey from graduating at Lancaster to landing a full-time engineering role: the highs, the rejections, and the practical things that actually made a difference.",
       },
       {
         title: "Student Q&A",
@@ -288,7 +288,7 @@ const ConferencesSection = () => {
           On The Ground
         </h2>
         <p className="text-center text-slate-500 dark:text-white/50 mb-16 text-lg">
-          Conferences, meetups & events — things I attended and what I took away
+          Conferences, meetups & events: things I attended and what I took away
         </p>
 
         <div className="flex flex-col gap-10">

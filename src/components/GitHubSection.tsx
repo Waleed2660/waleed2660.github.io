@@ -63,19 +63,19 @@ const GitHubSection = () => {
             <div className="grid grid-cols-3 gap-4 text-center">
               <div className="glass rounded-2xl py-4 px-2">
                 <div className="text-2xl font-bold text-yellow-700 dark:text-yellow-300">
-                  {stats ? stats.stars : '—'}
+                  {stats ? stats.stars : 'N/A'}
                 </div>
                 <div className="text-slate-500 dark:text-white/50 text-xs mt-1">Stars</div>
               </div>
               <div className="glass rounded-2xl py-4 px-2">
                 <div className="text-2xl font-bold text-blue-600 dark:text-blue-300">
-                  {stats ? stats.followers : '—'}
+                  {stats ? stats.followers : 'N/A'}
                 </div>
                 <div className="text-slate-500 dark:text-white/50 text-xs mt-1">Followers</div>
               </div>
               <div className="glass rounded-2xl py-4 px-2">
                 <div className="text-2xl font-bold text-purple-600 dark:text-purple-300">
-                  {stats ? stats.public_repos : '—'}
+                  {stats ? stats.public_repos : 'N/A'}
                 </div>
                 <div className="text-slate-500 dark:text-white/50 text-xs mt-1">Repos</div>
               </div>

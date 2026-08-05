@@ -8,7 +8,7 @@ const MONTHS: Record<string, number> = {
 };
 
 const getDuration = (period: string): string => {
-  const [startStr, endStr] = period.split(' - ');
+  const [startStr, endStr] = period.split(' to ');
   const parseDate = (s: string) => {
     if (s.trim() === 'Present') return new Date();
     const [mon, yr] = s.trim().split(' ');
@@ -51,12 +51,12 @@ const ExperienceSection = () => {
       company: "Sainsbury's Tech",
       location: "Manchester, UK",
       logo: "/work_exp/sainsburys.webp",
-      period: "Mar 2025 - Present",
+      period: "Mar 2025 to Present",
       tech: ["Java", "Spring Boot", "Apache Kafka", "Kubernetes", "AWS"],
       brandColor: "bg-gradient-to-br from-orange-500/10 to-amber-500/10 border-orange-500/30 hover:border-orange-500/50",
       bulletColor: "text-orange-600 dark:text-orange-400/80",
       description: [
-        "Part of Digital Fulfilment team, developing critical backend services that calculate accurate delivery timelines for customer orders — contributing to Sainsbury's online platform serving millions of weekly shoppers across the UK",
+        "Part of Digital Fulfilment team, developing critical backend services that calculate accurate delivery timelines for customer orders, contributing to Sainsbury's online platform serving millions of weekly shoppers across the UK",
         "Currently developing a new order reservation proposition, enabling advanced inventory management and improved customer experience through real-time stock availability",
         "Building event-driven microservices using Spring Boot and Apache Kafka, processing high-throughput event streams across multiple topics powering real-time order processing and inventory updates",
         "Architecting solutions using diverse data stores (PostgreSQL, MongoDB, DynamoDB) to optimize for different data access patterns and performance requirements",
@@ -69,18 +69,18 @@ const ExperienceSection = () => {
       company: "The Hut Group",
       location: "Manchester, UK",
       logo: "/work_exp/thg.webp",
-      period: "Jul 2022 - Mar 2025",
+      period: "Jul 2022 to Mar 2025",
       tech: ["Java", "Spring Boot", "Apache ActiveMQ"],
       brandColor: "bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border-cyan-500/40 hover:border-cyan-400/60",
       bulletColor: "text-cyan-600 dark:text-cyan-400/80",
       promotions: [
-        { title: "Graduate Software Engineer", period: "Jul 2022 - Jul 2024" },
-        { title: "Software Engineer", period: "Jul 2024 - Mar 2025" },
+        { title: "Graduate Software Engineer", period: "Jul 2022 to Jul 2024" },
+        { title: "Software Engineer", period: "Jul 2024 to Mar 2025" },
       ],
       description: [
-        "Part of Order Processing Team responsible for microservices that process orders and allocate & generate shipments for warehouses, serving THG's global brand portfolio including Myprotein and LOOKFANTASTIC — leveraging Java, Spring Boot, Apache ActiveMQ, Tomcat, Docker, and MSSQL",
+        "Part of Order Processing Team responsible for microservices that process orders and allocate & generate shipments for warehouses, serving THG's global brand portfolio including Myprotein and LOOKFANTASTIC, leveraging Java, Spring Boot, Apache ActiveMQ, Tomcat, Docker, and MSSQL",
         "Day-to-day work involves developing & deploying new features, bug fixing, code reviews, delivering knowledge share sessions, supporting operations team, providing technical details to senior management.",
-        "Led my team for Black Friday 2024, targeting application optimization by improving SQL queries, decoupling unnecessary dependencies and load testing our applications — delivering zero critical incidents during the highest-traffic trading window of the year",
+        "Led my team for Black Friday 2024, targeting application optimization by improving SQL queries, decoupling unnecessary dependencies and load testing our applications, delivering zero critical incidents during the highest-traffic trading window of the year",
         "Developed strong expertise in SQL & Jenkins to deploy applications on Kubernetes & Linux based VMs",
         "Collaborated with various teams to develop solutions for new clients while ensuring backward compatibility for existing clients.",
         "Efficiently managed escalated incidents from clients, briefed senior management with concise reports on impacts, and provided effective solutions to resolve them promptly."
@@ -91,7 +91,7 @@ const ExperienceSection = () => {
       company: "Lancaster University",
       location: "Lancaster, UK",
       logo: "/work_exp/lancaster-uni.webp",
-      period: "Jun 2022 - Sep 2022",
+      period: "Jun 2022 to Sep 2022",
       tech: ["Python", "Machine Learning", "OpenCV", "PyTorch", "Data Annotations"],
       brandColor: "bg-gradient-to-br from-red-500/10 to-rose-500/10 border-red-500/30 hover:border-red-500/50",
       bulletColor: "text-red-600 dark:text-red-400/80",

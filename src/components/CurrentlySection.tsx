@@ -40,7 +40,7 @@ const experiments: Experiment[] = [
     statusColor: 'text-purple-600 dark:text-purple-300 bg-purple-400/10 border border-purple-400/20',
     title: 'Vectorless PageIndex for RAG',
     description:
-      "Digging into retrieval strategies for RAG pipelines that don't rely on dense vector embeddings. PageIndex (as implemented in LlamaIndex) chunks documents at the page level and uses keyword / BM25-style retrieval — cheaper to run, no embedding model needed, surprisingly effective for structured documents like PDFs and reports.",
+      "Digging into retrieval strategies for RAG pipelines that don't rely on dense vector embeddings. PageIndex (as implemented in LlamaIndex) chunks documents at the page level and uses keyword / BM25-style retrieval: cheaper to run, no embedding model needed, surprisingly effective for structured documents like PDFs and reports.",
     motivation:
       'Vector DBs are powerful but come with cost & latency tradeoffs. Curious about when simpler, keyword-based page-level indexing can replace or complement them in production RAG systems.',
     tags: ['RAG', 'LlamaIndex', 'BM25', 'LLM', 'Information Retrieval', 'NLP'],

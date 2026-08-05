@@ -140,8 +140,8 @@ const Dissertation = () => {
                 </div>
               </div>
               <p className="text-slate-600 dark:text-white/70 text-sm leading-relaxed">
-                Britain's environment agency disclosed compensation costs for illegal waste dumping reached £924 Million 
-                — a staggering <span className="text-orange-700 dark:text-orange-300 font-semibold">90% increase</span> since 2015. Traditional 
+                Britain's environment agency disclosed compensation costs for illegal waste dumping reached £924 Million, 
+                a staggering <span className="text-orange-700 dark:text-orange-300 font-semibold">90% increase</span> since 2015. Traditional 
                 manual monitoring methods proved time-consuming and inefficient.
               </p>
             </div>
@@ -280,7 +280,7 @@ const Dissertation = () => {
                   </div>
                   <p className="text-slate-600 dark:text-white/70 text-sm leading-relaxed">
                     YOLOv3 performs predictions at <span className="text-green-700 dark:text-green-300 font-semibold">three scales</span> by downsampling images with 
-                    varying stride values. This enables detection of objects at various sizes — from large landfills to smaller waste dumps.
+                    varying stride values. This enables detection of objects at various sizes: from large landfills to smaller waste dumps.
                   </p>
                 </div>
               </div>
@@ -421,7 +421,7 @@ const Dissertation = () => {
                   <p className="text-slate-600 dark:text-white/70 text-sm leading-relaxed">
                     Initially, waste piles were labeled incorrectly without visible borders, causing the model to 
                     misclassify neighboring mud piles as waste. <span className="text-red-700 dark:text-red-300 font-semibold">Re-annotating the entire 
-                    dataset</span> with proper border visibility led to significant improvements in accuracy — proving that 
+                    dataset</span> with proper border visibility led to significant improvements in accuracy, proving that 
                     data quality trumps quantity.
                   </p>
                 </div>
@@ -453,7 +453,7 @@ const Dissertation = () => {
                   </p>
                   <p className="text-slate-600 dark:text-white/70 text-sm leading-relaxed">
                     Implemented <span className="text-orange-700 dark:text-orange-300 font-semibold">dynamic image scaling</span> every 10 iterations (alternating between 416×416 and 608×608) 
-                    to balance detection quality with computational constraints — a practical compromise for cloud-based training environments.
+                    to balance detection quality with computational constraints, a practical compromise for cloud-based training environments.
                   </p>
                 </div>
               </div>

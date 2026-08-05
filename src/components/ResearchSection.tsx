@@ -1,5 +1,40 @@
-import { ExternalLink, ArrowRight } from 'lucide-react';
+import { ExternalLink, ArrowRight, GraduationCap } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+
+interface Education {
+  degree: string;
+  institution: string;
+  location: string;
+  logo?: string;
+  period: string;
+  grade: string;
+  modules: string[];
+}
+
+const educationHistory: Education[] = [
+  {
+    degree: "BSc (Hons) Computer Science",
+    institution: "Lancaster University",
+    location: "Lancaster, UK",
+    logo: "/work_exp/lancaster-uni.webp",
+    period: "Sep 2019 to Jun 2022",
+    grade: "2:1",
+    modules: [
+      "Distributed auctioning system (Java RMI, active replication for reliability & availability)",
+      "Led a team building an OpenGL-based 2D platform fighter game using SFML in Java",
+      "Dissertation: ML model processing drone & satellite imagery to detect littering across the UK",
+    ],
+  },
+  {
+    degree: "Foundation Year in Computer Science",
+    institution: "University of Manchester",
+    location: "Manchester, UK",
+    logo: "/work_exp/uom_logo.png",
+    period: "Sep 2018 to Jun 2019",
+    grade: "1st Class",
+    modules: ["Mathematics with Mechanics", "Chemistry", "Physics", "Foundation Year Project"],
+  },
+];
 
 const ResearchSection = () => {
   const navigate = useNavigate();
@@ -10,9 +45,78 @@ const ResearchSection = () => {
         <h2 className="text-4xl md:text-6xl font-bold text-center mb-4 text-glow relative">
           Research & Academia
         </h2>
-        <p className="text-center text-slate-500 dark:text-white/50 mb-16 text-lg">
+        <p className="text-center text-slate-500 dark:text-white/50 mb-8 text-lg">
           Exploring the intersection of AI, computer vision, and real-world problems
         </p>
+
+        {/* Education strip */}
+        <div className="glass-strong rounded-2xl p-6 mb-8 border border-slate-200 dark:border-white/10 divide-y divide-slate-200 dark:divide-white/10">
+          {educationHistory.map((edu, i) => (
+            <div
+              key={i}
+              className={`${i > 0 ? 'pt-4 mt-4' : ''}`}
+            >
+              <div className="flex flex-wrap items-center gap-6">
+                {edu.logo ? (
+                  <img
+                    src={edu.logo}
+                    alt={`${edu.institution} logo`}
+                    width="56"
+                    height="56"
+                    loading="lazy"
+                    className="w-14 h-14 object-contain flex-shrink-0"
+                  />
+                ) : (
+                  <div className="w-14 h-14 flex-shrink-0 flex items-center justify-center glass rounded-xl">
+                    <GraduationCap className="w-7 h-7 text-slate-500 dark:text-white/50" />
+                  </div>
+                )}
+                <div className="flex-1 min-w-[200px]">
+                  <h3 className="text-lg font-bold text-slate-900 dark:text-white">
+                    {edu.degree}
+                  </h3>
+                  <p className="text-slate-500 dark:text-white/50 text-sm">{edu.institution}, {edu.location}</p>
+                </div>
+                <div className="flex flex-col items-end gap-0.5">
+                  <span className="text-slate-400 dark:text-white/40 text-sm font-medium whitespace-nowrap tabular-nums">
+                    {edu.period}
+                  </span>
+                  <span className="text-slate-400 dark:text-white/30 text-xs whitespace-nowrap">
+                    {edu.grade}
+                  </span>
+                </div>
+              </div>
+
+              {/* Relevant coursework / modules */}
+              <div className="mt-3 pl-0 sm:pl-[80px]">
+                <p className="text-slate-500 dark:text-white/40 text-xs uppercase tracking-widest font-semibold mb-2">
+                  Relevant Coursework
+                </p>
+                {edu.modules.every((m) => m.length < 40) ? (
+                  <div className="flex flex-wrap gap-2">
+                    {edu.modules.map((mod, j) => (
+                      <span
+                        key={j}
+                        className="glass rounded-lg px-3 py-1 text-slate-600 dark:text-white/70 text-xs"
+                      >
+                        {mod}
+                      </span>
+                    ))}
+                  </div>
+                ) : (
+                  <ul className="space-y-1.5">
+                    {edu.modules.map((mod, j) => (
+                      <li key={j} className="flex items-start gap-2 text-slate-600 dark:text-white/70 text-sm leading-relaxed">
+                        <span className="text-slate-400 dark:text-white/30 mt-1">•</span>
+                        <span>{mod}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
 
         <div className="glass-strong rounded-3xl overflow-hidden transition-all duration-500">
           <div
