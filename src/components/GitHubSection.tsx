@@ -38,17 +38,44 @@ const GitHubSection = () => {
   const chartRef = useRef<HTMLDivElement>(null);
   const { theme } = useTheme();
 
+  const streakStatsUrl = theme === 'dark'
+    ? 'https://streak-stats.demolab.com?user=Waleed2660&theme=transparent&hide_border=true&stroke=ffffff20&ring=818cf8&fire=818cf8&currStreakLabel=ffffff99&sideLabels=ffffff99&currStreakNum=ffffff&sideNums=ffffff&dates=ffffff40&background=00000000'
+    : 'https://streak-stats.demolab.com?user=Waleed2660&theme=transparent&hide_border=true&stroke=1e293b33&ring=6366f1&fire=6366f1&currStreakLabel=475569&sideLabels=475569&currStreakNum=1e293b&sideNums=1e293b&dates=64748b&background=00000000';
+
   // Cached copy of the streak SVG, refreshed daily by the update-github-stats workflow.
-  // Serving the local copy directly (instead of the live badge) avoids depending on the
-  // third-party service's uptime at page-load time.
+  // We show this immediately (no loading flicker) and swap to the live badge in the
+  // background if it loads successfully. If the live service is slow or unreachable,
+  // we just keep showing the cached copy.
   const localStreakSrc = theme === 'dark' ? '/github-streak-dark.svg' : '/github-streak-light.svg';
 
+  const [streakSrc, setStreakSrc] = useState(localStreakSrc);
   const [streakFailed, setStreakFailed] = useState(false);
 
   useEffect(() => {
-    // Theme changed, give the new image a chance to load
+    setStreakSrc(localStreakSrc);
     setStreakFailed(false);
-  }, [localStreakSrc]);
+
+    // Preload the live badge off-screen; only swap to it once it's confirmed loaded.
+    let cancelled = false;
+    const preload = new Image();
+    const timeout = setTimeout(() => {
+      cancelled = true;
+    }, 5000);
+    preload.onload = () => {
+      if (!cancelled) {
+        clearTimeout(timeout);
+        setStreakSrc(streakStatsUrl);
+      }
+    };
+    preload.onerror = () => clearTimeout(timeout);
+    preload.src = streakStatsUrl;
+
+    return () => {
+      cancelled = true;
+      clearTimeout(timeout);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [theme]);
 
   useEffect(() => {
     fetch('/github-stats.json')
@@ -94,13 +121,21 @@ const GitHubSection = () => {
               <div className="mt-6">
                 <p className="text-slate-400 dark:text-white/40 text-xs uppercase tracking-widest mb-3">Streak</p>
                 <img
-                  src={localStreakSrc}
+                  src={streakSrc}
                   alt="GitHub streak stats"
                   width="800"
                   height="200"
                   className="w-full rounded-xl opacity-90 hover:opacity-100 transition-opacity duration-300"
                   loading="lazy"
-                  onError={() => setStreakFailed(true)}
+                  onError={() => {
+                    // If the currently displayed image fails (e.g. live badge broke after
+                    // swap-in), fall back to the cached copy rather than hiding entirely.
+                    if (streakSrc !== localStreakSrc) {
+                      setStreakSrc(localStreakSrc);
+                    } else {
+                      setStreakFailed(true);
+                    }
+                  }}
                 />
               </div>
             )}
