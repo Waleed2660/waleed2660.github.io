@@ -71,6 +71,31 @@ jobs:
               json.dump(output, f, indent=2)
 
           print('Written:', json.dumps(output, indent=2))
+
+          # Cache the streak SVG for both themes so the site has a fallback to
+          # show if streak-stats.demolab.com is slow or unreachable at runtime.
+          streak_urls = {
+              'public/github-streak-dark.svg': (
+                  'https://streak-stats.demolab.com?user=Waleed2660&theme=transparent&hide_border=true'
+                  '&stroke=ffffff20&ring=818cf8&fire=818cf8&currStreakLabel=ffffff99&sideLabels=ffffff99'
+                  '&currStreakNum=ffffff&sideNums=ffffff&dates=ffffff40&background=00000000'
+              ),
+              'public/github-streak-light.svg': (
+                  'https://streak-stats.demolab.com?user=Waleed2660&theme=transparent&hide_border=true'
+                  '&stroke=1e293b33&ring=6366f1&fire=6366f1&currStreakLabel=475569&sideLabels=475569'
+                  '&currStreakNum=1e293b&sideNums=1e293b&dates=64748b&background=00000000'
+              ),
+          }
+          for path, url in streak_urls.items():
+              try:
+                  req = urllib.request.Request(url, headers={'User-Agent': 'github-actions'})
+                  with urllib.request.urlopen(req, timeout=15) as r:
+                      svg = r.read()
+                  with open(path, 'wb') as f:
+                      f.write(svg)
+                  print('Cached streak SVG:', path)
+              except Exception as e:
+                  print('Skipped caching', path, 'due to error:', e)
           EOF
 
       - name: Commit updated stats
@@ -80,6 +105,8 @@ jobs:
           git config user.name "Waleed2660"
           git config user.email "$GIT_EMAIL"
           git add public/github-stats.json
+          [ -f public/github-streak-dark.svg ] && git add public/github-streak-dark.svg
+          [ -f public/github-streak-light.svg ] && git add public/github-streak-light.svg
           if git diff --staged --quiet; then
             echo "changed=false" >> "$GITHUB_ENV"
           else

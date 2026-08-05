@@ -42,6 +42,53 @@ const GitHubSection = () => {
     ? 'https://streak-stats.demolab.com?user=Waleed2660&theme=transparent&hide_border=true&stroke=ffffff20&ring=818cf8&fire=818cf8&currStreakLabel=ffffff99&sideLabels=ffffff99&currStreakNum=ffffff&sideNums=ffffff&dates=ffffff40&background=00000000'
     : 'https://streak-stats.demolab.com?user=Waleed2660&theme=transparent&hide_border=true&stroke=1e293b33&ring=6366f1&fire=6366f1&currStreakLabel=475569&sideLabels=475569&currStreakNum=1e293b&sideNums=1e293b&dates=64748b&background=00000000';
 
+  // Cached copy of the streak SVG, refreshed daily by the update-github-stats workflow.
+  // Used as a fallback when the live badge service is slow or unreachable.
+  const localStreakSrc = theme === 'dark' ? '/github-streak-dark.svg' : '/github-streak-light.svg';
+
+  const [streakSrc, setStreakSrc] = useState(streakStatsUrl);
+  const [streakLoaded, setStreakLoaded] = useState(false);
+  const [streakFailed, setStreakFailed] = useState(false);
+  const streakStage = useRef<'live' | 'live-retry' | 'fallback'>('live');
+
+  useEffect(() => {
+    // Theme changed, reset the streak image and retry state for the new URL
+    streakStage.current = 'live';
+    setStreakSrc(streakStatsUrl);
+    setStreakLoaded(false);
+    setStreakFailed(false);
+  }, [streakStatsUrl]);
+
+  const handleStreakError = () => {
+    // The streak badge service is occasionally flaky, retry once before falling back
+    if (streakStage.current === 'live') {
+      streakStage.current = 'live-retry';
+      setTimeout(() => {
+        setStreakSrc(`${streakStatsUrl}&retry=${Date.now()}`);
+      }, 1500);
+    } else if (streakStage.current === 'live-retry') {
+      // Fall back to the locally cached SVG from the last successful daily stats update
+      streakStage.current = 'fallback';
+      setStreakLoaded(false);
+      setStreakSrc(localStreakSrc);
+    } else {
+      // Even the local fallback failed to load, nothing left to show
+      setStreakFailed(true);
+    }
+  };
+
+  useEffect(() => {
+    // <img> has no native load timeout, so a hung request (e.g. the badge service being
+    // down) would otherwise leave the loading skeleton stuck forever. Treat a stuck load
+    // as a failure after a few seconds so the retry/fallback logic still kicks in.
+    if (streakLoaded || streakFailed) return;
+    const timeout = setTimeout(() => {
+      handleStreakError();
+    }, 6000);
+    return () => clearTimeout(timeout);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [streakSrc, streakLoaded, streakFailed]);
+
   useEffect(() => {
     fetch('/github-stats.json')
       .then((r) => r.json())
@@ -82,20 +129,24 @@ const GitHubSection = () => {
             </div>
 
             {/* Streak stats */}
-            <div className="mt-6">
-              <p className="text-slate-400 dark:text-white/40 text-xs uppercase tracking-widest mb-3">Streak</p>
-              <img
-                src={streakStatsUrl}
-                alt="GitHub streak stats"
-                width="800"
-                height="200"
-                className="w-full rounded-xl opacity-90 hover:opacity-100 transition-opacity duration-300"
-                loading="lazy"
-                onError={(e) => {
-                  (e.target as HTMLImageElement).parentElement!.style.display = 'none';
-                }}
-              />
-            </div>
+            {!streakFailed && (
+              <div className="mt-6">
+                <p className="text-slate-400 dark:text-white/40 text-xs uppercase tracking-widest mb-3">Streak</p>
+                {!streakLoaded && (
+                  <div className="w-full h-[200px] rounded-xl bg-slate-900/5 dark:bg-white/10 animate-pulse" />
+                )}
+                <img
+                  src={streakSrc}
+                  alt="GitHub streak stats"
+                  width="800"
+                  height="200"
+                  className={`w-full rounded-xl opacity-90 hover:opacity-100 transition-opacity duration-300 ${streakLoaded ? '' : 'hidden'}`}
+                  loading="lazy"
+                  onLoad={() => setStreakLoaded(true)}
+                  onError={handleStreakError}
+                />
+              </div>
+            )}
           </div>
 
           {/* Right: Top Languages */}
