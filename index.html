@@ -12,12 +12,18 @@
           if (isDark) {
             document.documentElement.classList.add('dark');
           }
+          // Paint the correct background immediately via inline style, so there is
+          // no flash of the browser's default white background while the
+          // stylesheet (which sets this via CSS vars) is still loading/injecting —
+          // most noticeable in the Vite dev server, which injects CSS via JS.
+          document.documentElement.style.backgroundColor = isDark ? '#0f0f23' : '#f2f5fb';
           var meta = document.querySelector('meta[name="theme-color"]');
           if (meta) {
             meta.setAttribute('content', isDark ? '#0f0f23' : '#eef0fc');
           }
         } catch (e) {
           document.documentElement.classList.add('dark');
+          document.documentElement.style.backgroundColor = '#0f0f23';
         }
       })();
     </script>

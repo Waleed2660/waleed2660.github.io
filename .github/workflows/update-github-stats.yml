@@ -19,84 +19,7 @@ jobs:
       - name: Fetch GitHub stats and write JSON
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          python3 << 'EOF'
-          import json, os, urllib.request
-
-          token = os.environ['GH_TOKEN']
-          headers = {'Authorization': f'Bearer {token}', 'User-Agent': 'github-actions'}
-
-          def get(url):
-              req = urllib.request.Request(url, headers=headers)
-              with urllib.request.urlopen(req) as r:
-                  return json.loads(r.read())
-
-          user = get('https://api.github.com/users/Waleed2660')
-          repos = get('https://api.github.com/users/Waleed2660/repos?per_page=100&sort=updated')
-
-          own = [r for r in repos if not r.get('fork')]
-          stars = sum(r.get('stargazers_count', 0) for r in own)
-
-          lang_count = {}
-          for r in own:
-              lang = r.get('language')
-              if lang:
-                  lang_count[lang] = lang_count.get(lang, 0) + 1
-
-          total = sum(lang_count.values()) or 1
-          sorted_langs = sorted(lang_count.items(), key=lambda x: -x[1])[:5]
-          languages = [
-              {'name': l, 'percentage': round(c / total * 100)}
-              for l, c in sorted_langs
-          ]
-
-          pinned_repos = ['springboot-learning-kit']
-          repo_stats = {}
-          for r in own:
-              if r['name'] in pinned_repos:
-                  repo_stats[r['name']] = {
-                      'stars': r.get('stargazers_count', 0),
-                      'forks': r.get('forks_count', 0)
-                  }
-
-          output = {
-              'followers': user['followers'],
-              'public_repos': user['public_repos'],
-              'stars': stars,
-              'repos': repo_stats,
-              'languages': languages
-          }
-
-          with open('public/github-stats.json', 'w') as f:
-              json.dump(output, f, indent=2)
-
-          print('Written:', json.dumps(output, indent=2))
-
-          # Cache the streak SVG for both themes so the site has a fallback to
-          # show if streak-stats.demolab.com is slow or unreachable at runtime.
-          streak_urls = {
-              'public/github-streak-dark.svg': (
-                  'https://streak-stats.demolab.com?user=Waleed2660&theme=transparent&hide_border=true'
-                  '&stroke=ffffff20&ring=818cf8&fire=818cf8&currStreakLabel=ffffff99&sideLabels=ffffff99'
-                  '&currStreakNum=ffffff&sideNums=ffffff&dates=ffffff40&background=00000000'
-              ),
-              'public/github-streak-light.svg': (
-                  'https://streak-stats.demolab.com?user=Waleed2660&theme=transparent&hide_border=true'
-                  '&stroke=1e293b33&ring=6366f1&fire=6366f1&currStreakLabel=475569&sideLabels=475569'
-                  '&currStreakNum=1e293b&sideNums=1e293b&dates=64748b&background=00000000'
-              ),
-          }
-          for path, url in streak_urls.items():
-              try:
-                  req = urllib.request.Request(url, headers={'User-Agent': 'github-actions'})
-                  with urllib.request.urlopen(req, timeout=15) as r:
-                      svg = r.read()
-                  with open(path, 'wb') as f:
-                      f.write(svg)
-                  print('Cached streak SVG:', path)
-              except Exception as e:
-                  print('Skipped caching', path, 'due to error:', e)
-          EOF
+        run: python3 scripts/update_github_stats.py
 
       - name: Commit updated stats
         env:
@@ -105,8 +28,6 @@ jobs:
           git config user.name "Waleed2660"
           git config user.email "$GIT_EMAIL"
           git add public/github-stats.json
-          [ -f public/github-streak-dark.svg ] && git add public/github-streak-dark.svg
-          [ -f public/github-streak-light.svg ] && git add public/github-streak-light.svg
           if git diff --staged --quiet; then
             echo "changed=false" >> "$GITHUB_ENV"
           else
