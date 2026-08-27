@@ -1,37 +1,41 @@
 {
   "followers": 13,
-  "public_repos": 17,
+  "public_repos": 18,
   "stars": 193,
   "repos": {
     "springboot-learning-kit": {
       "stars": 186,
-      "forks": 83
+      "forks": 84
     }
   },
   "languages": [
     {
       "name": "Java",
-      "percentage": 33
+      "percentage": 29
     },
     {
       "name": "Python",
-      "percentage": 33
+      "percentage": 29
+    },
+    {
+      "name": "JavaScript",
+      "percentage": 14
     },
     {
       "name": "TypeScript",
-      "percentage": 17
+      "percentage": 14
     },
     {
       "name": "Go",
-      "percentage": 17
+      "percentage": 14
     }
   ],
   "streak": {
-    "totalContributions": 3741,
+    "totalContributions": 3758,
     "since": "2017-03-25",
-    "currentStreak": 9,
+    "currentStreak": 11,
     "currentStreakStart": "2026-08-17",
-    "currentStreakEnd": "2026-08-25",
+    "currentStreakEnd": "2026-08-27",
     "longestStreak": 51,
     "longestStreakStart": "2026-04-06",
     "longestStreakEnd": "2026-05-26"
