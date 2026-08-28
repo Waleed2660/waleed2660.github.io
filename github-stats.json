@@ -5,7 +5,7 @@
   "repos": {
     "springboot-learning-kit": {
       "stars": 186,
-      "forks": 84
+      "forks": 85
     }
   },
   "languages": [
@@ -18,11 +18,11 @@
       "percentage": 29
     },
     {
-      "name": "JavaScript",
+      "name": "TypeScript",
       "percentage": 14
     },
     {
-      "name": "TypeScript",
+      "name": "JavaScript",
       "percentage": 14
     },
     {
@@ -31,11 +31,11 @@
     }
   ],
   "streak": {
-    "totalContributions": 3758,
+    "totalContributions": 3766,
     "since": "2017-03-25",
-    "currentStreak": 11,
+    "currentStreak": 12,
     "currentStreakStart": "2026-08-17",
-    "currentStreakEnd": "2026-08-27",
+    "currentStreakEnd": "2026-08-28",
     "longestStreak": 51,
     "longestStreakStart": "2026-04-06",
     "longestStreakEnd": "2026-05-26"
