@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { X, GitCommit, Code2, Clock, Terminal } from 'lucide-react';
+import { useEffect, useState } from "react";
+import { X, GitCommit, Code2, Clock, Terminal } from "lucide-react";
 
 interface SiteStatsProps {
   open: boolean;
@@ -18,18 +18,22 @@ const timeAgo = () => {
 const stats = [
   {
     icon: <GitCommit className="w-4 h-4" />,
-    label: 'Commits',
+    label: "Commits",
     value: __GIT_COMMITS__.toLocaleString(),
   },
   {
     icon: <Code2 className="w-4 h-4" />,
-    label: 'Lines of code',
+    label: "Lines of code",
     value: __LINES_OF_CODE__.toLocaleString(),
   },
   {
     icon: <Clock className="w-4 h-4" />,
-    label: 'Last built',
-    value: buildTime.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }),
+    label: "Last built",
+    value: buildTime.toLocaleDateString("en-GB", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    }),
     sub: timeAgo(),
   },
 ];
@@ -45,18 +49,24 @@ const SiteStats = ({ open, onClose }: SiteStatsProps) => {
 
   return (
     <div
-      className={`fixed inset-0 z-[200] flex items-end justify-center pb-10 sm:items-center transition-all duration-300 ${open ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+      className={`fixed inset-0 z-[200] flex items-end justify-center pb-10 sm:items-center transition-all duration-300 ${open ? "opacity-100" : "opacity-0 pointer-events-none"}`}
       onClick={onClose}
-      onTransitionEnd={() => { if (!open) setVisible(false); }}
+      onTransitionEnd={() => {
+        if (!open) setVisible(false);
+      }}
     >
       {/* Backdrop */}
       <div className="absolute inset-0 bg-slate-950/20 dark:bg-black/40 backdrop-blur-sm" />
 
       {/* Panel */}
       <div
-        className={`relative z-10 rounded-2xl p-6 w-full max-w-sm mx-4 transition-all duration-300 ${open ? 'translate-y-0 scale-100' : 'translate-y-6 scale-95'}`}
-        style={{ background: 'var(--site-stats-bg)', border: '1px solid var(--site-stats-border)', boxShadow: 'var(--site-stats-shadow)' }}
-        onClick={e => e.stopPropagation()}
+        className={`relative z-10 rounded-2xl p-6 w-full max-w-sm mx-4 transition-all duration-300 ${open ? "translate-y-0 scale-100" : "translate-y-6 scale-95"}`}
+        style={{
+          background: "var(--site-stats-bg)",
+          border: "1px solid var(--site-stats-border)",
+          boxShadow: "var(--site-stats-shadow)",
+        }}
+        onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
         <div className="flex items-center justify-between mb-5">
@@ -64,7 +74,10 @@ const SiteStats = ({ open, onClose }: SiteStatsProps) => {
             <Terminal className="w-4 h-4" />
             <span className="text-sm font-mono font-medium">site.stats</span>
           </div>
-          <button onClick={onClose} className="text-slate-400 dark:text-white/30 hover:text-slate-600 dark:hover:text-white/60 transition-colors">
+          <button
+            onClick={onClose}
+            className="text-slate-400 dark:text-white/30 hover:text-slate-600 dark:hover:text-white/60 transition-colors"
+          >
             <X className="w-4 h-4" />
           </button>
         </div>
@@ -78,8 +91,14 @@ const SiteStats = ({ open, onClose }: SiteStatsProps) => {
                 <span className="text-sm">{s.label}</span>
               </div>
               <div className="text-right">
-                <span className="text-slate-900 dark:text-white/90 text-sm font-mono font-medium">{s.value}</span>
-                {s.sub && <span className="block text-slate-400 dark:text-white/30 text-xs font-mono">{s.sub}</span>}
+                <span className="text-slate-900 dark:text-white/90 text-sm font-mono font-medium">
+                  {s.value}
+                </span>
+                {s.sub && (
+                  <span className="block text-slate-400 dark:text-white/30 text-xs font-mono">
+                    {s.sub}
+                  </span>
+                )}
               </div>
             </div>
           ))}
@@ -87,7 +106,11 @@ const SiteStats = ({ open, onClose }: SiteStatsProps) => {
 
         {/* Footer */}
         <p className="mt-5 pt-4 border-t border-slate-200 dark:border-white/5 text-slate-400 dark:text-white/20 text-xs font-mono text-center">
-          press <kbd className="px-1 py-0.5 rounded bg-slate-900/5 dark:bg-white/8 text-slate-500 dark:text-white/30">`</kbd> to toggle
+          press{" "}
+          <kbd className="px-1 py-0.5 rounded bg-slate-900/5 dark:bg-white/8 text-slate-500 dark:text-white/30">
+            `
+          </kbd>{" "}
+          to toggle
         </p>
       </div>
     </div>

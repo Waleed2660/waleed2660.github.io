@@ -1,4 +1,4 @@
-import { ExternalLink, FlaskConical, BookOpen } from 'lucide-react';
+import { ExternalLink, FlaskConical, BookOpen } from "lucide-react";
 
 type Resource = {
   label: string;
@@ -7,7 +7,7 @@ type Resource = {
 
 type Experiment = {
   icon: string;
-  status: 'Experimenting' | 'Learning' | 'Building';
+  status: "Experimenting" | "Learning" | "Building";
   statusColor: string;
   title: string;
   description: string;
@@ -18,43 +18,57 @@ type Experiment = {
 
 const experiments: Experiment[] = [
   {
-    icon: '⚡',
-    status: 'Experimenting',
-    statusColor: 'text-orange-600 dark:text-orange-300 bg-orange-400/10 border border-orange-400/20',
-    title: 'High-RPS Stock Allocation Engine',
+    icon: "⚡",
+    status: "Experimenting",
+    statusColor:
+      "text-orange-600 dark:text-orange-300 bg-orange-400/10 border border-orange-400/20",
+    title: "High-RPS Stock Allocation Engine",
     description:
       "Exploring a hybrid Redis + PostgreSQL architecture for a stock allocation engine capable of handling extreme request-per-second throughput. The idea is to use Redis as an atomic counter & lock layer for hot inventory slots, with PostgreSQL as the source of truth, allowing sub-millisecond allocation decisions",
     motivation:
-      'Inspired by real-world problems in order fulfilment: how do you allocate finite stock across thousands of simultaneous checkout requests without overselling or deadlocking?',
-    tags: ['Redis', 'PostgreSQL', 'High Throughput', 'Distributed Systems', 'Inventory Management'],
+      "Inspired by real-world problems in order fulfilment: how do you allocate finite stock across thousands of simultaneous checkout requests without overselling or deadlocking?",
+    tags: ["Redis", "PostgreSQL", "High Throughput", "Distributed Systems", "Inventory Management"],
     resources: [
-      { label: 'Redis Atomic Counters', url: 'https://redis.io/docs/latest/commands/incr/' },
-      { label: 'Redis Lua Scripting', url: 'https://redis.io/docs/latest/develop/interact/programmability/lua-api/' },
-      { label: 'PG Advisory Locks', url: 'https://www.postgresql.org/docs/current/explicit-locking.html#ADVISORY-LOCKS' },
-      { label: 'Optimistic Locking in PG', url: 'https://www.postgresql.org/docs/current/mvcc-intro.html' },
+      { label: "Redis Atomic Counters", url: "https://redis.io/docs/latest/commands/incr/" },
+      {
+        label: "Redis Lua Scripting",
+        url: "https://redis.io/docs/latest/develop/interact/programmability/lua-api/",
+      },
+      {
+        label: "PG Advisory Locks",
+        url: "https://www.postgresql.org/docs/current/explicit-locking.html#ADVISORY-LOCKS",
+      },
+      {
+        label: "Optimistic Locking in PG",
+        url: "https://www.postgresql.org/docs/current/mvcc-intro.html",
+      },
     ],
   },
   {
-    icon: '🧠',
-    status: 'Learning',
-    statusColor: 'text-purple-600 dark:text-purple-300 bg-purple-400/10 border border-purple-400/20',
-    title: 'Vectorless PageIndex for RAG',
+    icon: "🧠",
+    status: "Learning",
+    statusColor:
+      "text-purple-600 dark:text-purple-300 bg-purple-400/10 border border-purple-400/20",
+    title: "Vectorless PageIndex for RAG",
     description:
       "Digging into retrieval strategies for RAG pipelines that don't rely on dense vector embeddings. PageIndex (as implemented in LlamaIndex) chunks documents at the page level and uses keyword / BM25-style retrieval: cheaper to run, no embedding model needed, surprisingly effective for structured documents like PDFs and reports.",
     motivation:
-      'Vector DBs are powerful but come with cost & latency tradeoffs. Curious about when simpler, keyword-based page-level indexing can replace or complement them in production RAG systems.',
-    tags: ['RAG', 'LlamaIndex', 'BM25', 'LLM', 'Information Retrieval', 'NLP'],
+      "Vector DBs are powerful but come with cost & latency tradeoffs. Curious about when simpler, keyword-based page-level indexing can replace or complement them in production RAG systems.",
+    tags: ["RAG", "LlamaIndex", "BM25", "LLM", "Information Retrieval", "NLP"],
     resources: [
-      { label: 'PageIndex by VectifyAI', url: 'https://github.com/VectifyAI/PageIndex' },
-      { label: 'LlamaIndex Docs', url: 'https://docs.llamaindex.ai/en/stable/' },
-      { label: 'BM25 Retrieval', url: 'https://docs.llamaindex.ai/en/stable/examples/retrievers/bm25_retriever/' },
-      { label: 'RAG Survey Paper', url: 'https://arxiv.org/abs/2312.10997' },
+      { label: "PageIndex by VectifyAI", url: "https://github.com/VectifyAI/PageIndex" },
+      { label: "LlamaIndex Docs", url: "https://docs.llamaindex.ai/en/stable/" },
+      {
+        label: "BM25 Retrieval",
+        url: "https://docs.llamaindex.ai/en/stable/examples/retrievers/bm25_retriever/",
+      },
+      { label: "RAG Survey Paper", url: "https://arxiv.org/abs/2312.10997" },
     ],
   },
 ];
 
-const statusIcon = (status: Experiment['status']) => {
-  if (status === 'Learning') return <BookOpen className="w-3.5 h-3.5" />;
+const statusIcon = (status: Experiment["status"]) => {
+  if (status === "Learning") return <BookOpen className="w-3.5 h-3.5" />;
   return <FlaskConical className="w-3.5 h-3.5" />;
 };
 
@@ -82,7 +96,9 @@ const CurrentlySection = () => {
                   <h3 className="text-xl font-semibold text-slate-900 dark:text-white leading-snug">
                     {exp.title}
                   </h3>
-                  <span className={`inline-flex items-center gap-1.5 mt-2 px-2.5 py-1 rounded-lg text-xs font-medium ${exp.statusColor}`}>
+                  <span
+                    className={`inline-flex items-center gap-1.5 mt-2 px-2.5 py-1 rounded-lg text-xs font-medium ${exp.statusColor}`}
+                  >
                     {statusIcon(exp.status)}
                     {exp.status}
                   </span>

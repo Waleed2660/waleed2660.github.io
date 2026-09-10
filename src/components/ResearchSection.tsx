@@ -1,5 +1,5 @@
-import { ExternalLink, ArrowRight, GraduationCap } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { ExternalLink, ArrowRight, GraduationCap } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 interface Education {
   degree: string;
@@ -53,10 +53,7 @@ const ResearchSection = () => {
         {/* Education strip */}
         <div className="glass-strong rounded-2xl p-6 mb-8 border border-slate-200 dark:border-white/10 divide-y divide-slate-200 dark:divide-white/10">
           {educationHistory.map((edu, i) => (
-            <div
-              key={i}
-              className={`${i > 0 ? 'pt-4 mt-4' : ''}`}
-            >
+            <div key={i} className={`${i > 0 ? "pt-4 mt-4" : ""}`}>
               <div className="flex flex-wrap items-center gap-6">
                 {edu.logo ? (
                   <img
@@ -73,10 +70,10 @@ const ResearchSection = () => {
                   </div>
                 )}
                 <div className="flex-1 min-w-[200px]">
-                  <h3 className="text-lg font-bold text-slate-900 dark:text-white">
-                    {edu.degree}
-                  </h3>
-                  <p className="text-slate-500 dark:text-white/50 text-sm">{edu.institution}, {edu.location}</p>
+                  <h3 className="text-lg font-bold text-slate-900 dark:text-white">{edu.degree}</h3>
+                  <p className="text-slate-500 dark:text-white/50 text-sm">
+                    {edu.institution}, {edu.location}
+                  </p>
                 </div>
                 <div className="flex flex-col items-end gap-0.5">
                   <span className="text-slate-400 dark:text-white/40 text-sm font-medium whitespace-nowrap tabular-nums">
@@ -95,7 +92,10 @@ const ResearchSection = () => {
                 </p>
                 <ul className="space-y-1.5">
                   {edu.modules.map((mod, j) => (
-                    <li key={j} className="flex items-start gap-2 text-slate-600 dark:text-white/70 text-sm leading-relaxed">
+                    <li
+                      key={j}
+                      className="flex items-start gap-2 text-slate-600 dark:text-white/70 text-sm leading-relaxed"
+                    >
                       <span className="text-slate-400 dark:text-white/30 mt-1">•</span>
                       <span>{mod}</span>
                     </li>
@@ -109,7 +109,7 @@ const ResearchSection = () => {
         <div className="glass-strong rounded-3xl overflow-hidden transition-all duration-500">
           <div
             className="bg-gradient-to-r from-blue-500/20 to-purple-500/10 px-8 py-5 flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 dark:border-white/5 cursor-pointer hover:bg-slate-900/[0.03] dark:hover:bg-white/5 transition-colors duration-300 group"
-            onClick={() => navigate('/dissertation')}
+            onClick={() => navigate("/dissertation")}
           >
             <div className="flex items-center gap-4">
               <div className="glass rounded-2xl p-3">
@@ -141,10 +141,10 @@ const ResearchSection = () => {
                   Using Satellite Imagery and Deep Learning
                 </p>
                 <p className="text-slate-600 dark:text-white/70 leading-relaxed text-sm">
-                  Built a machine learning model using YOLOv3 and Darknet-53 to automatically detect illegal
-                  landfill sites from satellite imagery. The project addressed a real-world problem where
-                  environmental agencies struggle to monitor waste crime, which cost the UK £924 million in
-                  damages between 2018-2019.
+                  Built a machine learning model using YOLOv3 and Darknet-53 to automatically detect
+                  illegal landfill sites from satellite imagery. The project addressed a real-world
+                  problem where environmental agencies struggle to monitor waste crime, which cost
+                  the UK £924 million in damages between 2018-2019.
                 </p>
               </div>
 
@@ -159,23 +159,41 @@ const ResearchSection = () => {
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-green-500 dark:text-green-400 mt-0.5">✓</span>
-                    <span>Collected and annotated high-resolution satellite imagery from 9 countries</span>
+                    <span>
+                      Collected and annotated high-resolution satellite imagery from 9 countries
+                    </span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-green-500 dark:text-green-400 mt-0.5">✓</span>
-                    <span>Implemented transfer learning with 106-layer convolutional neural network</span>
+                    <span>
+                      Implemented transfer learning with 106-layer convolutional neural network
+                    </span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-green-500 dark:text-green-400 mt-0.5">✓</span>
-                    <span>Multi-scale detection at three different resolutions for varying object sizes</span>
+                    <span>
+                      Multi-scale detection at three different resolutions for varying object sizes
+                    </span>
                   </li>
                 </ul>
               </div>
 
               {/* Tags */}
               <div className="flex flex-wrap gap-2">
-                {['YOLOv3', 'Darknet', 'Computer Vision', 'CNN', 'Object Detection', 'Python', 'CUDA', 'Machine Learning'].map((tag) => (
-                  <span key={tag} className="glass rounded-xl px-3 py-1 text-slate-700 dark:text-white/80 text-xs">
+                {[
+                  "YOLOv3",
+                  "Darknet",
+                  "Computer Vision",
+                  "CNN",
+                  "Object Detection",
+                  "Python",
+                  "CUDA",
+                  "Machine Learning",
+                ].map((tag) => (
+                  <span
+                    key={tag}
+                    className="glass rounded-xl px-3 py-1 text-slate-700 dark:text-white/80 text-xs"
+                  >
                     {tag}
                   </span>
                 ))}
@@ -183,7 +201,7 @@ const ResearchSection = () => {
 
               {/* View Full Paper button — left column */}
               <button
-                onClick={() => navigate('/dissertation')}
+                onClick={() => navigate("/dissertation")}
                 className="flex items-center justify-center gap-2 glass rounded-xl px-6 py-3 text-slate-700 dark:text-white/80 hover:text-blue-600 dark:hover:text-blue-300 hover:bg-slate-900/5 dark:hover:bg-white/10 transition-all group/btn mt-auto"
               >
                 <ExternalLink className="w-4 h-4" />
@@ -214,10 +232,12 @@ const ResearchSection = () => {
                       <span className="text-xl">🌍</span>
                     </div>
                     <div>
-                      <p className="text-slate-900 dark:text-white font-semibold mb-1">Environmental Protection</p>
+                      <p className="text-slate-900 dark:text-white font-semibold mb-1">
+                        Environmental Protection
+                      </p>
                       <p className="text-slate-500 dark:text-white/60 text-xs">
-                        Automated detection helps environmental agencies track illegal waste dumping,
-                        reducing environmental damage and cleanup costs
+                        Automated detection helps environmental agencies track illegal waste
+                        dumping, reducing environmental damage and cleanup costs
                       </p>
                     </div>
                   </div>
@@ -227,7 +247,9 @@ const ResearchSection = () => {
                       <span className="text-xl">⚡</span>
                     </div>
                     <div>
-                      <p className="text-slate-900 dark:text-white font-semibold mb-1">Real-Time Processing</p>
+                      <p className="text-slate-900 dark:text-white font-semibold mb-1">
+                        Real-Time Processing
+                      </p>
                       <p className="text-slate-500 dark:text-white/60 text-xs">
                         YOLOv3's single-pass detection makes it feasible to monitor large geographic
                         areas efficiently using satellite data
@@ -240,7 +262,9 @@ const ResearchSection = () => {
                       <span className="text-xl">🎯</span>
                     </div>
                     <div>
-                      <p className="text-slate-900 dark:text-white font-semibold mb-1">High Accuracy</p>
+                      <p className="text-slate-900 dark:text-white font-semibold mb-1">
+                        High Accuracy
+                      </p>
                       <p className="text-slate-500 dark:text-white/60 text-xs">
                         Demonstrated strong performance with 1,638 true positive detections and
                         effective handling of varied terrain and lighting conditions

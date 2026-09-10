@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
-import { Home, Briefcase, Code2, Calendar, Mail, ChevronUp } from 'lucide-react';
-import ThemeToggle from '@/components/ThemeToggle';
+import { useEffect, useRef, useState } from "react";
+import { Home, Briefcase, Code2, Calendar, Mail, ChevronUp } from "lucide-react";
+import ThemeToggle from "@/components/ThemeToggle";
 
 interface NavigationProps {
   onSectionClick: (section: string) => void;
@@ -9,17 +9,22 @@ interface NavigationProps {
   onScrollToTop?: () => void;
 }
 
-const Navigation = ({ onSectionClick, activeSection, showBackToTop, onScrollToTop }: NavigationProps) => {
+const Navigation = ({
+  onSectionClick,
+  activeSection,
+  showBackToTop,
+  onScrollToTop,
+}: NavigationProps) => {
   const sections = [
-    { id: 'home', label: 'Home' },
-    { id: 'experience', label: 'Experience' },
-    { id: 'projects', label: 'Projects' },
-    { id: 'research', label: 'Research' },
-    { id: 'conferences', label: 'On The Ground' },
-    { id: 'github', label: 'GitHub' },
-    { id: 'tools', label: 'Tech Stack' },
-    { id: 'currently', label: 'Interests' },
-    { id: 'contact', label: 'Contact' }
+    { id: "home", label: "Home" },
+    { id: "experience", label: "Experience" },
+    { id: "projects", label: "Projects" },
+    { id: "research", label: "Research" },
+    { id: "conferences", label: "On The Ground" },
+    { id: "github", label: "GitHub" },
+    { id: "tools", label: "Tech Stack" },
+    { id: "currently", label: "Interests" },
+    { id: "contact", label: "Contact" },
   ];
 
   const containerRef = useRef<HTMLDivElement>(null);
@@ -27,7 +32,7 @@ const Navigation = ({ onSectionClick, activeSection, showBackToTop, onScrollToTo
   const [pillStyle, setPillStyle] = useState<{ left: number; width: number } | null>(null);
 
   useEffect(() => {
-    const activeIndex = sections.findIndex(s => s.id === activeSection);
+    const activeIndex = sections.findIndex((s) => s.id === activeSection);
     const activeBtn = buttonRefs.current[activeIndex];
     const container = containerRef.current;
     if (activeBtn && container) {
@@ -41,18 +46,25 @@ const Navigation = ({ onSectionClick, activeSection, showBackToTop, onScrollToTo
   }, [activeSection]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const mobileSections = [
-    { id: 'home', label: 'Home', icon: <Home className="w-5 h-5" /> },
-    { id: 'experience', label: 'Work', icon: <Briefcase className="w-5 h-5" /> },
-    { id: 'projects', label: 'Projects', icon: <Code2 className="w-5 h-5" /> },
-    { id: 'conferences', label: 'Events', icon: <Calendar className="w-5 h-5" /> },
-    { id: 'contact', label: 'Contact', icon: <Mail className="w-5 h-5" /> },
+    { id: "home", label: "Home", icon: <Home className="w-5 h-5" /> },
+    { id: "experience", label: "Work", icon: <Briefcase className="w-5 h-5" /> },
+    { id: "projects", label: "Projects", icon: <Code2 className="w-5 h-5" /> },
+    { id: "conferences", label: "Events", icon: <Calendar className="w-5 h-5" /> },
+    { id: "contact", label: "Contact", icon: <Mail className="w-5 h-5" /> },
   ];
 
   return (
     <>
       {/* Desktop nav */}
       <nav className="fixed top-6 left-1/2 transform -translate-x-1/2 z-50 hidden md:block max-w-[calc(100vw-2rem)]">
-        <div className="rounded-2xl p-1.5 lg:p-2 overflow-x-auto" style={{ background: 'var(--nav-bg)', border: '1px solid var(--nav-border)', boxShadow: 'var(--nav-shadow)' }}>
+        <div
+          className="rounded-2xl p-1.5 lg:p-2 overflow-x-auto"
+          style={{
+            background: "var(--nav-bg)",
+            border: "1px solid var(--nav-border)",
+            boxShadow: "var(--nav-shadow)",
+          }}
+        >
           <div ref={containerRef} className="flex items-center space-x-1 lg:space-x-2 relative">
             {pillStyle && (
               <div
@@ -63,13 +75,15 @@ const Navigation = ({ onSectionClick, activeSection, showBackToTop, onScrollToTo
             {sections.map((section, index) => (
               <button
                 key={section.id}
-                ref={(el) => { buttonRefs.current[index] = el; }}
+                ref={(el) => {
+                  buttonRefs.current[index] = el;
+                }}
                 onClick={() => onSectionClick(section.id)}
-                aria-current={activeSection === section.id ? 'page' : undefined}
+                aria-current={activeSection === section.id ? "page" : undefined}
                 className={`px-3 lg:px-6 py-2.5 lg:py-3 rounded-xl text-xs lg:text-sm font-medium transition-colors duration-300 relative z-10 whitespace-nowrap ${
                   activeSection === section.id
-                    ? 'text-slate-900 dark:text-white'
-                    : 'text-slate-600 dark:text-white/80 hover:text-slate-900 dark:hover:text-white hover:bg-slate-900/5 dark:hover:bg-white/5'
+                    ? "text-slate-900 dark:text-white"
+                    : "text-slate-600 dark:text-white/80 hover:text-slate-900 dark:hover:text-white hover:bg-slate-900/5 dark:hover:bg-white/5"
                 }`}
               >
                 {section.label}
@@ -86,14 +100,18 @@ const Navigation = ({ onSectionClick, activeSection, showBackToTop, onScrollToTo
       {/* Mobile bottom nav — compact icon-only floating pill */}
       <nav
         className="fixed z-50 md:hidden"
-        style={{ bottom: 'calc(env(safe-area-inset-bottom) + 1.5rem)', left: '50%', transform: 'translateX(-50%)' }}
+        style={{
+          bottom: "calc(env(safe-area-inset-bottom) + 1.5rem)",
+          left: "50%",
+          transform: "translateX(-50%)",
+        }}
       >
         <div
           className="flex items-center gap-1 px-3 py-3 rounded-full"
           style={{
-            background: 'var(--nav-bg)',
-            border: '1px solid var(--nav-mobile-border)',
-            boxShadow: 'var(--nav-shadow)',
+            background: "var(--nav-bg)",
+            border: "1px solid var(--nav-mobile-border)",
+            boxShadow: "var(--nav-shadow)",
           }}
         >
           {mobileSections.map((section) => {
@@ -103,21 +121,21 @@ const Navigation = ({ onSectionClick, activeSection, showBackToTop, onScrollToTo
                 key={section.id}
                 onClick={() => onSectionClick(section.id)}
                 className="relative flex items-center justify-center w-11 h-11 rounded-full transition-colors duration-200"
-                style={{ color: isActive ? 'var(--nav-toggle-icon)' : 'var(--nav-icon-inactive)' }}
+                style={{ color: isActive ? "var(--nav-toggle-icon)" : "var(--nav-icon-inactive)" }}
                 aria-label={section.label}
-                aria-current={isActive ? 'page' : undefined}
+                aria-current={isActive ? "page" : undefined}
               >
                 {isActive && (
                   <span
                     className="absolute inset-0 rounded-full"
-                    style={{ background: 'var(--nav-icon-active-bg)' }}
+                    style={{ background: "var(--nav-icon-active-bg)" }}
                   />
                 )}
                 <span className="relative">{section.icon}</span>
                 {isActive && (
                   <span
                     className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full"
-                    style={{ background: 'var(--nav-icon-dot)' }}
+                    style={{ background: "var(--nav-icon-dot)" }}
                   />
                 )}
               </button>
@@ -131,12 +149,12 @@ const Navigation = ({ onSectionClick, activeSection, showBackToTop, onScrollToTo
           {/* Back to top — appears as extra icon when scrolled down */}
           <div
             className="overflow-hidden transition-all duration-300"
-            style={{ width: showBackToTop ? '2.75rem' : '0px', opacity: showBackToTop ? 1 : 0 }}
+            style={{ width: showBackToTop ? "2.75rem" : "0px", opacity: showBackToTop ? 1 : 0 }}
           >
             <button
               onClick={onScrollToTop}
               className="flex items-center justify-center w-11 h-11 rounded-full transition-colors duration-200"
-              style={{ color: 'var(--nav-icon-inactive)' }}
+              style={{ color: "var(--nav-icon-inactive)" }}
               aria-label="Back to top"
             >
               <ChevronUp className="w-5 h-5" />

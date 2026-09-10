@@ -1,17 +1,17 @@
-import { ChevronDown } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { ChevronDown } from "lucide-react";
+import { useEffect, useState } from "react";
 
 const TYPING_TEXTS = [
   "Software Engineer @ Sainsbury's",
-  'Java · Kafka · Kubernetes',
-  'Spring Boot · AWS · Docker',
-  'K6 · Grafana · JMeter',
-  'PostgreSQL · MongoDB · Redis',
-  'Event-driven microservices'
+  "Java · Kafka · Kubernetes",
+  "Spring Boot · AWS · Docker",
+  "K6 · Grafana · JMeter",
+  "PostgreSQL · MongoDB · Redis",
+  "Event-driven microservices",
 ];
 const CAREER_START = new Date(2022, 6, 1); // July 2022 — THG start
 const SHOW_AVAILABILITY = false; // Feature flag for availability status
-const NAME = 'Waleed Tariq';
+const NAME = "Waleed Tariq";
 
 function getYOE(): string {
   const now = new Date();
@@ -21,16 +21,16 @@ function getYOE(): string {
 }
 
 const HomeSection = () => {
-  const [displayed, setDisplayed] = useState('');
+  const [displayed, setDisplayed] = useState("");
   const [typingDone, setTypingDone] = useState(false);
-  const [phase, setPhase] = useState<'typing' | 'erasing'>('typing');
+  const [phase, setPhase] = useState<"typing" | "erasing">("typing");
   const [phraseIndex, setPhraseIndex] = useState(0);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [hoveredLetterIdx, setHoveredLetterIdx] = useState<number | null>(null);
 
   useEffect(() => {
     const currentText = TYPING_TEXTS[phraseIndex];
-    if (phase === 'typing') {
+    if (phase === "typing") {
       if (displayed.length < currentText.length) {
         const timer = setTimeout(() => {
           setDisplayed(currentText.slice(0, displayed.length + 1));
@@ -38,18 +38,18 @@ const HomeSection = () => {
         return () => clearTimeout(timer);
       } else {
         if (!typingDone) setTypingDone(true);
-        const timer = setTimeout(() => setPhase('erasing'), 2500);
+        const timer = setTimeout(() => setPhase("erasing"), 2500);
         return () => clearTimeout(timer);
       }
     } else {
       if (displayed.length > 0) {
         const timer = setTimeout(() => {
-          setDisplayed(prev => prev.slice(0, -1));
+          setDisplayed((prev) => prev.slice(0, -1));
         }, 25);
         return () => clearTimeout(timer);
       } else {
-        setPhraseIndex(i => (i + 1) % TYPING_TEXTS.length);
-        setPhase('typing');
+        setPhraseIndex((i) => (i + 1) % TYPING_TEXTS.length);
+        setPhase("typing");
       }
     }
   }, [displayed, phase, phraseIndex, typingDone]);
@@ -82,12 +82,14 @@ const HomeSection = () => {
             {SHOW_AVAILABILITY && (
               <div className="inline-flex items-center gap-2 mb-8 glass rounded-full px-4 py-2 border border-green-500/30">
                 <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-                <span className="text-green-700 dark:text-green-300/90 text-sm font-medium">Available for opportunities</span>
+                <span className="text-green-700 dark:text-green-300/90 text-sm font-medium">
+                  Available for opportunities
+                </span>
               </div>
             )}
 
             <div
-              className={`flex items-center justify-center gap-4 sm:gap-6 mb-6 ${!SHOW_AVAILABILITY ? 'mt-0' : ''}`}
+              className={`flex items-center justify-center gap-4 sm:gap-6 mb-6 ${!SHOW_AVAILABILITY ? "mt-0" : ""}`}
               onMouseLeave={() => setHoveredLetterIdx(null)}
             >
               <img
@@ -104,8 +106,9 @@ const HomeSection = () => {
               />
 
               <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-glow">
-                {NAME.split('').map((char, i) => {
-                  const dist = hoveredLetterIdx !== null ? Math.abs(i - hoveredLetterIdx) : Infinity;
+                {NAME.split("").map((char, i) => {
+                  const dist =
+                    hoveredLetterIdx !== null ? Math.abs(i - hoveredLetterIdx) : Infinity;
                   const translateY = dist === 0 ? -14 : dist === 1 ? -8 : dist === 2 ? -3 : 0;
                   return (
                     <span
@@ -113,9 +116,9 @@ const HomeSection = () => {
                       className="inline-block"
                       onMouseEnter={() => setHoveredLetterIdx(i)}
                       style={{
-                        whiteSpace: char === ' ' ? 'pre' : 'normal',
+                        whiteSpace: char === " " ? "pre" : "normal",
                         transform: `translateY(${translateY}px)`,
-                        transition: 'transform 150ms ease-out',
+                        transition: "transform 150ms ease-out",
                       }}
                     >
                       {char}
@@ -132,22 +135,25 @@ const HomeSection = () => {
               </span>
             </div>
 
-            <div className={`inline-flex items-center gap-2 mb-8 text-slate-400 dark:text-white/40 transition-opacity duration-500 ${typingDone ? 'opacity-100' : 'opacity-0'}`}>
+            <div
+              className={`inline-flex items-center gap-2 mb-8 text-slate-400 dark:text-white/40 transition-opacity duration-500 ${typingDone ? "opacity-100" : "opacity-0"}`}
+            >
               <span>📍</span>
               <span className="text-lg">Manchester, UK</span>
             </div>
 
             <p className="text-xl sm:text-2xl text-slate-600 dark:text-white/70 mb-12 max-w-3xl mx-auto leading-relaxed">
-              Backend engineer building reliable, high-throughput systems. Focused on Java, Kafka, and Kubernetes in production.
+              Backend engineer building reliable, high-throughput systems. Focused on Java, Kafka,
+              and Kubernetes in production.
             </p>
 
             <div className="flex justify-center flex-wrap gap-3">
               {[
-                { label: getYOE(), icon: '💼' },
-                { label: 'Java', icon: '☕' },
-                { label: 'Spring Boot', icon: '🍃' },
-                { label: 'Kubernetes', icon: '☸️' },
-                { label: 'AWS', icon: '☁️' },
+                { label: getYOE(), icon: "💼" },
+                { label: "Java", icon: "☕" },
+                { label: "Spring Boot", icon: "🍃" },
+                { label: "Kubernetes", icon: "☸️" },
+                { label: "AWS", icon: "☁️" },
               ].map((badge, index) => (
                 <div
                   key={index}
@@ -164,7 +170,9 @@ const HomeSection = () => {
         </div>
 
         {/* Scroll hint */}
-        <div className={`mt-8 flex justify-center transition-opacity duration-700 ${typingDone ? 'opacity-100' : 'opacity-0'}`}>
+        <div
+          className={`mt-8 flex justify-center transition-opacity duration-700 ${typingDone ? "opacity-100" : "opacity-0"}`}
+        >
           <ChevronDown className="w-6 h-6 text-slate-400 dark:text-white/25 animate-bounce" />
         </div>
       </div>

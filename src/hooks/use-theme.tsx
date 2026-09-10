@@ -1,7 +1,15 @@
 /* eslint-disable react-refresh/only-export-components */
-import { createContext, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 
-type Theme = 'dark' | 'light';
+type Theme = "dark" | "light";
 
 type ThemeContextValue = {
   theme: Theme;
@@ -12,27 +20,27 @@ type ThemeContextValue = {
 const ThemeContext = createContext<ThemeContextValue | undefined>(undefined);
 
 const getPreferredTheme = (): Theme => {
-  if (typeof window === 'undefined') return 'dark';
+  if (typeof window === "undefined") return "dark";
 
-  const storedTheme = window.localStorage.getItem('theme');
-  if (storedTheme === 'dark' || storedTheme === 'light') {
+  const storedTheme = window.localStorage.getItem("theme");
+  if (storedTheme === "dark" || storedTheme === "light") {
     return storedTheme;
   }
 
-  if (typeof window.matchMedia === 'function') {
-    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  if (typeof window.matchMedia === "function") {
+    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
   }
 
-  return 'dark';
+  return "dark";
 };
 
 const applyTheme = (theme: Theme) => {
   const root = document.documentElement;
-  root.classList.toggle('dark', theme === 'dark');
+  root.classList.toggle("dark", theme === "dark");
 
   const meta = document.querySelector('meta[name="theme-color"]');
   if (meta) {
-    meta.setAttribute('content', theme === 'dark' ? '#0f0f23' : '#eef0fc');
+    meta.setAttribute("content", theme === "dark" ? "#0f0f23" : "#eef0fc");
   }
 };
 
@@ -50,14 +58,14 @@ const applyThemeWithTransition = (theme: Theme) => {
   // Disable per-element transitions during the view transition to avoid
   // double-animating and reduce compositor work.
   const root = document.documentElement;
-  root.classList.add('theme-switching');
+  root.classList.add("theme-switching");
 
   const transition = document.startViewTransition(() => {
     applyTheme(theme);
   });
 
   transition.finished.then(() => {
-    root.classList.remove('theme-switching');
+    root.classList.remove("theme-switching");
   });
 };
 
@@ -76,16 +84,16 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
   }, [theme]);
 
   useEffect(() => {
-    window.localStorage.setItem('theme', theme);
+    window.localStorage.setItem("theme", theme);
   }, [theme]);
 
   const value = useMemo<ThemeContextValue>(
     () => ({
       theme,
       setTheme: setThemeState,
-      toggleTheme: () => setThemeState((current) => (current === 'dark' ? 'light' : 'dark')),
+      toggleTheme: () => setThemeState((current) => (current === "dark" ? "light" : "dark")),
     }),
-    [theme],
+    [theme]
   );
 
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
@@ -95,7 +103,7 @@ export const useTheme = () => {
   const context = useContext(ThemeContext);
 
   if (!context) {
-    throw new Error('useTheme must be used within a ThemeProvider');
+    throw new Error("useTheme must be used within a ThemeProvider");
   }
 
   return context;

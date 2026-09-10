@@ -1,20 +1,20 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 export function useActiveSection(ids: string[]) {
-  const [active, setActive] = useState(ids[0] ?? 'home');
-  const key = ids.join(',');
+  const [active, setActive] = useState(ids[0] ?? "home");
+  const key = ids.join(",");
 
   useEffect(() => {
     const handleScroll = () => {
       const scrollPosition = window.scrollY + window.innerHeight / 3; // Check at top third of viewport
-      
+
       // Find which section we're currently in
       for (let i = ids.length - 1; i >= 0; i--) {
         const section = document.getElementById(ids[i]);
         if (section) {
           const { top } = section.getBoundingClientRect();
           const sectionTop = top + window.scrollY;
-          
+
           if (scrollPosition >= sectionTop) {
             setActive(ids[i]);
             break;
@@ -25,7 +25,7 @@ export function useActiveSection(ids: string[]) {
 
     // Initial check
     handleScroll();
-    
+
     // Listen to scroll events with throttling
     let ticking = false;
     const onScroll = () => {
@@ -38,8 +38,8 @@ export function useActiveSection(ids: string[]) {
       }
     };
 
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, [key]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return active;

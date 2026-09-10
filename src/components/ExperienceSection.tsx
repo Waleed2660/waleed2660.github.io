@@ -3,20 +3,31 @@ import { useState } from "react";
 import FadeIn from "./FadeIn";
 
 const MONTHS: Record<string, number> = {
-  Jan: 0, Feb: 1, Mar: 2, Apr: 3, May: 4, Jun: 5,
-  Jul: 6, Aug: 7, Sep: 8, Oct: 9, Nov: 10, Dec: 11,
+  Jan: 0,
+  Feb: 1,
+  Mar: 2,
+  Apr: 3,
+  May: 4,
+  Jun: 5,
+  Jul: 6,
+  Aug: 7,
+  Sep: 8,
+  Oct: 9,
+  Nov: 10,
+  Dec: 11,
 };
 
 const getDuration = (period: string): string => {
-  const [startStr, endStr] = period.split(' to ');
+  const [startStr, endStr] = period.split(" to ");
   const parseDate = (s: string) => {
-    if (s.trim() === 'Present') return new Date();
-    const [mon, yr] = s.trim().split(' ');
+    if (s.trim() === "Present") return new Date();
+    const [mon, yr] = s.trim().split(" ");
     return new Date(parseInt(yr), MONTHS[mon]);
   };
   const start = parseDate(startStr);
   const end = parseDate(endStr);
-  const totalMonths = (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth());
+  const totalMonths =
+    (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth());
   const yrs = Math.floor(totalMonths / 12);
   const mos = totalMonths % 12;
   if (yrs === 0) return `${mos} mo`;
@@ -53,7 +64,8 @@ const ExperienceSection = () => {
       logo: "/work_exp/sainsburys.webp",
       period: "Mar 2025 to Present",
       tech: ["Java", "Spring Boot", "Apache Kafka", "Kubernetes", "AWS"],
-      brandColor: "bg-gradient-to-br from-orange-500/10 to-amber-500/10 border-orange-500/30 hover:border-orange-500/50",
+      brandColor:
+        "bg-gradient-to-br from-orange-500/10 to-amber-500/10 border-orange-500/30 hover:border-orange-500/50",
       bulletColor: "text-orange-600 dark:text-orange-400/80",
       description: [
         "Part of Digital Fulfilment team, developing critical backend services that calculate accurate delivery timelines for customer orders, contributing to Sainsbury's online platform serving millions of weekly shoppers across the UK",
@@ -61,8 +73,8 @@ const ExperienceSection = () => {
         "Building event-driven microservices using Spring Boot and Apache Kafka, processing high-throughput event streams across multiple topics powering real-time order processing and inventory updates",
         "Architecting solutions using diverse data stores (PostgreSQL, MongoDB, DynamoDB) to optimize for different data access patterns and performance requirements",
         "Managing deployments and infrastructure on AWS using Kubernetes, ensuring high availability and scalability of services",
-        "Collaborating with product teams and stakeholders to design and implement solutions that improve order fulfillment accuracy and efficiency"
-      ] as string[]
+        "Collaborating with product teams and stakeholders to design and implement solutions that improve order fulfillment accuracy and efficiency",
+      ] as string[],
     },
     {
       title: "Software Engineer",
@@ -71,7 +83,8 @@ const ExperienceSection = () => {
       logo: "/work_exp/thg.webp",
       period: "Jul 2022 to Mar 2025",
       tech: ["Java", "Spring Boot", "Apache ActiveMQ"],
-      brandColor: "bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border-cyan-500/40 hover:border-cyan-400/60",
+      brandColor:
+        "bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border-cyan-500/40 hover:border-cyan-400/60",
       bulletColor: "text-cyan-600 dark:text-cyan-400/80",
       promotions: [
         { title: "Graduate Software Engineer", period: "Jul 2022 to Jul 2024" },
@@ -83,8 +96,8 @@ const ExperienceSection = () => {
         "Led my team for Black Friday 2024, targeting application optimization by improving SQL queries, decoupling unnecessary dependencies and load testing our applications, delivering zero critical incidents during the highest-traffic trading window of the year",
         "Developed strong expertise in SQL & Jenkins to deploy applications on Kubernetes & Linux based VMs",
         "Collaborated with various teams to develop solutions for new clients while ensuring backward compatibility for existing clients.",
-        "Efficiently managed escalated incidents from clients, briefed senior management with concise reports on impacts, and provided effective solutions to resolve them promptly."
-      ] as string[]
+        "Efficiently managed escalated incidents from clients, briefed senior management with concise reports on impacts, and provided effective solutions to resolve them promptly.",
+      ] as string[],
     },
     {
       title: "Machine Learning Researcher",
@@ -93,18 +106,19 @@ const ExperienceSection = () => {
       logo: "/work_exp/lancaster-uni.webp",
       period: "Jun 2022 to Sep 2022",
       tech: ["Python", "Machine Learning", "OpenCV", "PyTorch", "Data Annotations"],
-      brandColor: "bg-gradient-to-br from-red-500/10 to-rose-500/10 border-red-500/30 hover:border-red-500/50",
+      brandColor:
+        "bg-gradient-to-br from-red-500/10 to-rose-500/10 border-red-500/30 hover:border-red-500/50",
       bulletColor: "text-red-600 dark:text-red-400/80",
       description: [
         "This research project was offered to me as an extension to my Final Year Project. My research was aimed at fine tuning & evaluating YOLOv3 and YOLOv5 machine learning models to detect landfills from both satellite and drone imagery.",
         "These models were trained on Google cloud for weeks while being tested & evaluated regularly to fine tune training parameters.",
         "I collected a training dataset containing 2,000 high quality images through Google Earth & open-source repositories.",
-      ] as string[]
-    }
+      ] as string[],
+    },
   ];
 
   const toggleCard = (index: number) => {
-    setExpandedCards(prev => {
+    setExpandedCards((prev) => {
       const next = new Set(prev);
       if (next.has(index)) {
         next.delete(index);
@@ -126,104 +140,124 @@ const ExperienceSection = () => {
         <div className="space-y-6">
           {experiences.map((exp, index) => (
             <FadeIn key={index} delay={index * 120}>
-            <div className="group">
-              {/* Card */}
-              <div
-                className={`glass-strong rounded-2xl p-8 transition-all duration-300 border cursor-pointer
+              <div className="group">
+                {/* Card */}
+                <div
+                  className={`glass-strong rounded-2xl p-8 transition-all duration-300 border cursor-pointer
                   ${exp.brandColor}
-                  ${expandedCards.has(index) ? 'scale-[1.01]' : 'hover:scale-[1.01] hover:-translate-y-1'}`}
-                onClick={() => toggleCard(index)}
-              >
-                <div className="flex flex-col lg:flex-row gap-6">
-                  {/* Logo */}
-                  <div className="flex-shrink-0">
-                    <img
-                      src={exp.logo}
-                      alt={`${exp.company} logo`}
-                      width="96"
-                      height="96"
-                      loading="lazy"
-                      className="w-24 h-24 object-contain filter brightness-100 hover:scale-110 transition-transform"
-                    />
-                  </div>
-
-                  <div className="flex-grow min-w-0">
-                    {/* Header */}
-                    <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-3">
-                      <div className="flex-1">
-                        <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-1">{exp.title}</h3>
-                        <p className="text-xl text-slate-700 dark:text-white/80">{exp.company}</p>
-                        <p className="text-slate-500 dark:text-white/50 text-sm mt-1">{exp.location}</p>
-                      </div>
-                      <div className="flex-shrink-0 text-right flex flex-col items-end gap-1">
-                        <span className="text-slate-400 dark:text-white/40 text-sm font-medium whitespace-nowrap tabular-nums">
-                          {exp.period}
-                        </span>
-                        <span className="block text-slate-400 dark:text-white/25 text-xs tabular-nums">
-                          {getDuration(exp.period)}
-                        </span>
-                        <ChevronDown
-                          className={`w-4 h-4 text-slate-400 dark:text-white/30 transition-transform duration-300 mt-1 ${
-                            expandedCards.has(index) ? 'rotate-180 text-slate-500 dark:text-white/60' : ''
-                          }`}
-                        />
-                      </div>
+                  ${expandedCards.has(index) ? "scale-[1.01]" : "hover:scale-[1.01] hover:-translate-y-1"}`}
+                  onClick={() => toggleCard(index)}
+                >
+                  <div className="flex flex-col lg:flex-row gap-6">
+                    {/* Logo */}
+                    <div className="flex-shrink-0">
+                      <img
+                        src={exp.logo}
+                        alt={`${exp.company} logo`}
+                        width="96"
+                        height="96"
+                        loading="lazy"
+                        className="w-24 h-24 object-contain filter brightness-100 hover:scale-110 transition-transform"
+                      />
                     </div>
 
-                    {/* Promotion ladder */}
-                    {exp.promotions && (
-                      <div className="glass rounded-xl p-3 mb-4 w-fit bg-gradient-to-r from-green-500/10 to-blue-500/10 border border-green-500/20">
-                        <div className="flex items-center gap-3">
-                          {exp.promotions.map((p, i) => (
-                            <div key={i} className="flex items-center gap-2">
-                              <div className="flex flex-col">
-                                <span className="text-slate-900 dark:text-white/90 text-xs font-semibold">{p.title}</span>
-                                <span className="text-slate-400 dark:text-white/40 text-[10px]">{p.period}</span>
-                              </div>
-                              {i < exp.promotions!.length - 1 && (
-                                <span className="text-green-600 dark:text-green-400 text-lg">→</span>
-                              )}
-                            </div>
-                          ))}
+                    <div className="flex-grow min-w-0">
+                      {/* Header */}
+                      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-3">
+                        <div className="flex-1">
+                          <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-1">
+                            {exp.title}
+                          </h3>
+                          <p className="text-xl text-slate-700 dark:text-white/80">{exp.company}</p>
+                          <p className="text-slate-500 dark:text-white/50 text-sm mt-1">
+                            {exp.location}
+                          </p>
+                        </div>
+                        <div className="flex-shrink-0 text-right flex flex-col items-end gap-1">
+                          <span className="text-slate-400 dark:text-white/40 text-sm font-medium whitespace-nowrap tabular-nums">
+                            {exp.period}
+                          </span>
+                          <span className="block text-slate-400 dark:text-white/25 text-xs tabular-nums">
+                            {getDuration(exp.period)}
+                          </span>
+                          <ChevronDown
+                            className={`w-4 h-4 text-slate-400 dark:text-white/30 transition-transform duration-300 mt-1 ${
+                              expandedCards.has(index)
+                                ? "rotate-180 text-slate-500 dark:text-white/60"
+                                : ""
+                            }`}
+                          />
                         </div>
                       </div>
-                    )}
 
-                    {/* Tech Stack */}
-                    <div className="flex flex-wrap gap-2 mb-3">
-                      {exp.tech.map((tech, techIndex) => (
-                        <span
-                          key={techIndex}
-                          className="glass rounded-lg px-3 py-1 text-slate-600 dark:text-white/70 text-xs hover:text-slate-900 dark:hover:text-white hover:bg-slate-900/5 dark:hover:bg-white/10 transition-all"
-                        >
-                          {tech}
-                        </span>
-                      ))}
-                    </div>
+                      {/* Promotion ladder */}
+                      {exp.promotions && (
+                        <div className="glass rounded-xl p-3 mb-4 w-fit bg-gradient-to-r from-green-500/10 to-blue-500/10 border border-green-500/20">
+                          <div className="flex items-center gap-3">
+                            {exp.promotions.map((p, i) => (
+                              <div key={i} className="flex items-center gap-2">
+                                <div className="flex flex-col">
+                                  <span className="text-slate-900 dark:text-white/90 text-xs font-semibold">
+                                    {p.title}
+                                  </span>
+                                  <span className="text-slate-400 dark:text-white/40 text-[10px]">
+                                    {p.period}
+                                  </span>
+                                </div>
+                                {i < exp.promotions!.length - 1 && (
+                                  <span className="text-green-600 dark:text-green-400 text-lg">
+                                    →
+                                  </span>
+                                )}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
 
-                    {/* Description - shows when expanded */}
-                    <div className={`overflow-hidden transition-all duration-500 ${
-                      expandedCards.has(index) ? 'max-h-[1000px] opacity-100 mt-4' : 'max-h-0 opacity-0'
-                    }`}>
-                      <div className="border-t border-slate-200 dark:border-white/10 pt-4">
-                        <ul className="space-y-3">
-                          {exp.description.map((item, i) => (
-                            <li key={i} className="flex items-start gap-3">
-                              <CircleDot className={`w-4 h-4 mt-1 ${exp.bulletColor} flex-shrink-0`} />
-                              <span className="text-slate-600 dark:text-white/70 text-sm leading-relaxed">{item}</span>
-                            </li>
-                          ))}
-                        </ul>
+                      {/* Tech Stack */}
+                      <div className="flex flex-wrap gap-2 mb-3">
+                        {exp.tech.map((tech, techIndex) => (
+                          <span
+                            key={techIndex}
+                            className="glass rounded-lg px-3 py-1 text-slate-600 dark:text-white/70 text-xs hover:text-slate-900 dark:hover:text-white hover:bg-slate-900/5 dark:hover:bg-white/10 transition-all"
+                          >
+                            {tech}
+                          </span>
+                        ))}
+                      </div>
+
+                      {/* Description - shows when expanded */}
+                      <div
+                        className={`overflow-hidden transition-all duration-500 ${
+                          expandedCards.has(index)
+                            ? "max-h-[1000px] opacity-100 mt-4"
+                            : "max-h-0 opacity-0"
+                        }`}
+                      >
+                        <div className="border-t border-slate-200 dark:border-white/10 pt-4">
+                          <ul className="space-y-3">
+                            {exp.description.map((item, i) => (
+                              <li key={i} className="flex items-start gap-3">
+                                <CircleDot
+                                  className={`w-4 h-4 mt-1 ${exp.bulletColor} flex-shrink-0`}
+                                />
+                                <span className="text-slate-600 dark:text-white/70 text-sm leading-relaxed">
+                                  {item}
+                                </span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
 
-                <p className="mt-3 text-center text-slate-400 dark:text-white/25 text-xs">
-                  {expandedCards.has(index) ? 'Click to collapse' : 'Click to expand'}
-                </p>
+                  <p className="mt-3 text-center text-slate-400 dark:text-white/25 text-xs">
+                    {expandedCards.has(index) ? "Click to collapse" : "Click to expand"}
+                  </p>
+                </div>
               </div>
-            </div>
             </FadeIn>
           ))}
         </div>

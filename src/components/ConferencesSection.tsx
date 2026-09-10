@@ -57,13 +57,19 @@ const conferences: Conference[] = [
       },
     ],
     tags: ["Sainsbury's", "Hackathon", "AI", "Innovation", "Finalist", "Food Wastage"],
-    links: [
-      { label: "Sainsbury's Tech", url: "https://www.sainsburys.jobs/teams/technology" },
-    ],
+    links: [{ label: "Sainsbury's Tech", url: "https://www.sainsburys.jobs/teams/technology" }],
     photos: [
       { src: "/conferences/hackathon_2026/hackathon_4.webp", alt: "Hackathon finale", span: "row" },
-      { src: "/conferences/hackathon_2026/hackathon_2.webp", alt: "Team at the hackathon", span: "col" },
-      { src: "/conferences/hackathon_2026/hackathon_3.webp", alt: "Hackathon presentation", span: "col" },
+      {
+        src: "/conferences/hackathon_2026/hackathon_2.webp",
+        alt: "Team at the hackathon",
+        span: "col",
+      },
+      {
+        src: "/conferences/hackathon_2026/hackathon_3.webp",
+        alt: "Hackathon presentation",
+        span: "col",
+      },
     ],
   },
   {
@@ -89,9 +95,19 @@ const conferences: Conference[] = [
           "Answered a lot of honest questions: how to handle rejection in the job hunt, what work pressure really feels like, what to actually expect from a first role, and how to make the most of the time left at university.",
       },
     ],
-    tags: ["Networking", "Alumni", "Lancaster University", "Grow Your Future", "Career Development"],
+    tags: [
+      "Networking",
+      "Alumni",
+      "Lancaster University",
+      "Grow Your Future",
+      "Career Development",
+    ],
     links: [
-      { label: "Grow Your Future", url: "https://portal.lancaster.ac.uk/ask/grow-your-future/", icon: "https://www.lancaster.ac.uk/media/wdp/style-assets/images/foundation/lu-shield.svg" },
+      {
+        label: "Grow Your Future",
+        url: "https://portal.lancaster.ac.uk/ask/grow-your-future/",
+        icon: "https://www.lancaster.ac.uk/media/wdp/style-assets/images/foundation/lu-shield.svg",
+      },
     ],
     photos: [
       { src: "/conferences/gyf/students_2026.webp", alt: "Students at Capital Connections 2026" },
@@ -109,9 +125,14 @@ const conferences: Conference[] = [
     tagline: "Sainsbury's Digital, Tech and Data Conference",
     summary: (
       <>
-        My first ever internal tech conference and what a way to experience it. My team walked away with the{" "}
-        <span className="text-yellow-700 dark:text-yellow-300 font-semibold">Strategic Team of the Year</span>{" "}
-        award. Heard from a brilliant lineup of speakers including Bruce Daisley and Kimberly Wilson across a range of topics, and spent time exploring stands from various companies showcasing their latest work.
+        My first ever internal tech conference and what a way to experience it. My team walked away
+        with the{" "}
+        <span className="text-yellow-700 dark:text-yellow-300 font-semibold">
+          Strategic Team of the Year
+        </span>{" "}
+        award. Heard from a brilliant lineup of speakers including Bruce Daisley and Kimberly Wilson
+        across a range of topics, and spent time exploring stands from various companies showcasing
+        their latest work.
       </>
     ),
     talks: [
@@ -127,12 +148,10 @@ const conferences: Conference[] = [
       },
     ],
     tags: ["Sainsbury's", "Tech Conference", "Internal Event", "Award", "Digital", "Data"],
-    links: [
-      { label: "Sainsbury's Tech", url: "https://www.sainsburys.jobs/teams/technology" },
-    ],
+    links: [{ label: "Sainsbury's Tech", url: "https://www.sainsburys.jobs/teams/technology" }],
     photos: [
       { src: "/conferences/tech_con/team.webp", alt: "Team at Sainsbury's Tech Con", span: "col" },
-      { src: "/conferences/tech_con/award.webp", alt: "Strategic Team of the Year award" }
+      { src: "/conferences/tech_con/award.webp", alt: "Strategic Team of the Year award" },
     ],
   },
   {
@@ -169,7 +188,16 @@ const conferences: Conference[] = [
           "Practical techniques for right-sizing pods, using spot nodes for non-critical workloads, and reading resource metrics you're probably ignoring today.",
       },
     ],
-    tags: ["Java", "JVM", "Spring Boot", "Kafka", "Kubernetes", "Virtual Threads", "AI", "Architecture"],
+    tags: [
+      "Java",
+      "JVM",
+      "Spring Boot",
+      "Kafka",
+      "Kubernetes",
+      "Virtual Threads",
+      "AI",
+      "Architecture",
+    ],
     links: [
       { label: "Devoxx UK Website", url: "https://www.devoxx.co.uk/" },
       { label: "Talks on YouTube", url: "https://www.youtube.com/@DevoxxUK" },
@@ -177,9 +205,12 @@ const conferences: Conference[] = [
     photos: [
       { src: "/conferences/devoxx2025/group_photo.webp", alt: "Group photo", span: "col" },
       { src: "/conferences/devoxx2025/conference_hall.webp", alt: "Conference hall" },
-      { src: "/conferences/devoxx2025/redbull_racing_sim.webp", alt: "Red Bull Racing F1 sim experience" },
+      {
+        src: "/conferences/devoxx2025/redbull_racing_sim.webp",
+        alt: "Red Bull Racing F1 sim experience",
+      },
       { src: "/conferences/devoxx2025/virtual_threads_talk.webp", alt: "Virtual Threads talk" },
-      { src: "/conferences/devoxx2025/snack_break.webp", alt: "Snack break" }
+      { src: "/conferences/devoxx2025/snack_break.webp", alt: "Snack break" },
     ],
   },
   {
@@ -205,9 +236,19 @@ const conferences: Conference[] = [
           "Walked through questions on job hunting strategy, what work pressure looks like in practice, salary expectations, and how to build confidence going into interviews and early in your career.",
       },
     ],
-    tags: ["Networking", "Alumni", "Lancaster University", "Grow Your Future", "Career Development"],
+    tags: [
+      "Networking",
+      "Alumni",
+      "Lancaster University",
+      "Grow Your Future",
+      "Career Development",
+    ],
     links: [
-      { label: "Grow Your Future", url: "https://portal.lancaster.ac.uk/ask/grow-your-future/", icon: "https://www.lancaster.ac.uk/media/wdp/style-assets/images/foundation/lu-shield.svg" },
+      {
+        label: "Grow Your Future",
+        url: "https://portal.lancaster.ac.uk/ask/grow-your-future/",
+        icon: "https://www.lancaster.ac.uk/media/wdp/style-assets/images/foundation/lu-shield.svg",
+      },
     ],
     photos: [
       { src: "/conferences/gyf/gyf_talk_2025.webp", alt: "Talk at Capital Connections 2025" },
@@ -216,18 +257,37 @@ const conferences: Conference[] = [
   },
 ];
 
-const PhotoGrid = ({ photos, accent, gridHeight = "h-64" }: { photos: PhotoSlot[]; accent: string; gridHeight?: string }) => {
+const PhotoGrid = ({
+  photos,
+  accent,
+  gridHeight = "h-64",
+}: {
+  photos: PhotoSlot[];
+  accent: string;
+  gridHeight?: string;
+}) => {
   const [loaded, setLoaded] = useState<Record<number, boolean>>({});
   const [errored, setErrored] = useState<Record<number, boolean>>({});
 
   const placeholderEmojis = ["📸", "🎙️", "💡", "🧑‍💻", "🎯", "☕"];
 
   return (
-    <div className={photos.length <= 2 ? `flex gap-2 ${gridHeight}` : `grid grid-cols-3 grid-rows-2 gap-2 ${gridHeight} overflow-hidden`}>
+    <div
+      className={
+        photos.length <= 2
+          ? `flex gap-2 ${gridHeight}`
+          : `grid grid-cols-3 grid-rows-2 gap-2 ${gridHeight} overflow-hidden`
+      }
+    >
       {photos.map((photo, i) => {
         const isLoaded = loaded[i];
         const isErrored = errored[i];
-        const colSpan = photo.span === "full" ? "col-span-3" : photo.span === "col" || photo.span === "both" ? "col-span-2" : "col-span-1";
+        const colSpan =
+          photo.span === "full"
+            ? "col-span-3"
+            : photo.span === "col" || photo.span === "both"
+              ? "col-span-2"
+              : "col-span-1";
         const rowSpan = photo.span === "row" || photo.span === "both" ? "row-span-2" : "row-span-1";
         const flexClass = photos.length <= 2 ? "flex-1 min-w-0" : `${colSpan} ${rowSpan}`;
 
@@ -235,7 +295,11 @@ const PhotoGrid = ({ photos, accent, gridHeight = "h-64" }: { photos: PhotoSlot[
           <div
             key={i}
             className={`${flexClass} relative rounded-2xl overflow-hidden glass group/photo`}
-            style={photos.length > 2 && (photo.gridCol || photo.gridRow) ? { gridColumn: photo.gridCol, gridRow: photo.gridRow } : undefined}
+            style={
+              photos.length > 2 && (photo.gridCol || photo.gridRow)
+                ? { gridColumn: photo.gridCol, gridRow: photo.gridRow }
+                : undefined
+            }
           >
             {!isErrored && (
               <img
@@ -257,8 +321,12 @@ const PhotoGrid = ({ photos, accent, gridHeight = "h-64" }: { photos: PhotoSlot[
               <div
                 className={`absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br ${accent} border border-slate-200 dark:border-white/5`}
               >
-                <span className="text-2xl mb-1 opacity-40">{placeholderEmojis[i % placeholderEmojis.length]}</span>
-                <span className="text-slate-400 dark:text-white/20 text-xs text-center px-2">{photo.alt}</span>
+                <span className="text-2xl mb-1 opacity-40">
+                  {placeholderEmojis[i % placeholderEmojis.length]}
+                </span>
+                <span className="text-slate-400 dark:text-white/20 text-xs text-center px-2">
+                  {photo.alt}
+                </span>
               </div>
             )}
             {/* Hover label overlay on loaded photos */}
@@ -295,13 +363,25 @@ const ConferencesSection = () => {
             <div
               key={index}
               className="glass-strong rounded-3xl overflow-hidden hover:bg-slate-900/5 dark:hover:bg-white/10 hover:scale-[1.02] transition-all duration-500 group will-change-transform"
-              style={{ contentVisibility: index > 0 ? 'auto' : 'visible', containIntrinsicSize: 'auto 600px' }}
+              style={{
+                contentVisibility: index > 0 ? "auto" : "visible",
+                containIntrinsicSize: "auto 600px",
+              }}
             >
               {/* Header band */}
-              <div className={`bg-gradient-to-r ${conf.accentColor} px-8 py-5 flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 dark:border-white/5`}>
+              <div
+                className={`bg-gradient-to-r ${conf.accentColor} px-8 py-5 flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 dark:border-white/5`}
+              >
                 <div className="flex items-center gap-4">
                   {conf.emoji.startsWith("http") ? (
-                    <img src={conf.emoji} alt="" width="40" height="40" loading="lazy" className="w-10 h-10 object-contain" />
+                    <img
+                      src={conf.emoji}
+                      alt=""
+                      width="40"
+                      height="40"
+                      loading="lazy"
+                      className="w-10 h-10 object-contain"
+                    />
                   ) : (
                     <span className="text-4xl">{conf.emoji}</span>
                   )}
@@ -311,7 +391,9 @@ const ConferencesSection = () => {
                         {conf.name}
                       </h3>
                     </div>
-                    <p className="text-slate-500 dark:text-white/50 text-sm mt-0.5 italic">{conf.tagline}</p>
+                    <p className="text-slate-500 dark:text-white/50 text-sm mt-0.5 italic">
+                      {conf.tagline}
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-center gap-4 text-sm text-slate-500 dark:text-white/50">
@@ -331,14 +413,14 @@ const ConferencesSection = () => {
                 {/* Left: Text content */}
                 <div className="flex flex-col gap-6">
                   {/* Summary */}
-                  <p className="text-slate-600 dark:text-white/70 leading-relaxed text-sm">{conf.summary}</p>
+                  <p className="text-slate-600 dark:text-white/70 leading-relaxed text-sm">
+                    {conf.summary}
+                  </p>
 
                   {/* Key talks / sessions */}
                   <div>
                     <button
-                      onClick={() =>
-                        setExpandedTalks((p) => ({ ...p, [index]: !p[index] }))
-                      }
+                      onClick={() => setExpandedTalks((p) => ({ ...p, [index]: !p[index] }))}
                       className="flex items-center gap-2 text-slate-400 dark:text-white/40 text-xs uppercase tracking-widest font-semibold mb-3 hover:text-slate-700 dark:hover:text-white/70 transition-colors"
                     >
                       {expandedTalks[index] ? (
@@ -349,18 +431,26 @@ const ConferencesSection = () => {
                       Key Sessions & Takeaways ({conf.talks.length})
                     </button>
 
-                    <div className={`overflow-hidden transition-all duration-500 ${expandedTalks[index] ? 'max-h-[800px] opacity-100' : 'max-h-0 opacity-0'}`}>
+                    <div
+                      className={`overflow-hidden transition-all duration-500 ${expandedTalks[index] ? "max-h-[800px] opacity-100" : "max-h-0 opacity-0"}`}
+                    >
                       <div className="flex flex-col gap-3">
                         {conf.talks.map((talk, ti) => (
                           <div
                             key={ti}
                             className="glass rounded-2xl px-4 py-3 border-l-2 border-blue-600/50 dark:border-blue-400/30"
                           >
-                            <p className="text-slate-900 dark:text-white/90 text-sm font-medium mb-1">{talk.title}</p>
+                            <p className="text-slate-900 dark:text-white/90 text-sm font-medium mb-1">
+                              {talk.title}
+                            </p>
                             {talk.speaker && (
-                              <p className="text-slate-400 dark:text-white/40 text-xs mb-1.5">{talk.speaker}</p>
+                              <p className="text-slate-400 dark:text-white/40 text-xs mb-1.5">
+                                {talk.speaker}
+                              </p>
                             )}
-                            <p className="text-slate-500 dark:text-white/55 text-xs leading-relaxed">{talk.takeaway}</p>
+                            <p className="text-slate-500 dark:text-white/55 text-xs leading-relaxed">
+                              {talk.takeaway}
+                            </p>
                           </div>
                         ))}
                       </div>
@@ -370,7 +460,10 @@ const ConferencesSection = () => {
                   {/* Tags */}
                   <div className="flex flex-wrap gap-2">
                     {conf.tags.map((tag, ti) => (
-                      <span key={ti} className="glass rounded-xl px-3 py-1 text-slate-700 dark:text-white/80 text-xs">
+                      <span
+                        key={ti}
+                        className="glass rounded-xl px-3 py-1 text-slate-700 dark:text-white/80 text-xs"
+                      >
                         {tag}
                       </span>
                     ))}
@@ -387,7 +480,14 @@ const ConferencesSection = () => {
                         className="flex items-center gap-2 glass rounded-xl px-4 py-2 text-slate-500 dark:text-white/60 text-xs hover:text-blue-600 dark:hover:text-blue-300 hover:bg-slate-900/5 dark:hover:bg-white/10 transition-all group/link"
                       >
                         {link.icon ? (
-                          <img src={link.icon} alt="" width="16" height="16" loading="lazy" className="w-4 h-4 object-contain opacity-70 dark:brightness-0 dark:invert dark:opacity-60 group-hover/link:opacity-100" />
+                          <img
+                            src={link.icon}
+                            alt=""
+                            width="16"
+                            height="16"
+                            loading="lazy"
+                            className="w-4 h-4 object-contain opacity-70 dark:brightness-0 dark:invert dark:opacity-60 group-hover/link:opacity-100"
+                          />
                         ) : (
                           <ExternalLink className="w-3 h-3" />
                         )}
@@ -402,7 +502,11 @@ const ConferencesSection = () => {
                   <p className="text-slate-400 dark:text-white/40 text-xs uppercase tracking-widest font-semibold mb-3">
                     Photos
                   </p>
-                  <PhotoGrid photos={conf.photos} accent={conf.accentColor} gridHeight={conf.gridHeight} />
+                  <PhotoGrid
+                    photos={conf.photos}
+                    accent={conf.accentColor}
+                    gridHeight={conf.gridHeight}
+                  />
                 </div>
               </div>
             </div>

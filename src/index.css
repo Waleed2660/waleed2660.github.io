@@ -109,9 +109,10 @@
 
     --html-bg: #f2f5fb;
     --glass-bg: rgba(240, 245, 255, 0.65);
-    --glass-strong-bg: rgba(245, 248, 255, 0.80);
+    --glass-strong-bg: rgba(245, 248, 255, 0.8);
     --glass-border: rgba(180, 195, 225, 0.35);
-    --glass-shadow: 0 20px 45px -14px rgba(30, 58, 138, 0.08), 0 4px 14px -4px rgba(30, 58, 138, 0.05);
+    --glass-shadow:
+      0 20px 45px -14px rgba(30, 58, 138, 0.08), 0 4px 14px -4px rgba(30, 58, 138, 0.05);
 
     --nav-bg: rgba(255, 255, 255, 0.88);
     --nav-border: rgba(0, 0, 0, 0.08);
@@ -121,15 +122,15 @@
     --nav-icon-active-bg: rgba(30, 41, 59, 0.08);
     --nav-icon-dot: rgba(30, 41, 59, 0.65);
     --nav-toggle-bg: rgba(30, 41, 59, 0.06);
-    --nav-toggle-hover-bg: rgba(30, 41, 59, 0.10);
-    --nav-toggle-icon: rgba(15, 23, 42, 0.80);
+    --nav-toggle-hover-bg: rgba(30, 41, 59, 0.1);
+    --nav-toggle-icon: rgba(15, 23, 42, 0.8);
 
     --site-stats-bg: rgba(255, 255, 255, 0.92);
     --site-stats-border: rgba(0, 0, 0, 0.08);
     --site-stats-shadow: 0 24px 64px rgba(0, 0, 0, 0.12);
 
     --floating-action-bg: rgba(255, 255, 255, 0.88);
-    --tooltip-bg: rgba(15, 23, 42, 0.80);
+    --tooltip-bg: rgba(15, 23, 42, 0.8);
     --resume-card-bg: rgba(0, 0, 0, 0.04);
   }
 }
@@ -220,7 +221,7 @@ html.theme-switching *:not([data-theme-toggle]):not([data-theme-toggle] *) {
   }
 
   .glass-strong::before {
-    content: '';
+    content: "";
     position: absolute;
     inset: 0;
     border-radius: inherit;
@@ -274,36 +275,75 @@ html.theme-switching *:not([data-theme-toggle]):not([data-theme-toggle] *) {
   }
 
   @keyframes float {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-10px); }
+    0%,
+    100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
   }
 
   @keyframes twinkle {
-    0%, 44%, 56%, 100% { opacity: 0.2; }
-    50% { opacity: 1; }
+    0%,
+    44%,
+    56%,
+    100% {
+      opacity: 0.2;
+    }
+    50% {
+      opacity: 1;
+    }
   }
 
   @keyframes dropIn {
-    0%   { opacity: 0; transform: translateY(-24px) scale(0.97); }
-    100% { opacity: 1; transform: translateY(0)    scale(1);    }
+    0% {
+      opacity: 0;
+      transform: translateY(-24px) scale(0.97);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
   }
 
   @keyframes drift1 {
-    0%, 100% { transform: translate(0, 0) scale(1); }
-    33%       { transform: translate(40px, -60px) scale(1.05); }
-    66%       { transform: translate(-30px, 40px) scale(0.97); }
+    0%,
+    100% {
+      transform: translate(0, 0) scale(1);
+    }
+    33% {
+      transform: translate(40px, -60px) scale(1.05);
+    }
+    66% {
+      transform: translate(-30px, 40px) scale(0.97);
+    }
   }
 
   @keyframes drift2 {
-    0%, 100% { transform: translate(0, 0) scale(1); }
-    33%       { transform: translate(-50px, 30px) scale(1.04); }
-    66%       { transform: translate(40px, -40px) scale(0.98); }
+    0%,
+    100% {
+      transform: translate(0, 0) scale(1);
+    }
+    33% {
+      transform: translate(-50px, 30px) scale(1.04);
+    }
+    66% {
+      transform: translate(40px, -40px) scale(0.98);
+    }
   }
 
   @keyframes drift3 {
-    0%, 100% { transform: translate(-50%, -50%) scale(1); }
-    33%       { transform: translate(calc(-50% + 60px), calc(-50% - 40px)) scale(1.06); }
-    66%       { transform: translate(calc(-50% - 40px), calc(-50% + 50px)) scale(0.96); }
+    0%,
+    100% {
+      transform: translate(-50%, -50%) scale(1);
+    }
+    33% {
+      transform: translate(calc(-50% + 60px), calc(-50% - 40px)) scale(1.06);
+    }
+    66% {
+      transform: translate(calc(-50% - 40px), calc(-50% + 50px)) scale(0.96);
+    }
   }
 }
 
@@ -312,7 +352,7 @@ html.theme-switching *:not([data-theme-toggle]):not([data-theme-toggle] *) {
 }
 
 @property --shine-angle {
-  syntax: '<angle>';
+  syntax: "<angle>";
   initial-value: 0deg;
   inherits: false;
 }
@@ -322,15 +362,26 @@ html.theme-switching *:not([data-theme-toggle]):not([data-theme-toggle] *) {
 }
 
 .featured-card::after {
-  content: '';
+  content: "";
   position: absolute;
   inset: -2px;
   border-radius: inherit;
   padding: 2px;
-  background: conic-gradient(from var(--shine-angle), rgba(202,163,30,0.9) 0%, rgba(202,163,30,0.9) 65%, rgba(255,255,255,1) 74%, rgba(202,163,30,0.9) 83%, rgba(202,163,30,0.9) 100%);
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  background: conic-gradient(
+    from var(--shine-angle),
+    rgba(202, 163, 30, 0.9) 0%,
+    rgba(202, 163, 30, 0.9) 65%,
+    rgba(255, 255, 255, 1) 74%,
+    rgba(202, 163, 30, 0.9) 83%,
+    rgba(202, 163, 30, 0.9) 100%
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
   -webkit-mask-composite: destination-out;
-  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
   mask-composite: exclude;
   pointer-events: none;
   animation: shine-border 3s linear infinite;
@@ -343,12 +394,20 @@ html.theme-switching *:not([data-theme-toggle]):not([data-theme-toggle] *) {
 }
 
 @keyframes shine-border {
-  to { --shine-angle: 360deg; }
+  to {
+    --shine-angle: 360deg;
+  }
 }
 
 @keyframes blink {
-  0%, 49% { opacity: 1; }
-  50%, 100% { opacity: 0; }
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
 }
 
 .animate-blink {
@@ -356,8 +415,12 @@ html.theme-switching *:not([data-theme-toggle]):not([data-theme-toggle] *) {
 }
 
 @keyframes fade-in {
-  from { opacity: 0; }
-  to { opacity: 0.75; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 0.75;
+  }
 }
 
 .animate-fade-in {
