@@ -137,10 +137,21 @@ def compute_streak_stats(user):
             'longestStreak': result['longest'],
             'longestStreakStart': result['longest_start'],
             'longestStreakEnd': result['longest_end'],
-        }
+        }, all_days
     except Exception as e:
         print('Failed to compute streak stats:', e)
-        return {'totalContributions': 0, 'currentStreak': 0, 'longestStreak': 0}
+        return {'totalContributions': 0, 'currentStreak': 0, 'longestStreak': 0}, {}
+
+
+def last_year_calendar(all_days, now):
+    """Returns {date: count} for the trailing ~53 weeks, matching the
+    GitHub profile contribution graph window."""
+    start = now - timedelta(weeks=53)
+    return {
+        date: count
+        for date, count in all_days.items()
+        if datetime.strptime(date, '%Y-%m-%d').replace(tzinfo=timezone.utc) >= start
+    }
 
 
 def compute_repo_stats(own_repos):
@@ -176,7 +187,8 @@ def main():
     own_repos = [r for r in repos if not r.get('fork')]
 
     stars, languages, repo_stats = compute_repo_stats(own_repos)
-    streak = compute_streak_stats(user)
+    streak, all_days = compute_streak_stats(user)
+    calendar = last_year_calendar(all_days, datetime.now(timezone.utc)) if all_days else {}
 
     output = {
         'followers': user['followers'],
@@ -185,6 +197,7 @@ def main():
         'repos': repo_stats,
         'languages': languages,
         'streak': streak,
+        'calendar': calendar,
     }
 
     with open('public/github-stats.json', 'w') as f:

@@ -1,5 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Flame, Trophy, CalendarDays } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 // Contribution colour — violet-600, rich and visible against dark background
 const USERNAME = "Waleed2660";
@@ -43,6 +44,7 @@ interface GitHubStats {
   stars: number;
   languages: Language[];
   streak?: StreakStats;
+  calendar?: Record<string, number>;
 }
 
 const formatDate = (iso?: string | null) => {
@@ -59,6 +61,149 @@ const formatShortDate = (iso?: string | null) => {
   if (!iso) return "";
   const [y, m, d] = iso.split("-").map(Number);
   return new Date(y, m - 1, d).toLocaleDateString("en-US", { month: "short", day: "numeric" });
+};
+
+const formatLongDate = (iso: string) => {
+  const [y, m, d] = iso.split("-").map(Number);
+  return new Date(y, m - 1, d).toLocaleDateString("en-US", {
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+};
+
+type CalendarDay = { date: string; count: number } | null;
+
+const LEVEL_COLORS = [
+  "bg-slate-900/10 dark:bg-white/10",
+  "bg-violet-300/70 dark:bg-violet-900",
+  "bg-violet-400 dark:bg-violet-700",
+  "bg-violet-500 dark:bg-violet-600",
+  "bg-violet-700 dark:bg-violet-400",
+];
+
+const levelFor = (count: number, max: number) => {
+  if (count <= 0) return 0;
+  if (max <= 0) return 1;
+  const ratio = count / max;
+  if (ratio <= 0.25) return 1;
+  if (ratio <= 0.5) return 2;
+  if (ratio <= 0.75) return 3;
+  return 4;
+};
+
+// Groups the flat date->count map into Sunday-start weeks, padding the first
+// and last week with nulls so every column has exactly 7 cells.
+const buildWeeks = (calendar: Record<string, number>): CalendarDay[][] => {
+  const dates = Object.keys(calendar).sort();
+  if (!dates.length) return [];
+
+  const weeks: CalendarDay[][] = [];
+  let week: CalendarDay[] = [];
+
+  const firstDow = new Date(`${dates[0]}T00:00:00Z`).getUTCDay();
+  for (let i = 0; i < firstDow; i++) week.push(null);
+
+  for (const date of dates) {
+    week.push({ date, count: calendar[date] });
+    if (week.length === 7) {
+      weeks.push(week);
+      week = [];
+    }
+  }
+  if (week.length) {
+    while (week.length < 7) week.push(null);
+    weeks.push(week);
+  }
+  return weeks;
+};
+
+const MONTH_LABELS = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
+];
+
+const ContributionGraph = ({ calendar }: { calendar: Record<string, number> }) => {
+  const weeks = useMemo(() => buildWeeks(calendar), [calendar]);
+  const max = useMemo(() => Math.max(0, ...Object.values(calendar)), [calendar]);
+
+  const monthLabels = useMemo(() => {
+    const labels: { index: number; label: string }[] = [];
+    let lastMonth = -1;
+    weeks.forEach((week, i) => {
+      const firstDay = week.find((d) => d);
+      if (!firstDay) return;
+      const month = new Date(`${firstDay.date}T00:00:00Z`).getUTCMonth();
+      if (month !== lastMonth) {
+        labels.push({ index: i, label: MONTH_LABELS[month] });
+        lastMonth = month;
+      }
+    });
+    return labels;
+  }, [weeks]);
+
+  if (!weeks.length) return null;
+
+  return (
+    <TooltipProvider delayDuration={100}>
+      <div className="overflow-x-auto">
+        <div className="inline-flex flex-col gap-1 min-w-full">
+          <div className="flex gap-1 pl-8 text-[11px] text-slate-400 dark:text-white/40">
+            {weeks.map((_, i) => {
+              const match = monthLabels.find((m) => m.index === i);
+              return (
+                <div key={i} className="w-3 flex-shrink-0">
+                  {match ? match.label : ""}
+                </div>
+              );
+            })}
+          </div>
+          <div className="flex gap-1">
+            <div className="flex flex-col gap-1 pr-2 text-[11px] text-slate-400 dark:text-white/40 justify-between">
+              <span>Sun</span>
+              <span>Tue</span>
+              <span>Thu</span>
+              <span>Sat</span>
+            </div>
+            <div className="flex gap-1">
+              {weeks.map((week, wi) => (
+                <div key={wi} className="flex flex-col gap-1">
+                  {week.map((day, di) =>
+                    day ? (
+                      <Tooltip key={di}>
+                        <TooltipTrigger asChild>
+                          <div
+                            className={`w-3 h-3 rounded-sm ${LEVEL_COLORS[levelFor(day.count, max)]} hover:ring-1 hover:ring-slate-400 dark:hover:ring-white/50 transition-all cursor-default`}
+                          />
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          {day.count} contribution{day.count === 1 ? "" : "s"} on{" "}
+                          {formatLongDate(day.date)}
+                        </TooltipContent>
+                      </Tooltip>
+                    ) : (
+                      <div key={di} className="w-3 h-3" />
+                    )
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </TooltipProvider>
+  );
 };
 
 const GitHubSection = () => {
@@ -205,7 +350,10 @@ const GitHubSection = () => {
           </div>
         </div>
 
-        {/* Full-width Contribution Graph */}
+        {/* Full-width Contribution Graph — native SVG-free grid rendered from
+            calendar data in github-stats.json (same source as the Streak
+            card), replacing the ghchart.rshah.org badge image so each day
+            cell can show its contribution count on hover. */}
         <div
           ref={chartRef}
           className="glass-strong rounded-3xl p-8 mt-6 hover:scale-[1.02] hover:bg-slate-900/5 dark:hover:bg-white/10 transition-all duration-500"
@@ -213,17 +361,21 @@ const GitHubSection = () => {
           <p className="text-slate-400 dark:text-white/40 text-xs uppercase tracking-widest mb-4">
             Contribution Graph
           </p>
-          <img
-            src={`https://ghchart.rshah.org/${CHART_COLOR}/${USERNAME}`}
-            alt="GitHub contribution graph"
-            width="800"
-            height="128"
-            loading="lazy"
-            className="w-full rounded-xl opacity-75 hover:opacity-100 transition-opacity duration-300"
-            onError={(e) => {
-              (e.target as HTMLImageElement).parentElement!.style.display = "none";
-            }}
-          />
+          {stats?.calendar ? (
+            <ContributionGraph calendar={stats.calendar} />
+          ) : (
+            <img
+              src={`https://ghchart.rshah.org/${CHART_COLOR}/${USERNAME}`}
+              alt="GitHub contribution graph"
+              width="800"
+              height="128"
+              loading="lazy"
+              className="w-full rounded-xl opacity-75 hover:opacity-100 transition-opacity duration-300"
+              onError={(e) => {
+                (e.target as HTMLImageElement).parentElement!.style.display = "none";
+              }}
+            />
+          )}
         </div>
       </div>
     </section>
