@@ -1,35 +1,41 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <script>
       (function () {
         try {
-          var stored = localStorage.getItem('theme');
-          var isDark = stored === 'dark' || stored === 'light'
-            ? stored === 'dark'
-            : !window.matchMedia || window.matchMedia('(prefers-color-scheme: dark)').matches;
+          var stored = localStorage.getItem("theme");
+          var isDark =
+            stored === "dark" || stored === "light"
+              ? stored === "dark"
+              : !window.matchMedia || window.matchMedia("(prefers-color-scheme: dark)").matches;
           if (isDark) {
-            document.documentElement.classList.add('dark');
+            document.documentElement.classList.add("dark");
           }
           // Paint the correct background immediately via inline style, so there is
           // no flash of the browser's default white background while the
           // stylesheet (which sets this via CSS vars) is still loading/injecting —
           // most noticeable in the Vite dev server, which injects CSS via JS.
-          document.documentElement.style.backgroundColor = isDark ? '#0f0f23' : '#f2f5fb';
+          document.documentElement.style.backgroundColor = isDark ? "#0f0f23" : "#f2f5fb";
           var meta = document.querySelector('meta[name="theme-color"]');
           if (meta) {
-            meta.setAttribute('content', isDark ? '#0f0f23' : '#eef0fc');
+            meta.setAttribute("content", isDark ? "#0f0f23" : "#eef0fc");
           }
         } catch (e) {
-          document.documentElement.classList.add('dark');
-          document.documentElement.style.backgroundColor = '#0f0f23';
+          document.documentElement.classList.add("dark");
+          document.documentElement.style.backgroundColor = "#0f0f23";
         }
       })();
     </script>
     <meta name="theme-color" content="#0f0f23" />
     <link rel="shortcut icon" href="/favicon.ico" />
-    <link rel="icon" type="image/png" sizes="192x192" href="/favicon_io/android-chrome-192x192.png" />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="192x192"
+      href="/favicon_io/android-chrome-192x192.png"
+    />
     <link rel="icon" type="image/x-icon" href="/favicon_io/favicon.ico" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon_io/favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon_io/favicon-16x16.png" />
@@ -37,8 +43,14 @@
     <link rel="manifest" href="/favicon_io/site.webmanifest" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Waleed Tariq | Software Engineer</title>
-    <meta name="description" content="Waleed Tariq, Software Engineer based in Manchester, UK. Specialising in Java, Spring Boot, Kubernetes, and AWS with 3+ years of experience building reliable backend systems." />
-    <meta name="keywords" content="Waleed Tariq, Waleed Tariq Software Engineer, Waleed Tariq Manchester, waleedtariq.com" />
+    <meta
+      name="description"
+      content="Waleed Tariq, Software Engineer based in Manchester, UK. Specialising in Java, Spring Boot, Kubernetes, and AWS with 3+ years of experience building reliable backend systems."
+    />
+    <meta
+      name="keywords"
+      content="Waleed Tariq, Waleed Tariq Software Engineer, Waleed Tariq Manchester, waleedtariq.com"
+    />
     <meta name="author" content="Waleed Tariq" />
     <meta name="robots" content="index, follow" />
     <link rel="canonical" href="https://waleedtariq.com/" />
@@ -47,42 +59,45 @@
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://waleedtariq.com/" />
     <meta property="og:title" content="Waleed Tariq | Software Engineer" />
-    <meta property="og:description" content="Waleed Tariq, Software Engineer based in Manchester, UK. Specialising in Java, Spring Boot, Kubernetes, and AWS with 3+ years of experience building reliable backend systems." />
+    <meta
+      property="og:description"
+      content="Waleed Tariq, Software Engineer based in Manchester, UK. Specialising in Java, Spring Boot, Kubernetes, and AWS with 3+ years of experience building reliable backend systems."
+    />
     <meta property="og:site_name" content="Waleed Tariq" />
     <meta property="og:image" content="https://waleedtariq.com/og-image.png?v=2" />
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Waleed Tariq | Software Engineer" />
-    <meta name="twitter:description" content="Waleed Tariq, Software Engineer based in Manchester, UK. Specialising in Java, Spring Boot, Kubernetes, and AWS with 3+ years of experience building reliable backend systems." />
+    <meta
+      name="twitter:description"
+      content="Waleed Tariq, Software Engineer based in Manchester, UK. Specialising in Java, Spring Boot, Kubernetes, and AWS with 3+ years of experience building reliable backend systems."
+    />
     <meta name="twitter:image" content="https://waleedtariq.com/og-image.png?v=2" />
 
     <!-- Structured Data -->
     <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Person",
-      "name": "Waleed Tariq",
-      "url": "https://waleedtariq.com",
-      "image": "https://waleedtariq.com/favicon_io/android-chrome-512x512.png",
-      "jobTitle": "Software Engineer",
-      "worksFor": {
-        "@type": "Organization",
-        "name": "Sainsbury's"
-      },
-      "address": {
-        "@type": "PostalAddress",
-        "addressLocality": "Manchester",
-        "addressCountry": "GB"
-      },
-      "knowsAbout": ["Java", "Spring Boot", "Kubernetes", "AWS", "Backend Engineering"],
-      "sameAs": [
-        "https://github.com/Waleed2660",
-        "https://www.linkedin.com/in/waleed-t/"
-      ]
-    }
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Waleed Tariq",
+        "url": "https://waleedtariq.com",
+        "image": "https://waleedtariq.com/favicon_io/android-chrome-512x512.png",
+        "jobTitle": "Software Engineer",
+        "worksFor": {
+          "@type": "Organization",
+          "name": "Sainsbury's"
+        },
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Manchester",
+          "addressCountry": "GB"
+        },
+        "knowsAbout": ["Java", "Spring Boot", "Kubernetes", "AWS", "Backend Engineering"],
+        "sameAs": ["https://github.com/Waleed2660", "https://www.linkedin.com/in/waleed-t/"]
+      }
     </script>
-    <script type="module" crossorigin src="/assets/index-DcvNavI5.js"></script>
+    <script type="module" crossorigin src="/assets/index-BlxCvpOy.js"></script>
     <link rel="modulepreload" crossorigin href="/assets/vendor-CQeHmLAp.js">
     <link rel="stylesheet" crossorigin href="/assets/index-UU53eREy.css">
   </head>
@@ -93,19 +108,26 @@
     <div id="root"></div>
     <!-- SPA redirect handler for GitHub Pages 404.html -->
     <script>
-      (function(l) {
-        if (l.search[1] === '/') {
-          var decoded = l.search.slice(1).split('&').map(function(s) {
-            return s.replace(/~and~/g, '&')
-          }).join('?');
+      (function (l) {
+        if (l.search[1] === "/") {
+          var decoded = l.search
+            .slice(1)
+            .split("&")
+            .map(function (s) {
+              return s.replace(/~and~/g, "&");
+            })
+            .join("?");
           window.history.replaceState(null, null, l.pathname.slice(0, -1) + decoded + l.hash);
         }
-      }(window.location))
+      })(window.location);
     </script>
     <!-- Static content for search engine crawlers (SPA pre-render fallback) -->
     <noscript>
       <h1>Waleed Tariq | Software Engineer</h1>
-      <p>Software Engineer based in Manchester, UK. Specialising in Java, Spring Boot, Kubernetes, and AWS with 3+ years of experience building reliable backend systems.</p>
+      <p>
+        Software Engineer based in Manchester, UK. Specialising in Java, Spring Boot, Kubernetes,
+        and AWS with 3+ years of experience building reliable backend systems.
+      </p>
       <p>Currently working at Sainsbury's. Previously at THG.</p>
     </noscript>
   </body>
