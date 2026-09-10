@@ -63,8 +63,7 @@ const conferences: Conference[] = [
     photos: [
       { src: "/conferences/hackathon_2026/hackathon_4.webp", alt: "Hackathon finale", span: "row" },
       { src: "/conferences/hackathon_2026/hackathon_2.webp", alt: "Team at the hackathon", span: "col" },
-      { src: "/conferences/hackathon_2026/hackathon_3.webp", alt: "Hackathon presentation" },
-      { src: "/conferences/hackathon_2026/hackathon_1.webp", alt: "Sainsbury's Tech Hackathon 2026" },
+      { src: "/conferences/hackathon_2026/hackathon_3.webp", alt: "Hackathon presentation", span: "col" },
     ],
   },
   {
