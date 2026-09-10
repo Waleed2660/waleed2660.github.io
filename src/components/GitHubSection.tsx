@@ -77,10 +77,10 @@ type CalendarDay = { date: string; count: number } | null;
 
 const LEVEL_COLORS = [
   "bg-slate-900/10 dark:bg-white/15",
-  "bg-violet-300/70 dark:bg-violet-800",
-  "bg-violet-400 dark:bg-violet-700",
-  "bg-violet-500 dark:bg-violet-600",
-  "bg-violet-700 dark:bg-violet-400",
+  "bg-violet-400/80 dark:bg-violet-800",
+  "bg-violet-500 dark:bg-violet-700",
+  "bg-violet-600 dark:bg-violet-600",
+  "bg-violet-800 dark:bg-violet-400",
 ];
 
 const levelFor = (count: number, max: number) => {
