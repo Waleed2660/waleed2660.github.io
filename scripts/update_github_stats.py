@@ -143,15 +143,6 @@ def compute_streak_stats(user):
         return {'totalContributions': 0, 'currentStreak': 0, 'longestStreak': 0}, {}
 
 
-def last_year_calendar(all_days, now):
-    """Returns {date: count} for the trailing ~53 weeks, matching the
-    GitHub profile contribution graph window."""
-    start = now - timedelta(weeks=53)
-    return {
-        date: count
-        for date, count in all_days.items()
-        if datetime.strptime(date, '%Y-%m-%d').replace(tzinfo=timezone.utc) >= start
-    }
 
 
 def compute_repo_stats(own_repos):
@@ -188,7 +179,6 @@ def main():
 
     stars, languages, repo_stats = compute_repo_stats(own_repos)
     streak, all_days = compute_streak_stats(user)
-    calendar = last_year_calendar(all_days, datetime.now(timezone.utc)) if all_days else {}
 
     output = {
         'followers': user['followers'],
@@ -197,11 +187,18 @@ def main():
         'repos': repo_stats,
         'languages': languages,
         'streak': streak,
-        'calendar': calendar,
     }
 
     with open('public/github-stats.json', 'w') as f:
         json.dump(output, f, indent=2)
+
+    # Kept in a separate file since it grows by ~365 entries/year and isn't
+    # needed by the rest of the page (only the ContributionGraph component
+    # fetches it, lazily, while github-stats.json is fetched immediately).
+    # Full history (not just the trailing year) is kept so the graph's year
+    # selector can show past calendar years too.
+    with open('public/github-calendar.json', 'w') as f:
+        json.dump({'calendar': all_days}, f, indent=2)
 
     print('Written:', json.dumps(output, indent=2))
 

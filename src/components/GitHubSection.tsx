@@ -44,7 +44,6 @@ interface GitHubStats {
   stars: number;
   languages: Language[];
   streak?: StreakStats;
-  calendar?: Record<string, number>;
 }
 
 const formatDate = (iso?: string | null) => {
@@ -135,13 +134,71 @@ const MONTH_LABELS = [
 ];
 
 const ContributionGraph = ({ calendar }: { calendar: Record<string, number> }) => {
-  const weeks = useMemo(() => buildWeeks(calendar), [calendar]);
-  const max = useMemo(() => Math.max(0, ...Object.values(calendar)), [calendar]);
+  const allDates = useMemo(() => Object.keys(calendar).sort(), [calendar]);
+  const latestDate = allDates[allDates.length - 1];
+
+  const years = useMemo(() => {
+    const set = new Set(allDates.map((d) => d.slice(0, 4)));
+    return Array.from(set).sort((a, b) => Number(b) - Number(a));
+  }, [allDates]);
+
+  // "" = trailing 12 months ending on the latest available day (default,
+  // matches the GitHub profile graph); a specific year shows Jan-Dec of it.
+  const [selectedYear, setSelectedYear] = useState("");
+
+  const filteredCalendar = useMemo(() => {
+    if (!latestDate) return calendar;
+    if (selectedYear) {
+      return Object.fromEntries(
+        Object.entries(calendar).filter(([date]) => date.startsWith(selectedYear))
+      );
+    }
+    const cutoff = new Date(`${latestDate}T00:00:00Z`);
+    cutoff.setUTCDate(cutoff.getUTCDate() - 371);
+    return Object.fromEntries(
+      Object.entries(calendar).filter(([date]) => new Date(`${date}T00:00:00Z`) >= cutoff)
+    );
+  }, [calendar, latestDate, selectedYear]);
+
+  const weeks = useMemo(() => buildWeeks(filteredCalendar), [filteredCalendar]);
+  const max = useMemo(() => Math.max(0, ...Object.values(filteredCalendar)), [filteredCalendar]);
+
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [visibleCount, setVisibleCount] = useState(weeks.length);
+
+  // Cell + gap sizing must match the classes below (w-3 = 12px, gap-1 = 4px).
+  const CELL_PX = 12;
+  const GAP_PX = 4;
+  const DAY_LABEL_PX = 32; // w-8 reserved for the Sun/Tue/Thu/Sat column
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    const recompute = (width: number) => {
+      const available = width - DAY_LABEL_PX;
+      const fit = Math.max(1, Math.floor((available + GAP_PX) / (CELL_PX + GAP_PX)));
+      setVisibleCount(fit);
+    };
+
+    recompute(el.clientWidth);
+    const observer = new ResizeObserver(([entry]) => recompute(entry.contentRect.width));
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  // Always keep the most recent weeks in view, dropping older ones off the
+  // left edge instead of shrinking cells or scrolling — the latest day is
+  // always visible without any user interaction.
+  const visibleWeeks = useMemo(
+    () => weeks.slice(Math.max(0, weeks.length - visibleCount)),
+    [weeks, visibleCount]
+  );
 
   const monthLabels = useMemo(() => {
     const labels: { index: number; label: string }[] = [];
     let lastMonth = -1;
-    weeks.forEach((week, i) => {
+    visibleWeeks.forEach((week, i) => {
       const firstDay = week.find((d) => d);
       if (!firstDay) return;
       const month = new Date(`${firstDay.date}T00:00:00Z`).getUTCMonth();
@@ -150,20 +207,36 @@ const ContributionGraph = ({ calendar }: { calendar: Record<string, number> }) =
         lastMonth = month;
       }
     });
-    return labels;
-  }, [weeks]);
+    // Drop a label that would visually collide with the next one (each
+    // week column is 16px, a 3-letter month label needs ~3 columns).
+    return labels.filter((m, i) => i === labels.length - 1 || labels[i + 1].index - m.index >= 3);
+  }, [visibleWeeks]);
 
   if (!weeks.length) return null;
 
   return (
     <TooltipProvider delayDuration={100}>
-      <div className="overflow-x-auto">
-        <div className="inline-flex flex-col gap-1 min-w-full">
+      <div className="flex justify-end mb-3">
+        <select
+          value={selectedYear}
+          onChange={(e) => setSelectedYear(e.target.value)}
+          className="text-xs bg-transparent border border-slate-900/10 dark:border-white/15 rounded-lg px-2 py-1 text-slate-500 dark:text-white/60 focus:outline-none focus:ring-1 focus:ring-violet-500 cursor-pointer"
+        >
+          <option value="">Last 12 months</option>
+          {years.map((y) => (
+            <option key={y} value={y}>
+              {y}
+            </option>
+          ))}
+        </select>
+      </div>
+      <div ref={containerRef} className="w-full">
+        <div className="flex flex-col gap-1">
           <div className="flex gap-1 pl-8 text-[11px] text-slate-400 dark:text-white/40">
-            {weeks.map((_, i) => {
+            {visibleWeeks.map((_, i) => {
               const match = monthLabels.find((m) => m.index === i);
               return (
-                <div key={i} className="w-3 flex-shrink-0">
+                <div key={i} className="w-3 flex-shrink-0 whitespace-nowrap">
                   {match ? match.label : ""}
                 </div>
               );
@@ -177,14 +250,14 @@ const ContributionGraph = ({ calendar }: { calendar: Record<string, number> }) =
               <span>Sat</span>
             </div>
             <div className="flex gap-1">
-              {weeks.map((week, wi) => (
+              {visibleWeeks.map((week, wi) => (
                 <div key={wi} className="flex flex-col gap-1">
                   {week.map((day, di) =>
                     day ? (
                       <Tooltip key={di}>
                         <TooltipTrigger asChild>
                           <div
-                            className={`w-3 h-3 rounded-sm ${LEVEL_COLORS[levelFor(day.count, max)]} hover:ring-1 hover:ring-slate-400 dark:hover:ring-white/50 transition-all cursor-default`}
+                            className={`w-3 h-3 rounded-sm flex-shrink-0 ${LEVEL_COLORS[levelFor(day.count, max)]} hover:ring-1 hover:ring-slate-400 dark:hover:ring-white/50 transition-all cursor-default`}
                           />
                         </TooltipTrigger>
                         <TooltipContent>
@@ -193,7 +266,7 @@ const ContributionGraph = ({ calendar }: { calendar: Record<string, number> }) =
                         </TooltipContent>
                       </Tooltip>
                     ) : (
-                      <div key={di} className="w-3 h-3" />
+                      <div key={di} className="w-3 h-3 flex-shrink-0" />
                     )
                   )}
                 </div>
@@ -208,12 +281,18 @@ const ContributionGraph = ({ calendar }: { calendar: Record<string, number> }) =
 
 const GitHubSection = () => {
   const [stats, setStats] = useState<GitHubStats | null>(null);
+  const [calendar, setCalendar] = useState<Record<string, number> | null>(null);
   const chartRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     fetch("/github-stats.json")
       .then((r) => r.json())
       .then((data: GitHubStats) => setStats(data))
+      .catch(() => {});
+
+    fetch("/github-calendar.json")
+      .then((r) => r.json())
+      .then((data: { calendar: Record<string, number> }) => setCalendar(data.calendar))
       .catch(() => {});
   }, []);
 
@@ -361,8 +440,8 @@ const GitHubSection = () => {
           <p className="text-slate-400 dark:text-white/40 text-xs uppercase tracking-widest mb-4">
             Contribution Graph
           </p>
-          {stats?.calendar ? (
-            <ContributionGraph calendar={stats.calendar} />
+          {calendar ? (
+            <ContributionGraph calendar={calendar} />
           ) : (
             <img
               src={`https://ghchart.rshah.org/${CHART_COLOR}/${USERNAME}`}
