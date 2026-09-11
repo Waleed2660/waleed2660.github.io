@@ -216,7 +216,10 @@ const ContributionGraph = ({ calendar }: { calendar: Record<string, number> }) =
 
   return (
     <TooltipProvider delayDuration={100}>
-      <div className="flex justify-end mb-3">
+      <div className="flex items-center justify-between mb-4">
+        <p className="text-slate-400 dark:text-white/40 text-xs uppercase tracking-widest">
+          Contribution Graph
+        </p>
         <select
           value={selectedYear}
           onChange={(e) => setSelectedYear(e.target.value)}
@@ -307,24 +310,75 @@ const GitHubSection = () => {
             <p className="text-slate-400 dark:text-white/40 text-xs uppercase tracking-widest mb-5">
               Stats
             </p>
-            <div className="grid grid-cols-3 gap-4 text-center flex-1 content-center">
-              <div className="glass rounded-2xl py-6 px-2">
+            <div className="grid grid-cols-3 gap-4 text-center pb-6 border-b border-slate-900/10 dark:border-white/10">
+              <div className="flex flex-col items-center gap-1 py-2">
                 <div className="text-2xl font-bold text-yellow-700 dark:text-yellow-300">
                   {stats ? stats.stars : "N/A"}
                 </div>
-                <div className="text-slate-500 dark:text-white/50 text-xs mt-1">Stars</div>
+                <div className="text-slate-500 dark:text-white/50 text-xs">Stars</div>
               </div>
-              <div className="glass rounded-2xl py-6 px-2">
+              <div className="flex flex-col items-center gap-1 py-2">
                 <div className="text-2xl font-bold text-blue-600 dark:text-blue-300">
                   {stats ? stats.followers : "N/A"}
                 </div>
-                <div className="text-slate-500 dark:text-white/50 text-xs mt-1">Followers</div>
+                <div className="text-slate-500 dark:text-white/50 text-xs">Followers</div>
               </div>
-              <div className="glass rounded-2xl py-6 px-2">
+              <div className="flex flex-col items-center gap-1 py-2">
                 <div className="text-2xl font-bold text-purple-600 dark:text-purple-300">
                   {stats ? stats.public_repos : "N/A"}
                 </div>
-                <div className="text-slate-500 dark:text-white/50 text-xs mt-1">Repos</div>
+                <div className="text-slate-500 dark:text-white/50 text-xs">Repos</div>
+              </div>
+            </div>
+
+            {/* Streak — computed server-side (see scripts/update_github_stats.py)
+                by reading GitHub's own public contribution calendar and
+                rendered natively, rather than embedding the third-party
+                streak-stats.demolab.com badge (a free Heroku app prone to
+                downtime/rate-limiting, which is what broke it before). */}
+            <div className="grid grid-cols-3 divide-x divide-slate-900/10 dark:divide-white/10 mt-6 pt-2 flex-1">
+              <div className="flex flex-col items-center text-center gap-2 px-1">
+                <CalendarDays className="w-4 h-4 text-slate-400 dark:text-white/40" />
+                <div className="text-xl font-bold text-slate-800 dark:text-white">
+                  {stats?.streak ? stats.streak.totalContributions.toLocaleString() : "N/A"}
+                </div>
+                <div className="text-slate-500 dark:text-white/50 text-[10px] uppercase tracking-wide leading-tight">
+                  Total Contributions
+                </div>
+                {stats?.streak?.since && (
+                  <div className="text-slate-400 dark:text-white/30 text-[10px]">
+                    Since {formatDate(stats.streak.since)}
+                  </div>
+                )}
+              </div>
+              <div className="flex flex-col items-center text-center gap-2 px-1">
+                <Flame className="w-4 h-4 text-orange-500" />
+                <div className="text-xl font-bold text-orange-600 dark:text-orange-400">
+                  {stats?.streak ? stats.streak.currentStreak : "N/A"}
+                </div>
+                <div className="text-slate-500 dark:text-white/50 text-[10px] uppercase tracking-wide leading-tight">
+                  Current Streak
+                </div>
+                <div className="text-slate-400 dark:text-white/30 text-[10px]">
+                  {stats?.streak?.currentStreak
+                    ? `${formatShortDate(stats.streak.currentStreakStart)} – Present`
+                    : "No active streak"}
+                </div>
+              </div>
+              <div className="flex flex-col items-center text-center gap-2 px-1">
+                <Trophy className="w-4 h-4 text-amber-500" />
+                <div className="text-xl font-bold text-slate-800 dark:text-white">
+                  {stats?.streak ? stats.streak.longestStreak : "N/A"}
+                </div>
+                <div className="text-slate-500 dark:text-white/50 text-[10px] uppercase tracking-wide leading-tight">
+                  Longest Streak
+                </div>
+                {stats?.streak?.longestStreakStart && (
+                  <div className="text-slate-400 dark:text-white/30 text-[10px]">
+                    {formatShortDate(stats.streak.longestStreakStart)} –{" "}
+                    {formatShortDate(stats.streak.longestStreakEnd)}
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -373,87 +427,33 @@ const GitHubSection = () => {
           </div>
         </div>
 
-        {/* Full-width Streak card — computed server-side (see
-            scripts/update_github_stats.py) by reading GitHub's own public
-            contribution calendar and rendered natively, rather than embedding
-            the third-party streak-stats.demolab.com badge (a free Heroku app
-            prone to downtime/rate-limiting, which is what broke it before). */}
-        <div className="glass-strong rounded-3xl p-8 mt-6 hover:scale-[1.02] hover:bg-slate-900/5 dark:hover:bg-white/10 transition-all duration-500">
-          <p className="text-slate-400 dark:text-white/40 text-xs uppercase tracking-widest mb-5">
-            Streak
-          </p>
-          <div className="grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-slate-900/10 dark:divide-white/10">
-            <div className="flex flex-col items-center text-center gap-2 pb-5 sm:pb-0 sm:pr-4">
-              <CalendarDays className="w-5 h-5 text-slate-400 dark:text-white/40" />
-              <div className="text-3xl font-bold text-slate-800 dark:text-white">
-                {stats?.streak ? stats.streak.totalContributions.toLocaleString() : "N/A"}
-              </div>
-              <div className="text-slate-500 dark:text-white/50 text-xs uppercase tracking-wide">
-                Total Contributions
-              </div>
-              {stats?.streak?.since && (
-                <div className="text-slate-400 dark:text-white/30 text-[11px]">
-                  Since {formatDate(stats.streak.since)}
-                </div>
-              )}
-            </div>
-            <div className="flex flex-col items-center text-center gap-2 py-5 sm:py-0 sm:px-4">
-              <Flame className="w-5 h-5 text-orange-500" />
-              <div className="text-3xl font-bold text-orange-600 dark:text-orange-400">
-                {stats?.streak ? stats.streak.currentStreak : "N/A"}
-              </div>
-              <div className="text-slate-500 dark:text-white/50 text-xs uppercase tracking-wide">
-                Current Streak
-              </div>
-              <div className="text-slate-400 dark:text-white/30 text-[11px]">
-                {stats?.streak?.currentStreak
-                  ? `${formatShortDate(stats.streak.currentStreakStart)} – Present`
-                  : "No active streak"}
-              </div>
-            </div>
-            <div className="flex flex-col items-center text-center gap-2 pt-5 sm:pt-0 sm:pl-4">
-              <Trophy className="w-5 h-5 text-amber-500" />
-              <div className="text-3xl font-bold text-slate-800 dark:text-white">
-                {stats?.streak ? stats.streak.longestStreak : "N/A"}
-              </div>
-              <div className="text-slate-500 dark:text-white/50 text-xs uppercase tracking-wide">
-                Longest Streak
-              </div>
-              {stats?.streak?.longestStreakStart && (
-                <div className="text-slate-400 dark:text-white/30 text-[11px]">
-                  {formatShortDate(stats.streak.longestStreakStart)} –{" "}
-                  {formatShortDate(stats.streak.longestStreakEnd)}
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-
         {/* Full-width Contribution Graph — native SVG-free grid rendered from
-            calendar data in github-stats.json (same source as the Streak
-            card), replacing the ghchart.rshah.org badge image so each day
-            cell can show its contribution count on hover. */}
+            calendar data in github-calendar.json, replacing the
+            ghchart.rshah.org badge image so each day cell can show its
+            contribution count on hover. */}
         <div
           ref={chartRef}
           className="glass-strong rounded-3xl p-8 mt-6 hover:scale-[1.02] hover:bg-slate-900/5 dark:hover:bg-white/10 transition-all duration-500"
         >
-          <p className="text-slate-400 dark:text-white/40 text-xs uppercase tracking-widest mb-4">
-            Contribution Graph
-          </p>
           {calendar ? (
             <ContributionGraph calendar={calendar} />
           ) : (
-            <img
-              src={`https://ghchart.rshah.org/${CHART_COLOR}/${USERNAME}`}
-              alt="GitHub contribution graph"
-              width="800"
-              height="128"
-              loading="lazy"
-              className="w-full rounded-xl opacity-75 hover:opacity-100 transition-opacity duration-300"
-              onError={(e) => {
-                (e.target as HTMLImageElement).parentElement!.style.display = "none";
-              }}
-            />
+            <>
+              <p className="text-slate-400 dark:text-white/40 text-xs uppercase tracking-widest mb-4">
+                Contribution Graph
+              </p>
+              <img
+                src={`https://ghchart.rshah.org/${CHART_COLOR}/${USERNAME}`}
+                alt="GitHub contribution graph"
+                width="800"
+                height="128"
+                loading="lazy"
+                className="w-full rounded-xl opacity-75 hover:opacity-100 transition-opacity duration-300"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).parentElement!.style.display = "none";
+                }}
+              />
+            </>
           )}
         </div>
       </div>
