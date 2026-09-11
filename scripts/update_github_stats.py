@@ -124,25 +124,62 @@ def compute_streaks(all_days, now):
 
 
 def compute_streak_stats(user):
+    created_at = user.get('created_at', '2017-01-01T00:00:00Z')
+    all_days, created, now = fetch_all_contribution_days(created_at)
+    result = compute_streaks(all_days, now)
+    return {
+        'totalContributions': sum(all_days.values()),
+        'since': created.strftime('%Y-%m-%d'),
+        'currentStreak': result['current'],
+        'currentStreakStart': result['current_start'],
+        'currentStreakEnd': result['current_end'],
+        'longestStreak': result['longest'],
+        'longestStreakStart': result['longest_start'],
+        'longestStreakEnd': result['longest_end'],
+    }, all_days
+
+
+
+
+def load_json_safe(path):
     try:
-        created_at = user.get('created_at', '2017-01-01T00:00:00Z')
-        all_days, created, now = fetch_all_contribution_days(created_at)
-        result = compute_streaks(all_days, now)
-        return {
-            'totalContributions': sum(all_days.values()),
-            'since': created.strftime('%Y-%m-%d'),
-            'currentStreak': result['current'],
-            'currentStreakStart': result['current_start'],
-            'currentStreakEnd': result['current_end'],
-            'longestStreak': result['longest'],
-            'longestStreakStart': result['longest_start'],
-            'longestStreakEnd': result['longest_end'],
-        }, all_days
-    except Exception as e:
-        print('Failed to compute streak stats:', e)
-        return {'totalContributions': 0, 'currentStreak': 0, 'longestStreak': 0}, {}
+        with open(path) as f:
+            return json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError):
+        return None
 
 
+def validate_output(output, calendar):
+    """Sanity-checks freshly fetched data against the previously committed
+    files before anything is written, so a GitHub API/HTML hiccup (empty
+    response, rate limit, markup change, etc.) can't silently overwrite
+    known-good stats with zeroed-out or truncated data."""
+    errors = []
+
+    if not calendar:
+        errors.append('calendar is empty')
+    elif len(calendar) < 300:
+        errors.append(f'calendar has too few days ({len(calendar)})')
+
+    new_total = output.get('streak', {}).get('totalContributions', 0)
+    if new_total <= 0:
+        errors.append('totalContributions is zero')
+
+    existing_stats = load_json_safe('public/github-stats.json')
+    if existing_stats:
+        old_total = existing_stats.get('streak', {}).get('totalContributions', 0)
+        # Contribution totals only ever grow over time; a drop means the
+        # fetch was incomplete/garbled.
+        if new_total < old_total:
+            errors.append(f'totalContributions decreased ({old_total} -> {new_total})')
+
+    existing_calendar = load_json_safe('public/github-calendar.json')
+    if existing_calendar:
+        old_days = len(existing_calendar.get('calendar', {}))
+        if len(calendar) < old_days:
+            errors.append(f'calendar shrank ({old_days} -> {len(calendar)} days)')
+
+    return errors
 
 
 def compute_repo_stats(own_repos):
@@ -188,6 +225,13 @@ def main():
         'languages': languages,
         'streak': streak,
     }
+
+    errors = validate_output(output, all_days)
+    if errors:
+        print('Refusing to write stats — validation failed:')
+        for e in errors:
+            print(' -', e)
+        raise SystemExit(1)
 
     with open('public/github-stats.json', 'w') as f:
         json.dump(output, f, indent=2)
