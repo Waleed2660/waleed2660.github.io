@@ -27,7 +27,7 @@ jobs:
         run: |
           git config user.name "Waleed2660"
           git config user.email "$GIT_EMAIL"
-          git add public/github-stats.json
+          git add public/github-stats.json public/github-calendar.json
           if git diff --staged --quiet; then
             echo "changed=false" >> "$GITHUB_ENV"
           else
