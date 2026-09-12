@@ -76,6 +76,7 @@
     --brand-spotlight: 234 170 70;
 
     --html-bg: #0f0f23;
+    --page-gradient: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
     --glass-bg: rgba(255, 255, 255, 0.04);
     --glass-strong-bg: rgba(255, 255, 255, 0.05);
     --glass-border: rgba(255, 255, 255, 0.07);
@@ -150,6 +151,7 @@
     /* Cards are solid white and the page field is a muted slate, so cards
        actually separate from the background instead of dissolving into it. */
     --html-bg: #dfe4ee;
+    --page-gradient: linear-gradient(135deg, #e3e8f1 0%, #dde3ee 45%, #e0e5f0 100%);
     --glass-bg: rgba(255, 255, 255, 0.92);
     --glass-strong-bg: #ffffff;
     --glass-border: rgba(100, 116, 139, 0.28);
@@ -247,33 +249,29 @@
   }
 }
 
-/* Crossfading full-viewport background layers so switching themes fades
-   smoothly between the dark and light gradients instead of snapping —
-   background-image/gradients can't be transitioned directly. */
+/* Full-viewport background gradient layer, kept as a single fixed element.
+   iOS Safari's tab/toolbar tinting reads the raw background-color of fixed
+   full-viewport elements near the top/bottom edges — and does so regardless
+   of opacity. Two overlapping fixed layers (one per theme, cross-faded via
+   opacity) made Safari latch onto whichever layer's color it sampled first
+   and get stuck there after a theme toggle until the page was reloaded.
+   A single layer whose gradient swaps with the theme class removes the
+   competing element entirely; the View Transition API (see use-theme.tsx)
+   handles the smooth crossfade for browsers that support it, and this
+   transition is the graceful fallback for those that don't. */
 .theme-bg-layer {
   position: fixed;
   inset: 0;
   z-index: -1;
   pointer-events: none;
-  transition: opacity 450ms ease;
-}
-
-.theme-bg-layer--dark {
-  background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
-  opacity: 1;
-}
-
-.theme-bg-layer--light {
-  background: linear-gradient(135deg, #e3e8f1 0%, #dde3ee 45%, #e0e5f0 100%);
-  opacity: 0;
-}
-
-html:not(.dark) .theme-bg-layer--dark {
-  opacity: 0;
-}
-
-html:not(.dark) .theme-bg-layer--light {
-  opacity: 1;
+  /* Solid background-color first: this is the sub-property iOS Safari's
+     toolbar tinting actually reads on fixed elements, and it must resolve to
+     a real theme color, not "transparent" (which is what the `background`
+     shorthand alone leaves it as once an image is set). The gradient is
+     layered on top purely for visual richness. */
+  background-color: var(--html-bg);
+  background-image: var(--page-gradient);
+  transition: background-color 450ms ease;
 }
 
 /* View Transitions API — smooth whole-page crossfade for theme switches */
