@@ -17,10 +17,10 @@
           // no flash of the browser's default white background while the
           // stylesheet (which sets this via CSS vars) is still loading/injecting —
           // most noticeable in the Vite dev server, which injects CSS via JS.
-          document.documentElement.style.backgroundColor = isDark ? "#0f0f23" : "#f2f5fb";
+          document.documentElement.style.backgroundColor = isDark ? "#0f0f23" : "#dfe4ee";
           var meta = document.querySelector('meta[name="theme-color"]');
           if (meta) {
-            meta.setAttribute("content", isDark ? "#0f0f23" : "#eef0fc");
+            meta.setAttribute("content", isDark ? "#0f0f23" : "#dfe4ee");
           }
         } catch (e) {
           document.documentElement.classList.add("dark");

@@ -161,7 +161,7 @@ const conferences: Conference[] = [
     date: "May 2025",
     location: "London, UK",
     emoji: "🎤",
-    accentColor: "from-violet-500/20 to-blue-500/10",
+    accentColor: "from-brand/25 to-brand/5",
     tagline: "Europe's largest Java & JVM developer conference",
     summary:
       "Spent two days at Business Design Centre surrounded by hundreds of engineers deep-diving into the Java ecosystem, distributed systems, AI integration, and the broader craft of software engineering. A mix of deep technical talks, lightning sessions, and hallway conversations that reinforced just how fast the industry is moving.",
@@ -351,9 +351,7 @@ const ConferencesSection = () => {
   return (
     <section className="flex items-center justify-center px-6 py-24 relative z-20">
       <div className="max-w-6xl w-full">
-        <h2 className="text-4xl md:text-6xl font-bold text-center mb-4 text-glow relative">
-          On The Ground
-        </h2>
+        <h2 className="text-4xl md:text-6xl font-bold text-center mb-4 relative">Conferences</h2>
         <p className="text-center text-slate-500 dark:text-white/50 mb-16 text-lg">
           Conferences, meetups & events: things I attended and what I took away
         </p>
@@ -387,7 +385,7 @@ const ConferencesSection = () => {
                   )}
                   <div>
                     <div className="flex items-center gap-3 flex-wrap">
-                      <h3 className="text-2xl font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-300 transition-colors">
+                      <h3 className="text-2xl font-bold text-slate-900 dark:text-white group-hover:text-brand transition-colors">
                         {conf.name}
                       </h3>
                     </div>
@@ -421,7 +419,8 @@ const ConferencesSection = () => {
                   <div>
                     <button
                       onClick={() => setExpandedTalks((p) => ({ ...p, [index]: !p[index] }))}
-                      className="flex items-center gap-2 text-slate-400 dark:text-white/40 text-xs uppercase tracking-widest font-semibold mb-3 hover:text-slate-700 dark:hover:text-white/70 transition-colors"
+                      className="flex items-center gap-2 -mx-2 px-2 min-h-[44px] rounded-lg text-slate-400 dark:text-white/40 text-xs uppercase tracking-widest font-semibold mb-1 hover:text-slate-700 dark:hover:text-white/70 transition-colors"
+                      aria-expanded={!!expandedTalks[index]}
                     >
                       {expandedTalks[index] ? (
                         <ChevronUp className="w-3.5 h-3.5" />
@@ -438,7 +437,7 @@ const ConferencesSection = () => {
                         {conf.talks.map((talk, ti) => (
                           <div
                             key={ti}
-                            className="glass rounded-2xl px-4 py-3 border-l-2 border-blue-600/50 dark:border-blue-400/30"
+                            className="glass rounded-2xl px-4 py-3 border border-brand/30"
                           >
                             <p className="text-slate-900 dark:text-white/90 text-sm font-medium mb-1">
                               {talk.title}
@@ -477,7 +476,7 @@ const ConferencesSection = () => {
                         href={link.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center gap-2 glass rounded-xl px-4 py-2 text-slate-500 dark:text-white/60 text-xs hover:text-blue-600 dark:hover:text-blue-300 hover:bg-slate-900/5 dark:hover:bg-white/10 transition-all group/link"
+                        className="flex items-center gap-2 glass rounded-xl px-4 py-2 min-h-[44px] text-slate-500 dark:text-white/60 text-xs hover:text-brand hover:bg-slate-900/5 dark:hover:bg-white/10 transition-all group/link"
                       >
                         {link.icon ? (
                           <img

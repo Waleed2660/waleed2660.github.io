@@ -103,9 +103,7 @@ const ProjectsSection = () => {
   return (
     <section className="flex items-center justify-center px-6 py-24 relative z-20">
       <div className="max-w-6xl w-full">
-        <h2 className="text-4xl md:text-6xl font-bold text-center mb-16 text-glow relative">
-          Projects
-        </h2>
+        <h2 className="text-4xl md:text-6xl font-bold text-center mb-16 relative">Projects</h2>
         <div className="flex flex-col gap-8">
           {/* Pinned project - full width */}
           {projects
@@ -131,7 +129,7 @@ const ProjectsSection = () => {
                     </div>
                     <div className="flex flex-col flex-1">
                       <div className="flex items-center gap-3 mb-1 flex-wrap">
-                        <h3 className="text-2xl font-semibold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-300 transition-colors">
+                        <h3 className="text-2xl font-semibold text-slate-900 dark:text-white group-hover:text-brand transition-colors">
                           {project.title}
                         </h3>
                         {stats && (
@@ -155,9 +153,7 @@ const ProjectsSection = () => {
                               key={pi}
                               className="flex items-start gap-2 text-slate-500 dark:text-white/60 text-sm"
                             >
-                              <span className="text-blue-600/80 dark:text-blue-400/70 mt-0.5 flex-shrink-0">
-                                ▸
-                              </span>
+                              <span className="text-brand/80 mt-0.5 flex-shrink-0">▸</span>
                               {point}
                             </li>
                           ))}
@@ -178,7 +174,7 @@ const ProjectsSection = () => {
                           href={project.github}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex items-center gap-2 text-slate-500 dark:text-white/50 hover:text-blue-600 dark:hover:text-blue-300 transition-colors group/link ml-4 flex-shrink-0"
+                          className="flex items-center gap-2 min-h-[44px] text-slate-500 dark:text-white/50 hover:text-brand transition-colors group/link ml-4 flex-shrink-0"
                         >
                           <span className="text-sm opacity-40 group-hover/link:opacity-100 transition-opacity">
                             View Code
@@ -218,7 +214,7 @@ const ProjectsSection = () => {
                         className="w-10 h-10 object-contain brightness-90 group-hover:brightness-100 transition-all"
                       />
                       <div className="flex items-center gap-2 flex-wrap">
-                        <h3 className="text-2xl font-semibold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-300 transition-colors">
+                        <h3 className="text-2xl font-semibold text-slate-900 dark:text-white group-hover:text-brand transition-colors">
                           {project.title}
                         </h3>
                       </div>
@@ -242,7 +238,7 @@ const ProjectsSection = () => {
                           href={project.github}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex items-center gap-2 text-slate-500 dark:text-white/50 hover:text-blue-600 dark:hover:text-blue-300 transition-colors group/link"
+                          className="flex items-center gap-2 min-h-[44px] text-slate-500 dark:text-white/50 hover:text-brand transition-colors group/link"
                         >
                           <span className="text-sm opacity-40 group-hover/link:opacity-100 transition-opacity">
                             View Code

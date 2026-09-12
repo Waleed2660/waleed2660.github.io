@@ -19,6 +19,11 @@ export default {
       },
     },
     extend: {
+      fontFamily: {
+        sans: ["var(--font-sans)"],
+        display: ["var(--font-display)"],
+        mono: ["var(--font-mono)"],
+      },
       spacing: {
         "26": "104px",
         "27": "108px",
@@ -42,6 +47,11 @@ export default {
         "45": "180px",
       },
       colors: {
+        brand: {
+          DEFAULT: "hsl(var(--brand))",
+          strong: "hsl(var(--brand-strong))",
+          contrast: "hsl(var(--brand-contrast))",
+        },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

@@ -43,15 +43,15 @@ const ResearchSection = () => {
   return (
     <section className="flex items-center justify-center px-6 py-24 relative z-20">
       <div className="max-w-6xl w-full">
-        <h2 className="text-4xl md:text-6xl font-bold text-center mb-4 text-glow relative">
-          Research & Academia
+        <h2 className="text-4xl md:text-6xl font-bold text-center mb-4 relative">
+          Education & Research
         </h2>
         <p className="text-center text-slate-500 dark:text-white/50 mb-8 text-lg">
-          Exploring the intersection of AI, computer vision, and real-world problems
+          Where I studied, and the computer-vision research I took furthest
         </p>
 
         {/* Education strip */}
-        <div className="glass-strong rounded-2xl p-6 mb-8 border border-slate-200 dark:border-white/10 divide-y divide-slate-200 dark:divide-white/10">
+        <div className="glass-strong rounded-2xl p-6 mb-8 border border-slate-200 dark:border-white/10 divide-y divide-slate-200 dark:divide-white/10 hover:scale-[1.01] transition-all duration-500 will-change-transform">
           {educationHistory.map((edu, i) => (
             <div key={i} className={`${i > 0 ? "pt-4 mt-4" : ""}`}>
               <div className="flex flex-wrap items-center gap-6">
@@ -106,9 +106,9 @@ const ResearchSection = () => {
           ))}
         </div>
 
-        <div className="glass-strong rounded-3xl overflow-hidden transition-all duration-500">
+        <div className="glass-strong rounded-3xl overflow-hidden hover:scale-[1.01] transition-all duration-500 will-change-transform">
           <div
-            className="bg-gradient-to-r from-blue-500/20 to-purple-500/10 px-8 py-5 flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 dark:border-white/5 cursor-pointer hover:bg-slate-900/[0.03] dark:hover:bg-white/5 transition-colors duration-300 group"
+            className="bg-gradient-to-r from-brand/25 to-brand/5 px-8 py-5 flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 dark:border-white/5 cursor-pointer hover:bg-slate-900/[0.03] dark:hover:bg-white/5 transition-colors duration-300 group"
             onClick={() => navigate("/dissertation")}
           >
             <div className="flex items-center gap-4">
@@ -116,7 +116,7 @@ const ResearchSection = () => {
                 <span className="text-3xl">🎓</span>
               </div>
               <div>
-                <h3 className="text-2xl font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-300 transition-colors">
+                <h3 className="text-2xl font-bold text-slate-900 dark:text-white group-hover:text-brand transition-colors">
                   BSc Dissertation Project
                 </h3>
                 <p className="text-slate-500 dark:text-white/50 text-sm mt-0.5 italic">
@@ -124,7 +124,7 @@ const ResearchSection = () => {
                 </p>
               </div>
             </div>
-            <div className="flex items-center gap-2 text-sm text-blue-600 dark:text-blue-300">
+            <div className="flex items-center gap-2 text-sm text-brand">
               <span>Read More</span>
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </div>
@@ -202,7 +202,7 @@ const ResearchSection = () => {
               {/* View Full Paper button — left column */}
               <button
                 onClick={() => navigate("/dissertation")}
-                className="flex items-center justify-center gap-2 glass rounded-xl px-6 py-3 text-slate-700 dark:text-white/80 hover:text-blue-600 dark:hover:text-blue-300 hover:bg-slate-900/5 dark:hover:bg-white/10 transition-all group/btn mt-auto"
+                className="flex items-center justify-center gap-2 glass rounded-xl px-6 py-3 text-slate-700 dark:text-white/80 hover:text-brand hover:bg-slate-900/5 dark:hover:bg-white/10 transition-all group/btn mt-auto"
               >
                 <ExternalLink className="w-4 h-4" />
                 <span>View Full Research Paper</span>

@@ -13,9 +13,9 @@ const ContactSection = () => {
       title: "LinkedIn",
       subtitle: "Let's connect",
       href: "https://www.linkedin.com/in/waleed-t/",
-      gradient: "from-blue-500/20 to-cyan-500/20",
-      hoverGradient: "hover:from-blue-500/40 hover:to-cyan-500/40",
-      hoverColor: "group-hover:text-blue-500 dark:group-hover:text-blue-400",
+      gradient: "from-brand/20 to-brand/5",
+      hoverGradient: "hover:from-brand/40 hover:to-brand/15",
+      hoverColor: "group-hover:text-brand",
       isExternal: true,
     },
     {
@@ -23,9 +23,9 @@ const ContactSection = () => {
       title: "GitHub",
       subtitle: "Check out my code",
       href: "https://github.com/Waleed2660",
-      gradient: "from-purple-500/20 to-pink-500/20",
-      hoverGradient: "hover:from-purple-500/40 hover:to-pink-500/40",
-      hoverColor: "group-hover:text-purple-500 dark:group-hover:text-purple-400",
+      gradient: "from-brand/20 to-brand/5",
+      hoverGradient: "hover:from-brand/40 hover:to-brand/15",
+      hoverColor: "group-hover:text-brand",
       isExternal: true,
     },
     {
@@ -52,7 +52,7 @@ const ContactSection = () => {
     <section className="flex flex-col items-center justify-center px-6 py-24 min-h-screen">
       <div className="max-w-6xl w-full">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-6xl font-bold mb-6 text-glow">Let's Connect</h2>
+          <h2 className="text-4xl md:text-6xl font-bold mb-6 ">Let's Connect</h2>
           <p className="text-xl text-slate-500 dark:text-white/60 max-w-2xl mx-auto">
             Always open to discussing new opportunities, collaborations, or just a friendly chat
             about tech

@@ -1,5 +1,6 @@
-import { ChevronDown } from "lucide-react";
-import { useEffect, useState } from "react";
+import { ArrowRight, ChevronDown, FileText } from "lucide-react";
+import { Fragment } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const TYPING_TEXTS = [
   "Software Engineer @ Sainsbury's",
@@ -13,6 +14,18 @@ const CAREER_START = new Date(2022, 6, 1); // July 2022 — THG start
 const SHOW_AVAILABILITY = false; // Feature flag for availability status
 const NAME = "Waleed Tariq";
 
+// Each letter is its own inline-block so it can lift on hover, which also lets the
+// browser break the line between any two letters. Grouping letters into nowrap
+// words keeps the per-letter effect without splitting the name mid-word.
+const NAME_WORDS = (() => {
+  let offset = 0;
+  return NAME.split(" ").map((word) => {
+    const entry = { word, offset };
+    offset += word.length + 1;
+    return entry;
+  });
+})();
+
 function getYOE(): string {
   const now = new Date();
   const years = (now.getTime() - CAREER_START.getTime()) / (1000 * 60 * 60 * 24 * 365.25);
@@ -20,15 +33,49 @@ function getYOE(): string {
   return `${floored}+ YOE`;
 }
 
-const HomeSection = () => {
+interface HomeSectionProps {
+  onNavigate?: (id: string) => void;
+}
+
+const HomeSection = ({ onNavigate }: HomeSectionProps) => {
   const [displayed, setDisplayed] = useState("");
   const [typingDone, setTypingDone] = useState(false);
   const [phase, setPhase] = useState<"typing" | "erasing">("typing");
   const [phraseIndex, setPhraseIndex] = useState(0);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [hoveredLetterIdx, setHoveredLetterIdx] = useState<number | null>(null);
+  const [animateTyping, setAnimateTyping] = useState(true);
+  const [isVisible, setIsVisible] = useState(true);
+  const sectionRef = useRef<HTMLElement | null>(null);
+
+  // Honour reduced motion by showing the first phrase outright, and stop the
+  // timer loop entirely once the hero scrolls out of view.
+  useEffect(() => {
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const apply = () => {
+      setAnimateTyping(!reduced.matches);
+      if (reduced.matches) {
+        setDisplayed(TYPING_TEXTS[0]);
+        setTypingDone(true);
+      }
+    };
+    apply();
+    reduced.addEventListener("change", apply);
+    return () => reduced.removeEventListener("change", apply);
+  }, []);
 
   useEffect(() => {
+    const node = sectionRef.current;
+    if (!node) return;
+    const observer = new IntersectionObserver(([entry]) => setIsVisible(entry.isIntersecting), {
+      threshold: 0,
+    });
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!animateTyping || !isVisible) return;
     const currentText = TYPING_TEXTS[phraseIndex];
     if (phase === "typing") {
       if (displayed.length < currentText.length) {
@@ -52,7 +99,7 @@ const HomeSection = () => {
         setPhase("typing");
       }
     }
-  }, [displayed, phase, phraseIndex, typingDone]);
+  }, [displayed, phase, phraseIndex, typingDone, animateTyping, isVisible]);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -63,7 +110,10 @@ const HomeSection = () => {
   };
 
   return (
-    <section className="min-h-screen flex items-center justify-center px-4 sm:px-6 pt-24 pb-20 md:pt-32 md:pb-12">
+    <section
+      ref={sectionRef}
+      className="min-h-screen flex items-center justify-center px-4 sm:px-6 pt-24 pb-20 md:pt-32 md:pb-12"
+    >
       <div className="w-full max-w-4xl text-center relative">
         <div
           className="glass-strong rounded-3xl p-8 sm:p-12 md:p-16 relative overflow-hidden"
@@ -105,26 +155,35 @@ const HomeSection = () => {
                 className="shrink-0 w-16 h-16 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-full object-cover border-2 border-slate-200 dark:border-white/10 shadow-lg"
               />
 
-              <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-glow">
-                {NAME.split("").map((char, i) => {
-                  const dist =
-                    hoveredLetterIdx !== null ? Math.abs(i - hoveredLetterIdx) : Infinity;
-                  const translateY = dist === 0 ? -14 : dist === 1 ? -8 : dist === 2 ? -3 : 0;
-                  return (
-                    <span
-                      key={i}
-                      className="inline-block"
-                      onMouseEnter={() => setHoveredLetterIdx(i)}
-                      style={{
-                        whiteSpace: char === " " ? "pre" : "normal",
-                        transform: `translateY(${translateY}px)`,
-                        transition: "transform 150ms ease-out",
-                      }}
-                    >
-                      {char}
+              <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold ">
+                {NAME_WORDS.map(({ word, offset }, wordIdx) => (
+                  <Fragment key={wordIdx}>
+                    {/* Separator lives outside the nowrap span; trailing whitespace
+                        inside an inline-block collapses and swallows the space. */}
+                    {wordIdx > 0 && " "}
+                    <span className="inline-block whitespace-nowrap">
+                      {word.split("").map((char, charIdx) => {
+                        const i = offset + charIdx;
+                        const dist =
+                          hoveredLetterIdx !== null ? Math.abs(i - hoveredLetterIdx) : Infinity;
+                        const translateY = dist === 0 ? -14 : dist === 1 ? -8 : dist === 2 ? -3 : 0;
+                        return (
+                          <span
+                            key={charIdx}
+                            className="inline-block"
+                            onMouseEnter={() => setHoveredLetterIdx(i)}
+                            style={{
+                              transform: `translateY(${translateY}px)`,
+                              transition: "transform 150ms ease-out",
+                            }}
+                          >
+                            {char}
+                          </span>
+                        );
+                      })}
                     </span>
-                  );
-                })}
+                  </Fragment>
+                ))}
               </h1>
             </div>
 
@@ -147,6 +206,26 @@ const HomeSection = () => {
               and Kubernetes in production.
             </p>
 
+            <div className="flex flex-col sm:flex-row justify-center items-stretch sm:items-center gap-3 mb-8">
+              <button
+                type="button"
+                onClick={() => onNavigate?.("experience")}
+                className="inline-flex items-center justify-center gap-2 min-h-[48px] px-6 rounded-full bg-brand text-brand-contrast font-semibold tracking-tight transition-colors duration-200 hover:bg-brand-strong focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
+              >
+                See my work
+                <ArrowRight className="w-4 h-4" aria-hidden="true" />
+              </button>
+              <a
+                href="/resume.pdf"
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center justify-center gap-2 min-h-[48px] px-6 rounded-full glass border border-slate-300 dark:border-white/15 text-slate-800 dark:text-white/85 font-medium transition-colors duration-200 hover:border-brand/60 hover:text-slate-950 dark:hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+              >
+                <FileText className="w-4 h-4" aria-hidden="true" />
+                Résumé
+              </a>
+            </div>
+
             <div className="flex justify-center flex-wrap gap-3">
               {[
                 { label: getYOE(), icon: "💼" },
@@ -157,7 +236,7 @@ const HomeSection = () => {
               ].map((badge, index) => (
                 <div
                   key={index}
-                  className="glass rounded-2xl px-5 py-3 hover:scale-110 hover:-translate-y-1 hover:bg-slate-900/5 dark:hover:bg-white/10 transition-all duration-300 cursor-default group border border-slate-200 dark:border-white/5 hover:border-slate-300 dark:hover:border-white/20"
+                  className="glass rounded-2xl px-4 py-2.5 transition-colors duration-200 hover:bg-slate-900/5 dark:hover:bg-white/10 cursor-default group border border-slate-200 dark:border-white/5 hover:border-slate-300 dark:hover:border-white/20"
                 >
                   <span className="text-slate-700 dark:text-white/80 group-hover:text-slate-900 dark:group-hover:text-white transition-colors flex items-center gap-2">
                     <span className="text-lg">{badge.icon}</span>
@@ -173,7 +252,7 @@ const HomeSection = () => {
         <div
           className={`mt-8 flex justify-center transition-opacity duration-700 ${typingDone ? "opacity-100" : "opacity-0"}`}
         >
-          <ChevronDown className="w-6 h-6 text-slate-400 dark:text-white/25 animate-bounce" />
+          <ChevronDown className="w-6 h-6 text-slate-400 dark:text-white/25 animate-nudge" />
         </div>
       </div>
     </section>

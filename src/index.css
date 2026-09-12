@@ -4,6 +4,30 @@
 
 /* Definition of the design system. All colors, gradients, fonts, etc should be defined here. */
 
+/* Self-hosted display face — no third-party font CDN, so no extra connection
+   on first paint and nothing leaks to Google. Variable 400..700 in one file,
+   so headings get real weights instead of synthetic bold. */
+@font-face {
+  font-family: "Newsreader";
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url("/fonts/newsreader-latin.woff2") format("woff2");
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC,
+    U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@layer base {
+  :root {
+    --font-display: "Newsreader", ui-serif, Georgia, "Times New Roman", serif;
+    --font-sans:
+      ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif, "Apple Color Emoji",
+      "Segoe UI Emoji";
+    --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  }
+}
+
 @layer base {
   :root {
     --background: 222.2 84% 4.9%;
@@ -44,11 +68,18 @@
 
     --radius: 0.5rem;
 
+    /* Brand accent — warm amber against the cool navy field. Deliberately not
+       the violet/cyan default; it is the only saturated hue on the page. */
+    --brand: 38 92% 60%;
+    --brand-strong: 32 90% 66%;
+    --brand-contrast: 222 47% 11%;
+    --brand-spotlight: 234 170 70;
+
     --html-bg: #0f0f23;
     --glass-bg: rgba(255, 255, 255, 0.04);
     --glass-strong-bg: rgba(255, 255, 255, 0.05);
     --glass-border: rgba(255, 255, 255, 0.07);
-    --glass-shadow: 0 20px 45px -18px rgba(0, 0, 0, 0.5), 0 4px 14px -6px rgba(96, 165, 250, 0.12);
+    --glass-shadow: 0 20px 45px -18px rgba(0, 0, 0, 0.5), 0 4px 14px -6px rgba(234, 170, 70, 0.1);
 
     --nav-bg: rgba(12, 12, 28, 0.92);
     --nav-border: rgba(255, 255, 255, 0.1);
@@ -67,6 +98,9 @@
 
     --floating-action-bg: rgba(30, 30, 50, 0.9);
     --tooltip-bg: rgba(0, 0, 0, 0.75);
+    --bubble-bg: rgba(255, 255, 255, 0.06);
+    --bubble-bg-hover: rgba(255, 255, 255, 0.12);
+    --bubble-border: rgba(255, 255, 255, 0.1);
     --resume-card-bg: rgba(255, 255, 255, 0.1);
   }
 
@@ -107,12 +141,19 @@
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
 
-    --html-bg: #f2f5fb;
-    --glass-bg: rgba(240, 245, 255, 0.65);
-    --glass-strong-bg: rgba(245, 248, 255, 0.8);
-    --glass-border: rgba(180, 195, 225, 0.35);
-    --glass-shadow:
-      0 20px 45px -14px rgba(30, 58, 138, 0.08), 0 4px 14px -4px rgba(30, 58, 138, 0.05);
+    /* Deeper copper so accent text clears 4.5:1 on white cards */
+    --brand: 27 88% 36%;
+    --brand-strong: 24 86% 30%;
+    --brand-contrast: 0 0% 100%;
+    --brand-spotlight: 180 100 25;
+
+    /* Cards are solid white and the page field is a muted slate, so cards
+       actually separate from the background instead of dissolving into it. */
+    --html-bg: #dfe4ee;
+    --glass-bg: rgba(255, 255, 255, 0.92);
+    --glass-strong-bg: #ffffff;
+    --glass-border: rgba(100, 116, 139, 0.28);
+    --glass-shadow: 0 18px 40px -20px rgba(15, 23, 42, 0.28), 0 2px 8px -3px rgba(15, 23, 42, 0.12);
 
     --nav-bg: rgba(255, 255, 255, 0.88);
     --nav-border: rgba(0, 0, 0, 0.08);
@@ -131,6 +172,9 @@
 
     --floating-action-bg: rgba(255, 255, 255, 0.88);
     --tooltip-bg: rgba(15, 23, 42, 0.8);
+    --bubble-bg: rgba(255, 255, 255, 0.85);
+    --bubble-bg-hover: #ffffff;
+    --bubble-border: rgba(100, 116, 139, 0.22);
     --resume-card-bg: rgba(0, 0, 0, 0.04);
   }
 }
@@ -157,9 +201,49 @@
 
   body {
     @apply bg-background text-foreground;
+    font-family: var(--font-sans);
     background: transparent;
     min-height: 100vh;
     position: relative;
+  }
+
+  /* Display face carries every section heading. Components set size and weight;
+     the family, tracking and balance live here so they stay consistent. */
+  h1,
+  h2 {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+
+  h3,
+  h4 {
+    text-wrap: balance;
+  }
+
+  /* Numerals line up in columns wherever figures are compared */
+  .tabular {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum";
+  }
+}
+
+/* Honour the OS "reduce motion" setting: drop the ambient drifting, twinkling,
+   shine and float loops entirely and collapse transitions to near-instant. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .animate-float,
+  .animate-nudge,
+  .featured-card::after {
+    animation: none !important;
   }
 }
 
@@ -180,7 +264,7 @@
 }
 
 .theme-bg-layer--light {
-  background: linear-gradient(135deg, #edf2fd 0%, #e8edf8 45%, #eaedf9 100%);
+  background: linear-gradient(135deg, #e3e8f1 0%, #dde3ee 45%, #e0e5f0 100%);
   opacity: 0;
 }
 
@@ -227,9 +311,9 @@ html.theme-switching *:not([data-theme-toggle]):not([data-theme-toggle] *) {
     border-radius: inherit;
     background: radial-gradient(
       220px circle at var(--mouse-x, -999px) var(--mouse-y, -999px),
-      rgba(96, 165, 250, 0.12) 0%,
-      rgba(96, 165, 250, 0.06) 40%,
-      rgba(96, 165, 250, 0.02) 65%,
+      rgba(var(--brand-spotlight), 0.14) 0%,
+      rgba(var(--brand-spotlight), 0.07) 40%,
+      rgba(var(--brand-spotlight), 0.02) 65%,
       transparent 80%
     );
     pointer-events: none;
@@ -241,9 +325,9 @@ html.theme-switching *:not([data-theme-toggle]):not([data-theme-toggle] *) {
   html:not(.dark) .glass-strong::before {
     background: radial-gradient(
       220px circle at var(--mouse-x, -999px) var(--mouse-y, -999px),
-      rgba(15, 23, 42, 0.06) 0%,
-      rgba(15, 23, 42, 0.03) 40%,
-      rgba(15, 23, 42, 0.01) 65%,
+      rgba(var(--brand-spotlight), 0.1) 0%,
+      rgba(var(--brand-spotlight), 0.05) 40%,
+      rgba(var(--brand-spotlight), 0.015) 65%,
       transparent 80%
     );
   }
@@ -261,17 +345,53 @@ html.theme-switching *:not([data-theme-toggle]):not([data-theme-toggle] *) {
     opacity: 1;
   }
 
-  .text-glow {
-    text-shadow: 0 0 20px rgba(147, 197, 253, 0.5);
+  /* Fades collapsed content out at its lower edge. A mask is used rather than a
+     gradient overlay so it works over the translucent glass in both themes. */
+  /* Apple-Watch style cluster. Only `transform` is animated per frame; the
+     surface is a plain background so no bubble triggers a backdrop-filter or
+     shadow repaint while the magnifier runs. */
+  .tech-bubble {
+    will-change: transform;
+    transition: none;
   }
 
-  html:not(.dark) .text-glow {
-    text-shadow: none;
+  .tech-bubble button {
+    background: var(--bubble-bg);
+    border: 1px solid var(--bubble-border);
+    transition:
+      background-color 0.2s ease,
+      border-color 0.2s ease;
+  }
+
+  .tech-bubble:hover button {
+    background: var(--bubble-bg-hover);
+    border-color: hsl(var(--brand) / 0.55);
+  }
+
+  .fade-mask-b {
+    -webkit-mask-image: linear-gradient(to bottom, #000 30%, transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 30%, transparent 100%);
   }
 
   .animate-float {
     animation: float 6s ease-in-out infinite;
     will-change: transform;
+  }
+
+  /* Scroll hint nudge — decelerating travel rather than a bounce */
+  @keyframes nudge {
+    0%,
+    60%,
+    100% {
+      transform: translateY(0);
+    }
+    30% {
+      transform: translateY(6px);
+    }
+  }
+
+  .animate-nudge {
+    animation: nudge 2s cubic-bezier(0.22, 1, 0.36, 1) infinite;
   }
 
   @keyframes float {

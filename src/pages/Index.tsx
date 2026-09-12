@@ -18,10 +18,10 @@ const SECTION_IDS = [
   "home",
   "experience",
   "projects",
-  "research",
-  "conferences",
   "github",
   "tools",
+  "research",
+  "conferences",
   "currently",
   "contact",
 ];
@@ -29,12 +29,50 @@ const SECTION_IDS = [
 const Index = () => {
   const activeSection = useActiveSection(SECTION_IDS);
 
+  const NAV_OFFSET = 80;
+
+  // Lazy images below the fold load while a smooth scroll is in flight, which moves
+  // the target after the browser has committed to a destination. Re-measure once the
+  // scroll settles and correct until the section actually sits under the nav.
   const scrollToSection = (sectionId: string) => {
     document.fonts.ready.then(() => {
       const element = document.getElementById(sectionId);
       if (!element) return;
-      const top = element.getBoundingClientRect().top + window.scrollY - 80;
-      window.scrollTo({ top, behavior: "smooth" });
+
+      let corrections = 0;
+      let settleTimer: number;
+
+      const go = () => {
+        const top = element.getBoundingClientRect().top + window.scrollY - NAV_OFFSET;
+        window.scrollTo({ top, behavior: "smooth" });
+        waitForSettle();
+      };
+
+      const waitForSettle = () => {
+        let lastY = window.scrollY;
+        let stableFrames = 0;
+        const tick = () => {
+          const y = window.scrollY;
+          stableFrames = Math.abs(y - lastY) < 1 ? stableFrames + 1 : 0;
+          lastY = y;
+          if (stableFrames < 5) {
+            settleTimer = requestAnimationFrame(tick);
+            return;
+          }
+          const drift = element.getBoundingClientRect().top - NAV_OFFSET;
+          if (Math.abs(drift) > 4 && corrections < 3) {
+            corrections += 1;
+            go();
+          }
+        };
+        settleTimer = requestAnimationFrame(tick);
+      };
+
+      go();
+
+      const cancel = () => cancelAnimationFrame(settleTimer);
+      window.addEventListener("wheel", cancel, { once: true, passive: true });
+      window.addEventListener("touchstart", cancel, { once: true, passive: true });
     });
   };
 
@@ -103,30 +141,34 @@ const Index = () => {
   }, []);
 
   useEffect(() => {
-    let rafId: number;
-    let cards: HTMLElement[] = [];
-    const refreshCards = () => {
-      cards = Array.from(document.querySelectorAll<HTMLElement>(".glass-strong"));
+    // The spotlight only renders on `.glass-strong:hover`, so exactly one card can
+    // ever show it. Resolving the card under the cursor beats writing custom
+    // properties to every card on the page on each frame.
+    if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+
+    let rafId = 0;
+    let pending: MouseEvent | null = null;
+    const flush = () => {
+      rafId = 0;
+      const e = pending;
+      pending = null;
+      if (!e) return;
+      const target = e.target instanceof Element ? e.target.closest(".glass-strong") : null;
+      if (!(target instanceof HTMLElement)) return;
+      const rect = target.getBoundingClientRect();
+      const scaleX = rect.width / target.offsetWidth;
+      const scaleY = rect.height / target.offsetHeight;
+      target.style.setProperty("--mouse-x", `${(e.clientX - rect.left) / scaleX}px`);
+      target.style.setProperty("--mouse-y", `${(e.clientY - rect.top) / scaleY}px`);
     };
-    refreshCards();
-    window.addEventListener("resize", refreshCards, { passive: true });
     const handler = (e: MouseEvent) => {
-      cancelAnimationFrame(rafId);
-      rafId = requestAnimationFrame(() => {
-        cards.forEach((card) => {
-          const rect = card.getBoundingClientRect();
-          const scaleX = rect.width / card.offsetWidth;
-          const scaleY = rect.height / card.offsetHeight;
-          card.style.setProperty("--mouse-x", `${(e.clientX - rect.left) / scaleX}px`);
-          card.style.setProperty("--mouse-y", `${(e.clientY - rect.top) / scaleY}px`);
-        });
-      });
+      pending = e;
+      if (!rafId) rafId = requestAnimationFrame(flush);
     };
     window.addEventListener("mousemove", handler, { passive: true });
     return () => {
       window.removeEventListener("mousemove", handler);
-      window.removeEventListener("resize", refreshCards);
-      cancelAnimationFrame(rafId);
+      if (rafId) cancelAnimationFrame(rafId);
     };
   }, []);
 
@@ -135,7 +177,7 @@ const Index = () => {
       <div className="fixed top-0 left-0 right-0 z-[100] h-0.5 pointer-events-none md:hidden">
         <div
           ref={progressBarRef}
-          className="h-full bg-gradient-to-r from-blue-400 to-purple-400"
+          className="h-full bg-gradient-to-r from-brand to-brand-strong"
           style={{ width: "0%" }}
         />
       </div>
@@ -155,11 +197,10 @@ const Index = () => {
 
       <div className="min-h-screen relative overflow-hidden">
         <div className="fixed inset-0 pointer-events-none overflow-hidden">
-          <div className="absolute -top-48 -left-48 w-[700px] h-[700px] rounded-full bg-blue-500/10 dark:bg-blue-600/20 blur-[60px] md:blur-[120px] will-change-transform" />
-          <div className="absolute -top-32 -right-64 w-[600px] h-[600px] rounded-full bg-violet-500/8 dark:bg-violet-600/15 blur-[50px] md:blur-[100px] will-change-transform" />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] rounded-full bg-cyan-500/5 dark:bg-cyan-700/10 blur-[140px] hidden md:block will-change-transform" />
-          <div className="absolute -bottom-64 -left-32 w-[600px] h-[600px] rounded-full bg-purple-500/8 dark:bg-purple-700/15 blur-[55px] md:blur-[110px] will-change-transform" />
-          <div className="absolute -bottom-32 -right-32 w-[500px] h-[500px] rounded-full bg-blue-400/5 dark:bg-blue-500/10 blur-[90px] hidden md:block will-change-transform" />
+          <div className="absolute -top-48 -left-48 w-[700px] h-[700px] rounded-full bg-brand/10 blur-[60px] md:blur-[120px] will-change-transform" />
+          <div className="absolute -top-32 -right-64 w-[600px] h-[600px] rounded-full bg-blue-700/10 dark:bg-blue-700/20 blur-[50px] md:blur-[100px] will-change-transform" />
+          <div className="absolute -bottom-64 -left-32 w-[600px] h-[600px] rounded-full bg-brand/8 dark:bg-brand/10 blur-[55px] md:blur-[110px] will-change-transform" />
+          <div className="absolute -bottom-32 -right-32 w-[500px] h-[500px] rounded-full bg-blue-800/8 dark:bg-blue-600/12 blur-[90px] hidden md:block will-change-transform" />
         </div>
 
         <div className="fixed inset-0 pointer-events-none">
@@ -177,17 +218,12 @@ const Index = () => {
           ))}
         </div>
 
-        <Navigation
-          onSectionClick={scrollToSection}
-          activeSection={activeSection}
-          showBackToTop={showBackToTop}
-          onScrollToTop={() => scrollToSection("home")}
-        />
+        <Navigation onSectionClick={scrollToSection} activeSection={activeSection} />
         <SiteStats open={showSiteStats} onClose={() => setShowSiteStats(false)} />
 
         <main className="relative z-10 pb-28 md:pb-0">
           <div id="home" className="scroll-mt-0">
-            <HomeSection />
+            <HomeSection onNavigate={scrollToSection} />
           </div>
 
           <div className="h-px bg-gradient-to-r from-transparent via-slate-400/25 dark:via-white/[0.06] to-transparent mx-8 sm:mx-24" />
@@ -205,20 +241,6 @@ const Index = () => {
           </div>
 
           <div className="h-px bg-gradient-to-r from-transparent via-slate-400/25 dark:via-white/[0.06] to-transparent mx-8 sm:mx-24" />
-          <div id="research">
-            <FadeIn>
-              <ResearchSection />
-            </FadeIn>
-          </div>
-
-          <div className="h-px bg-gradient-to-r from-transparent via-slate-400/25 dark:via-white/[0.06] to-transparent mx-8 sm:mx-24" />
-          <div id="conferences">
-            <FadeIn>
-              <ConferencesSection />
-            </FadeIn>
-          </div>
-
-          <div className="h-px bg-gradient-to-r from-transparent via-slate-400/25 dark:via-white/[0.06] to-transparent mx-8 sm:mx-24" />
           <div id="github">
             <FadeIn>
               <GitHubSection />
@@ -229,6 +251,20 @@ const Index = () => {
           <div id="tools">
             <FadeIn>
               <TechStack />
+            </FadeIn>
+          </div>
+
+          <div className="h-px bg-gradient-to-r from-transparent via-slate-400/25 dark:via-white/[0.06] to-transparent mx-8 sm:mx-24" />
+          <div id="research">
+            <FadeIn>
+              <ResearchSection />
+            </FadeIn>
+          </div>
+
+          <div className="h-px bg-gradient-to-r from-transparent via-slate-400/25 dark:via-white/[0.06] to-transparent mx-8 sm:mx-24" />
+          <div id="conferences">
+            <FadeIn>
+              <ConferencesSection />
             </FadeIn>
           </div>
 

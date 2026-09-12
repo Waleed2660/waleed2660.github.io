@@ -47,8 +47,7 @@ const experiments: Experiment[] = [
   {
     icon: "🧠",
     status: "Learning",
-    statusColor:
-      "text-purple-600 dark:text-purple-300 bg-purple-400/10 border border-purple-400/20",
+    statusColor: "text-brand bg-brand/10 border border-brand/20",
     title: "Vectorless PageIndex for RAG",
     description:
       "Digging into retrieval strategies for RAG pipelines that don't rely on dense vector embeddings. PageIndex (as implemented in LlamaIndex) chunks documents at the page level and uses keyword / BM25-style retrieval: cheaper to run, no embedding model needed, surprisingly effective for structured documents like PDFs and reports.",
@@ -76,9 +75,7 @@ const CurrentlySection = () => {
   return (
     <section className="flex items-center justify-center px-6 py-24 relative z-20">
       <div className="max-w-6xl w-full">
-        <h2 className="text-4xl md:text-6xl font-bold text-center mb-4 text-glow relative">
-          Interests
-        </h2>
+        <h2 className="text-4xl md:text-6xl font-bold text-center mb-4 relative">Interests</h2>
         <p className="text-center text-slate-500 dark:text-white/50 mb-16 text-lg">
           Things I'm actively experimenting with or learning outside of work
         </p>
@@ -111,7 +108,7 @@ const CurrentlySection = () => {
               </p>
 
               {/* Motivation */}
-              <p className="text-slate-500 dark:text-white/40 leading-relaxed italic mb-5 border-l-2 border-slate-200 dark:border-white/10 pl-4">
+              <p className="text-slate-500 dark:text-white/40 leading-relaxed italic mb-5 border border-slate-200 dark:border-white/10 pl-4">
                 {exp.motivation}
               </p>
 
@@ -139,7 +136,7 @@ const CurrentlySection = () => {
                       href={res.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-2 px-3 py-2 rounded-lg bg-slate-900/[0.03] dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-500 dark:text-white/50 text-sm hover:text-slate-900 dark:hover:text-white/90 hover:bg-slate-900/5 dark:hover:bg-white/10 transition-all group/link"
+                      className="flex items-center gap-2 px-3 py-2 min-h-[44px] rounded-lg bg-slate-900/[0.03] dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-500 dark:text-white/50 text-sm hover:text-slate-900 dark:hover:text-white/90 hover:bg-slate-900/5 dark:hover:bg-white/10 transition-all group/link"
                     >
                       <ExternalLink className="w-3 h-3 flex-shrink-0" />
                       <span className="truncate">{res.label}</span>
