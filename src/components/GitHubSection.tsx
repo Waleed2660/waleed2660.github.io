@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Flame, Trophy, CalendarDays } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
-// Contribution colour — violet-600, rich and visible against dark background
+// Contribution colour — brand amber ramp, matching the single accent hue
 const USERNAME = "Waleed2660";
 const CHART_COLOR = "7c3aed";
 
@@ -76,10 +76,10 @@ type CalendarDay = { date: string; count: number } | null;
 
 const LEVEL_COLORS = [
   "bg-slate-900/10 dark:bg-white/15",
-  "bg-violet-400/80 dark:bg-violet-800",
-  "bg-violet-500 dark:bg-violet-700",
-  "bg-violet-600 dark:bg-violet-600",
-  "bg-violet-800 dark:bg-violet-400",
+  "bg-amber-300 dark:bg-amber-900",
+  "bg-amber-500 dark:bg-amber-700",
+  "bg-amber-600 dark:bg-amber-500",
+  "bg-amber-800 dark:bg-amber-300",
 ];
 
 const levelFor = (count: number, max: number) => {
@@ -223,7 +223,7 @@ const ContributionGraph = ({ calendar }: { calendar: Record<string, number> }) =
         <select
           value={selectedYear}
           onChange={(e) => setSelectedYear(e.target.value)}
-          className="text-xs bg-transparent border border-slate-900/10 dark:border-white/15 rounded-lg px-2 py-1 text-slate-500 dark:text-white/60 focus:outline-none focus:ring-1 focus:ring-violet-500 cursor-pointer"
+          className="text-xs bg-transparent border border-slate-900/10 dark:border-white/15 rounded-lg px-2 py-1 text-slate-500 dark:text-white/60 focus:outline-none focus:ring-1 focus:ring-brand cursor-pointer"
         >
           <option value="">Last 12 months</option>
           {years.map((y) => (
@@ -302,7 +302,7 @@ const GitHubSection = () => {
   return (
     <section className="flex items-center justify-center px-6 py-24 relative z-10">
       <div className="max-w-4xl w-full">
-        <h2 className="text-4xl md:text-6xl font-bold text-center mb-16 text-glow">GitHub</h2>
+        <h2 className="text-4xl md:text-6xl font-bold text-center mb-16 ">GitHub</h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Left: Stats */}
@@ -318,13 +318,13 @@ const GitHubSection = () => {
                 <div className="text-slate-500 dark:text-white/50 text-xs">Stars</div>
               </div>
               <div className="flex flex-col items-center gap-1 py-2">
-                <div className="text-2xl font-bold text-blue-600 dark:text-blue-300">
+                <div className="text-2xl font-bold text-brand">
                   {stats ? stats.followers : "N/A"}
                 </div>
                 <div className="text-slate-500 dark:text-white/50 text-xs">Followers</div>
               </div>
               <div className="flex flex-col items-center gap-1 py-2">
-                <div className="text-2xl font-bold text-purple-600 dark:text-purple-300">
+                <div className="text-2xl font-bold text-brand">
                   {stats ? stats.public_repos : "N/A"}
                 </div>
                 <div className="text-slate-500 dark:text-white/50 text-xs">Repos</div>

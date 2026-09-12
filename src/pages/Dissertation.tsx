@@ -30,10 +30,9 @@ const Dissertation = () => {
     <div className="min-h-screen relative overflow-hidden">
       {/* Ambient orbs — matches the vibrancy of the Home page background */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute -top-48 -left-48 w-[700px] h-[700px] rounded-full bg-blue-500/10 dark:bg-blue-600/20 blur-[60px] md:blur-[120px] will-change-transform" />
-        <div className="absolute -top-32 -right-64 w-[600px] h-[600px] rounded-full bg-violet-500/8 dark:bg-violet-600/15 blur-[50px] md:blur-[100px] will-change-transform" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] rounded-full bg-cyan-500/5 dark:bg-cyan-700/10 blur-[140px] hidden md:block will-change-transform" />
-        <div className="absolute -bottom-64 -left-32 w-[600px] h-[600px] rounded-full bg-purple-500/8 dark:bg-purple-700/15 blur-[55px] md:blur-[110px] will-change-transform" />
+        <div className="absolute -top-48 -left-48 w-[700px] h-[700px] rounded-full bg-brand/10 blur-[60px] md:blur-[120px] will-change-transform" />
+        <div className="absolute -top-32 -right-64 w-[600px] h-[600px] rounded-full bg-blue-700/10 dark:bg-blue-700/20 blur-[50px] md:blur-[100px] will-change-transform" />
+        <div className="absolute -bottom-64 -left-32 w-[600px] h-[600px] rounded-full bg-brand/8 dark:bg-brand/10 blur-[55px] md:blur-[110px] will-change-transform" />
       </div>
       {isVisible && (
         <div className="fixed inset-0 pointer-events-none opacity-30">
@@ -79,7 +78,7 @@ const Dissertation = () => {
               <span className="text-4xl">🎓</span>
             </div>
             <div className="flex-1">
-              <h1 className="text-3xl md:text-5xl font-bold text-slate-900 dark:text-white mb-4 text-glow">
+              <h1 className="text-3xl md:text-5xl font-bold text-slate-900 dark:text-white mb-4 ">
                 Detecting Landfill Sites through YOLOv3
               </h1>
               <p className="text-xl text-slate-600 dark:text-white/70 mb-4">
@@ -144,7 +143,7 @@ const Dissertation = () => {
           </h2>
 
           <div className="grid md:grid-cols-2 gap-6">
-            <div className="glass rounded-2xl p-6 border-l-4 border-blue-600/70 dark:border-blue-400/50 hover:border-blue-700 dark:hover:border-blue-400 transition-all hover:scale-[1.02] duration-300">
+            <div className="glass rounded-2xl p-6 border border-brand/40 hover:border-brand transition-all hover:scale-[1.02] duration-300">
               <div className="flex items-start gap-4 mb-3">
                 <div className="glass rounded-xl p-3 bg-blue-500/10">
                   <span className="text-3xl">🚨</span>
@@ -154,9 +153,7 @@ const Dissertation = () => {
                     The Problem
                   </h3>
                   <div className="flex items-baseline gap-2 mb-3">
-                    <span className="text-4xl font-bold text-blue-700 dark:text-blue-300">
-                      £924M
-                    </span>
+                    <span className="text-4xl font-bold text-brand">£924M</span>
                     <span className="text-slate-500 dark:text-white/50 text-sm">
                       in damages (2018-2019)
                     </span>
@@ -174,7 +171,7 @@ const Dissertation = () => {
               </p>
             </div>
 
-            <div className="glass rounded-2xl p-6 border-l-4 border-green-600/70 dark:border-green-400/50 hover:border-green-700 dark:hover:border-green-400 transition-all hover:scale-[1.02] duration-300">
+            <div className="glass rounded-2xl p-6 border border-green-600/70 dark:border-green-400/50 hover:border-green-700 dark:hover:border-green-400 transition-all hover:scale-[1.02] duration-300">
               <div className="flex items-start gap-4 mb-3">
                 <div className="glass rounded-xl p-3 bg-green-500/10">
                   <span className="text-3xl">🎯</span>
@@ -203,9 +200,9 @@ const Dissertation = () => {
               </p>
             </div>
 
-            <div className="glass rounded-2xl p-6 border-l-4 border-purple-600/70 dark:border-purple-400/50 hover:border-purple-700 dark:hover:border-purple-400 transition-all hover:scale-[1.02] duration-300">
+            <div className="glass rounded-2xl p-6 border border-brand/40 hover:border-brand transition-all hover:scale-[1.02] duration-300">
               <div className="flex items-start gap-4 mb-3">
-                <div className="glass rounded-xl p-3 bg-purple-500/10">
+                <div className="glass rounded-xl p-3 bg-brand/10">
                   <span className="text-3xl">🌍</span>
                 </div>
                 <div className="flex-1">
@@ -213,9 +210,7 @@ const Dissertation = () => {
                     Dataset Preparation
                   </h3>
                   <div className="flex items-baseline gap-2 mb-3">
-                    <span className="text-4xl font-bold text-purple-700 dark:text-purple-300">
-                      9
-                    </span>
+                    <span className="text-4xl font-bold text-brand">9</span>
                     <span className="text-slate-500 dark:text-white/50 text-sm">
                       countries sampled
                     </span>
@@ -225,12 +220,12 @@ const Dissertation = () => {
               <p className="text-slate-600 dark:text-white/70 text-sm leading-relaxed">
                 Collected high-resolution satellite imagery from Google Earth covering sites in the
                 UK, USA, Canada, South Korea, China, Pakistan, Brazil, Nigeria, and India. Used{" "}
-                <span className="text-purple-700 dark:text-purple-300 font-semibold">LabelImg</span>{" "}
-                for precise annotation with careful boundary detection.
+                <span className="text-brand font-semibold">LabelImg</span> for precise annotation
+                with careful boundary detection.
               </p>
             </div>
 
-            <div className="glass rounded-2xl p-6 border-l-4 border-yellow-600/70 dark:border-yellow-400/50 hover:border-yellow-700 dark:hover:border-yellow-400 transition-all hover:scale-[1.02] duration-300">
+            <div className="glass rounded-2xl p-6 border border-yellow-600/70 dark:border-yellow-400/50 hover:border-yellow-700 dark:hover:border-yellow-400 transition-all hover:scale-[1.02] duration-300">
               <div className="flex items-start gap-4 mb-3">
                 <div className="glass rounded-xl p-3 bg-yellow-500/10">
                   <span className="text-3xl">📊</span>
@@ -271,7 +266,7 @@ const Dissertation = () => {
 
           {/* Architecture Diagram */}
           <div className="glass rounded-2xl overflow-hidden mb-8 hover:scale-[1.02] hover:-translate-y-1 transition-all duration-300 cursor-pointer">
-            <div className="bg-gradient-to-r from-indigo-500/20 to-purple-500/10 px-4 py-3 border-b border-slate-200 dark:border-white/5">
+            <div className="bg-gradient-to-r from-brand/20 to-brand/5 px-4 py-3 border-b border-slate-200 dark:border-white/5">
               <h3 className="text-slate-900 dark:text-white font-semibold">
                 YOLOv3 Network Architecture
               </h3>
@@ -292,7 +287,7 @@ const Dissertation = () => {
           <div className="space-y-4">
             <div className="glass rounded-2xl p-6 hover:bg-slate-900/5 dark:hover:bg-white/10 hover:shadow-2xl hover:scale-[1.02] transition-all duration-300 group cursor-pointer">
               <div className="flex items-start gap-4">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500/20 to-blue-600/20 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-brand/25 to-brand/5 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
                   <span className="text-2xl">⚡</span>
                 </div>
                 <div className="flex-1">
@@ -301,31 +296,23 @@ const Dissertation = () => {
                   </h3>
                   <div className="flex flex-wrap gap-4 mb-3">
                     <div className="flex items-baseline gap-1">
-                      <span className="text-2xl font-bold text-blue-700 dark:text-blue-300">
-                        1457
-                      </span>
+                      <span className="text-2xl font-bold text-brand">1457</span>
                       <span className="text-slate-500 dark:text-white/50 text-xs">BFLOP/s</span>
                     </div>
                     <div className="flex items-baseline gap-1">
-                      <span className="text-2xl font-bold text-blue-700 dark:text-blue-300">
-                        78
-                      </span>
+                      <span className="text-2xl font-bold text-brand">78</span>
                       <span className="text-slate-500 dark:text-white/50 text-xs">FPS</span>
                     </div>
                     <div className="flex items-baseline gap-1">
-                      <span className="text-2xl font-bold text-blue-700 dark:text-blue-300">
-                        53
-                      </span>
+                      <span className="text-2xl font-bold text-brand">53</span>
                       <span className="text-slate-500 dark:text-white/50 text-xs">Conv layers</span>
                     </div>
                   </div>
                   <p className="text-slate-600 dark:text-white/70 text-sm leading-relaxed">
                     Neural network framework written in{" "}
-                    <span className="text-blue-700 dark:text-blue-300 font-semibold">
-                      C and CUDA
-                    </span>{" "}
-                    with 53 convolutional layers trained on ImageNet. Outperformed ResNet-152 and
-                    other competitors in both speed and accuracy.
+                    <span className="text-brand font-semibold">C and CUDA</span> with 53
+                    convolutional layers trained on ImageNet. Outperformed ResNet-152 and other
+                    competitors in both speed and accuracy.
                   </p>
                 </div>
               </div>
@@ -374,7 +361,7 @@ const Dissertation = () => {
 
             <div className="glass rounded-2xl p-6 hover:bg-slate-900/5 dark:hover:bg-white/10 hover:shadow-2xl hover:scale-[1.02] transition-all duration-300 group cursor-pointer">
               <div className="flex items-start gap-4">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500/20 to-purple-600/20 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-brand/25 to-brand/5 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
                   <span className="text-2xl">🔄</span>
                 </div>
                 <div className="flex-1">
@@ -383,18 +370,14 @@ const Dissertation = () => {
                   </h3>
                   <div className="flex items-center gap-2 mb-3">
                     <div className="glass px-3 py-1 rounded-lg text-slate-900 dark:text-white">
-                      <span className="text-purple-700 dark:text-purple-300 font-semibold text-sm">
-                        ImageNet
-                      </span>
+                      <span className="text-brand font-semibold text-sm">ImageNet</span>
                       <span className="text-slate-400 dark:text-white/40 text-xs mx-2">→</span>
-                      <span className="text-purple-700 dark:text-purple-300 font-semibold text-sm">
-                        Satellite Data
-                      </span>
+                      <span className="text-brand font-semibold text-sm">Satellite Data</span>
                     </div>
                   </div>
                   <p className="text-slate-600 dark:text-white/70 text-sm leading-relaxed">
                     Leveraged pre-trained weights from Darknet-53 trained on ImageNet,{" "}
-                    <span className="text-purple-700 dark:text-purple-300 font-semibold">
+                    <span className="text-brand font-semibold">
                       significantly reducing training time
                     </span>{" "}
                     while maintaining accuracy. The model adapted these weights to recognize
@@ -483,7 +466,7 @@ const Dissertation = () => {
 
             {/* 2000 Iterations */}
             <div className="glass rounded-2xl overflow-hidden hover:scale-[1.02] hover:-translate-y-1 transition-all duration-300 cursor-pointer">
-              <div className="bg-gradient-to-r from-green-500/20 to-blue-500/10 px-4 py-3 border-b border-slate-200 dark:border-white/5">
+              <div className="bg-gradient-to-r from-emerald-500/18 to-emerald-500/5 px-4 py-3 border-b border-slate-200 dark:border-white/5">
                 <h3 className="text-slate-900 dark:text-white font-semibold">
                   Refined Model (2,000 Iterations)
                 </h3>
@@ -508,7 +491,7 @@ const Dissertation = () => {
             </div>
           </div>
 
-          <div className="mt-6 glass rounded-2xl p-4 border-l-2 border-blue-600/50 dark:border-blue-400/30">
+          <div className="mt-6 glass rounded-2xl p-4 border border-brand/30">
             <p className="text-slate-600 dark:text-white/70 text-sm leading-relaxed">
               <span className="font-semibold text-slate-900 dark:text-white">Key Insight:</span>{" "}
               This progression illustrates the critical importance of adequate training iterations
@@ -526,7 +509,7 @@ const Dissertation = () => {
           </h2>
 
           <div className="space-y-4">
-            <div className="glass rounded-2xl p-6 border-l-4 border-red-600/70 dark:border-red-400/50 hover:border-red-700 dark:hover:border-red-400 transition-all hover:scale-[1.01] duration-300">
+            <div className="glass rounded-2xl p-6 border border-red-600/70 dark:border-red-400/50 hover:border-red-700 dark:hover:border-red-400 transition-all hover:scale-[1.01] duration-300">
               <div className="flex items-start gap-4">
                 <div className="glass rounded-xl p-3 bg-red-500/10 flex-shrink-0">
                   <span className="text-2xl">📝</span>
@@ -553,7 +536,7 @@ const Dissertation = () => {
               </div>
             </div>
 
-            <div className="glass rounded-2xl p-6 border-l-4 border-orange-600/70 dark:border-orange-400/50 hover:border-orange-700 dark:hover:border-orange-400 transition-all hover:scale-[1.01] duration-300">
+            <div className="glass rounded-2xl p-6 border border-orange-600/70 dark:border-orange-400/50 hover:border-orange-700 dark:hover:border-orange-400 transition-all hover:scale-[1.01] duration-300">
               <div className="flex items-start gap-4">
                 <div className="glass rounded-xl p-3 bg-orange-500/10 flex-shrink-0">
                   <span className="text-2xl">⚖️</span>
@@ -598,7 +581,7 @@ const Dissertation = () => {
               </div>
             </div>
 
-            <div className="glass rounded-2xl p-6 border-l-4 border-blue-600/70 dark:border-blue-400/50 hover:border-blue-700 dark:hover:border-blue-400 transition-all hover:scale-[1.01] duration-300">
+            <div className="glass rounded-2xl p-6 border border-brand/40 hover:border-brand transition-all hover:scale-[1.01] duration-300">
               <div className="flex items-start gap-4">
                 <div className="glass rounded-xl p-3 bg-blue-500/10 flex-shrink-0">
                   <span className="text-2xl">🌏</span>
@@ -609,25 +592,19 @@ const Dissertation = () => {
                   </h3>
                   <div className="flex flex-wrap gap-2 mb-3">
                     <div className="px-2 py-1 bg-blue-500/10 rounded">
-                      <span className="text-blue-700 dark:text-blue-300 text-xs">
-                        Developed: Well-contained
-                      </span>
+                      <span className="text-brand text-xs">Developed: Well-contained</span>
                     </div>
                     <div className="px-2 py-1 bg-blue-500/10 rounded">
-                      <span className="text-blue-700 dark:text-blue-300 text-xs">
-                        Developing: Visible targets
-                      </span>
+                      <span className="text-brand text-xs">Developing: Visible targets</span>
                     </div>
                   </div>
                   <p className="text-slate-600 dark:text-white/70 text-sm leading-relaxed">
                     Waste dumps in developed countries (UK, USA) were well-contained and harder to
                     detect, while developing countries (Pakistan, India, Brazil) provided more
                     visible targets.{" "}
-                    <span className="text-blue-700 dark:text-blue-300 font-semibold">
-                      Balancing the dataset
-                    </span>{" "}
-                    between both types was crucial for generalization across different waste
-                    management practices globally.
+                    <span className="text-brand font-semibold">Balancing the dataset</span> between
+                    both types was crucial for generalization across different waste management
+                    practices globally.
                   </p>
                 </div>
               </div>
@@ -662,7 +639,7 @@ const Dissertation = () => {
             href="/dissertation/Dissertation_YOLOv3_TYP.pdf"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 glass rounded-xl px-8 py-4 text-slate-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-300 hover:bg-slate-900/5 dark:hover:bg-white/10 hover:scale-105 transition-all"
+            className="inline-flex items-center gap-2 glass rounded-xl px-8 py-4 text-slate-900 dark:text-white hover:text-brand hover:bg-slate-900/5 dark:hover:bg-white/10 hover:scale-105 transition-all"
           >
             <ExternalLink className="w-5 h-5" />
             Download Full Paper (PDF)

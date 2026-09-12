@@ -20,7 +20,7 @@ const ThemeToggle = ({ className = "", size = "md" }: ThemeToggleProps) => {
       type="button"
       onClick={toggleTheme}
       aria-label="Toggle theme"
-      className={`relative rounded-full overflow-hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 ${className}`}
+      className={`relative rounded-full overflow-hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-brand ${className}`}
       style={{ width: w, height: h, contain: "layout style paint" }}
       data-theme-toggle
     >

@@ -84,8 +84,8 @@ const ExperienceSection = () => {
       period: "Jul 2022 to Mar 2025",
       tech: ["Java", "Spring Boot", "Apache ActiveMQ"],
       brandColor:
-        "bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border-cyan-500/40 hover:border-cyan-400/60",
-      bulletColor: "text-cyan-600 dark:text-cyan-400/80",
+        "bg-gradient-to-br from-brand/25 to-brand/5 border-brand/40 hover:border-brand/60",
+      bulletColor: "text-brand",
       promotions: [
         { title: "Graduate Software Engineer", period: "Jul 2022 to Jul 2024" },
         { title: "Software Engineer", period: "Jul 2024 to Mar 2025" },
@@ -132,9 +132,7 @@ const ExperienceSection = () => {
   return (
     <section className="flex items-center justify-center px-6 py-24 relative z-0">
       <div className="max-w-6xl w-full">
-        <h2 className="text-4xl md:text-6xl font-bold text-center mb-8 sm:mb-16 text-glow">
-          Experience
-        </h2>
+        <h2 className="text-4xl md:text-6xl font-bold text-center mb-8 sm:mb-16 ">Experience</h2>
 
         {/* Cards Grid */}
         <div className="space-y-6">
@@ -143,10 +141,20 @@ const ExperienceSection = () => {
               <div className="group">
                 {/* Card */}
                 <div
-                  className={`glass-strong rounded-2xl p-8 transition-all duration-300 border cursor-pointer
+                  className={`glass-strong rounded-2xl p-8 transition-all duration-300 border cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-brand
                   ${exp.brandColor}
                   ${expandedCards.has(index) ? "scale-[1.01]" : "hover:scale-[1.01] hover:-translate-y-1"}`}
+                  role="button"
+                  tabIndex={0}
+                  aria-expanded={expandedCards.has(index)}
+                  aria-label={`${expandedCards.has(index) ? "Collapse" : "Expand"} details for ${exp.title} at ${exp.company}`}
                   onClick={() => toggleCard(index)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      toggleCard(index);
+                    }
+                  }}
                 >
                   <div className="flex flex-col lg:flex-row gap-6">
                     {/* Logo */}
@@ -180,19 +188,12 @@ const ExperienceSection = () => {
                           <span className="block text-slate-400 dark:text-white/25 text-xs tabular-nums">
                             {getDuration(exp.period)}
                           </span>
-                          <ChevronDown
-                            className={`w-4 h-4 text-slate-400 dark:text-white/30 transition-transform duration-300 mt-1 ${
-                              expandedCards.has(index)
-                                ? "rotate-180 text-slate-500 dark:text-white/60"
-                                : ""
-                            }`}
-                          />
                         </div>
                       </div>
 
                       {/* Promotion ladder */}
                       {exp.promotions && (
-                        <div className="glass rounded-xl p-3 mb-4 w-fit bg-gradient-to-r from-green-500/10 to-blue-500/10 border border-green-500/20">
+                        <div className="glass rounded-xl p-3 mb-4 w-fit bg-gradient-to-r from-emerald-500/12 to-emerald-500/4 border border-green-500/20">
                           <div className="flex items-center gap-3">
                             {exp.promotions.map((p, i) => (
                               <div key={i} className="flex items-center gap-2">
@@ -227,12 +228,11 @@ const ExperienceSection = () => {
                         ))}
                       </div>
 
-                      {/* Description - shows when expanded */}
+                      {/* Description — peeks out behind a fade so the card reads as
+                          having more to show, with the chevron floating over it. */}
                       <div
-                        className={`overflow-hidden transition-all duration-500 ${
-                          expandedCards.has(index)
-                            ? "max-h-[1000px] opacity-100 mt-4"
-                            : "max-h-0 opacity-0"
+                        className={`relative overflow-hidden transition-all duration-500 mt-4 ${
+                          expandedCards.has(index) ? "max-h-[1200px]" : "max-h-24 fade-mask-b pb-4"
                         }`}
                       >
                         <div className="border-t border-slate-200 dark:border-white/10 pt-4">
@@ -253,9 +253,28 @@ const ExperienceSection = () => {
                     </div>
                   </div>
 
-                  <p className="mt-3 text-center text-slate-400 dark:text-white/25 text-xs">
-                    {expandedCards.has(index) ? "Click to collapse" : "Click to expand"}
-                  </p>
+                  <div
+                    className={`relative z-10 flex justify-center ${
+                      expandedCards.has(index) ? "mt-4" : "-mt-4"
+                    }`}
+                  >
+                    <span
+                      aria-hidden="true"
+                      className="inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-medium text-slate-600 dark:text-white/70 border transition-colors duration-200 group-hover:border-brand/50 group-hover:text-brand"
+                      style={{
+                        background: "var(--nav-bg)",
+                        borderColor: "var(--nav-mobile-border)",
+                        backdropFilter: "blur(6px)",
+                      }}
+                    >
+                      {expandedCards.has(index) ? "Show less" : "Read more"}
+                      <ChevronDown
+                        className={`w-3.5 h-3.5 transition-transform duration-300 ${
+                          expandedCards.has(index) ? "rotate-180" : ""
+                        }`}
+                      />
+                    </span>
+                  </div>
                 </div>
               </div>
             </FadeIn>

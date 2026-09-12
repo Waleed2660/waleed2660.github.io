@@ -1,28 +1,21 @@
 import { useEffect, useRef, useState } from "react";
-import { Home, Briefcase, Code2, Calendar, Mail, ChevronUp } from "lucide-react";
+import { Home, Briefcase, Code2, Calendar, Mail, MoreHorizontal } from "lucide-react";
 import ThemeToggle from "@/components/ThemeToggle";
 
 interface NavigationProps {
   onSectionClick: (section: string) => void;
   activeSection: string;
-  showBackToTop?: boolean;
-  onScrollToTop?: () => void;
 }
 
-const Navigation = ({
-  onSectionClick,
-  activeSection,
-  showBackToTop,
-  onScrollToTop,
-}: NavigationProps) => {
+const Navigation = ({ onSectionClick, activeSection }: NavigationProps) => {
   const sections = [
     { id: "home", label: "Home" },
     { id: "experience", label: "Experience" },
     { id: "projects", label: "Projects" },
-    { id: "research", label: "Research" },
-    { id: "conferences", label: "On The Ground" },
     { id: "github", label: "GitHub" },
     { id: "tools", label: "Tech Stack" },
+    { id: "research", label: "Education" },
+    { id: "conferences", label: "Conferences" },
     { id: "currently", label: "Interests" },
     { id: "contact", label: "Contact" },
   ];
@@ -52,6 +45,20 @@ const Navigation = ({
     { id: "conferences", label: "Events", icon: <Calendar className="w-5 h-5" /> },
     { id: "contact", label: "Contact", icon: <Mail className="w-5 h-5" /> },
   ];
+
+  // Sections with no room in the bottom pill, reachable through the "More" sheet
+  const overflowSections = sections.filter((s) => !mobileSections.some((m) => m.id === s.id));
+  const [moreOpen, setMoreOpen] = useState(false);
+  const moreActive = overflowSections.some((s) => s.id === activeSection);
+
+  useEffect(() => {
+    if (!moreOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMoreOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [moreOpen]);
 
   return (
     <>
@@ -107,7 +114,7 @@ const Navigation = ({
         }}
       >
         <div
-          className="flex items-center gap-1 px-3 py-3 rounded-full"
+          className="flex items-center gap-0.5 px-2 py-3 rounded-full sm:gap-1 sm:px-3 max-w-[calc(100vw-1.5rem)]"
           style={{
             background: "var(--nav-bg)",
             border: "1px solid var(--nav-mobile-border)",
@@ -120,7 +127,7 @@ const Navigation = ({
               <button
                 key={section.id}
                 onClick={() => onSectionClick(section.id)}
-                className="relative flex items-center justify-center w-11 h-11 rounded-full transition-colors duration-200"
+                className="relative flex items-center justify-center w-10 h-11 min-[360px]:w-11 rounded-full transition-colors duration-200"
                 style={{ color: isActive ? "var(--nav-toggle-icon)" : "var(--nav-icon-inactive)" }}
                 aria-label={section.label}
                 aria-current={isActive ? "page" : undefined}
@@ -142,26 +149,75 @@ const Navigation = ({
             );
           })}
 
-          <div className="flex items-center justify-center px-1">
+          <div className="flex items-center justify-center">
             <ThemeToggle size="sm" />
           </div>
 
-          {/* Back to top — appears as extra icon when scrolled down */}
-          <div
-            className="overflow-hidden transition-all duration-300"
-            style={{ width: showBackToTop ? "2.75rem" : "0px", opacity: showBackToTop ? 1 : 0 }}
+          {/* More — the sections with no room in the pill */}
+          <button
+            onClick={() => setMoreOpen((v) => !v)}
+            className="relative flex items-center justify-center w-10 h-11 min-[360px]:w-11 rounded-full transition-colors duration-200"
+            style={{
+              color: moreOpen || moreActive ? "var(--nav-toggle-icon)" : "var(--nav-icon-inactive)",
+            }}
+            aria-label="More sections"
+            aria-expanded={moreOpen}
           >
-            <button
-              onClick={onScrollToTop}
-              className="flex items-center justify-center w-11 h-11 rounded-full transition-colors duration-200"
-              style={{ color: "var(--nav-icon-inactive)" }}
-              aria-label="Back to top"
-            >
-              <ChevronUp className="w-5 h-5" />
-            </button>
-          </div>
+            {(moreOpen || moreActive) && (
+              <span
+                className="absolute inset-0 rounded-full"
+                style={{ background: "var(--nav-icon-active-bg)" }}
+              />
+            )}
+            <span className="relative">
+              <MoreHorizontal className="w-5 h-5" />
+            </span>
+            {moreActive && !moreOpen && (
+              <span
+                className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full"
+                style={{ background: "var(--nav-icon-dot)" }}
+              />
+            )}
+          </button>
         </div>
+
+        {moreOpen && (
+          <div
+            className="absolute bottom-full right-0 mb-3 min-w-[11rem] rounded-2xl overflow-hidden p-1.5 backdrop-blur-xl"
+            style={{
+              background: "var(--nav-bg)",
+              border: "1px solid var(--nav-mobile-border)",
+              boxShadow: "var(--nav-shadow)",
+            }}
+          >
+            {overflowSections.map((section) => (
+              <button
+                key={section.id}
+                onClick={() => {
+                  setMoreOpen(false);
+                  onSectionClick(section.id);
+                }}
+                aria-current={activeSection === section.id ? "page" : undefined}
+                className="flex w-full items-center rounded-xl px-4 min-h-[44px] text-sm font-medium text-left transition-colors duration-200 text-slate-700 dark:text-white/80"
+                style={{
+                  background:
+                    activeSection === section.id ? "var(--nav-icon-active-bg)" : "transparent",
+                }}
+              >
+                {section.label}
+              </button>
+            ))}
+          </div>
+        )}
       </nav>
+
+      {moreOpen && (
+        <button
+          className="fixed inset-0 z-40 md:hidden"
+          aria-label="Close menu"
+          onClick={() => setMoreOpen(false)}
+        />
+      )}
     </>
   );
 };
