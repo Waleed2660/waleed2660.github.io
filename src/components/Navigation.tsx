@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Home, Briefcase, Code2, Calendar, Mail, MoreHorizontal } from "lucide-react";
 import ThemeToggle from "@/components/ThemeToggle";
 
@@ -55,6 +55,48 @@ const Navigation = ({ onSectionClick, activeSection }: NavigationProps) => {
   const moreActive = overflowSections.some((s) => s.id === activeSection);
   const [tabletMoreOpen, setTabletMoreOpen] = useState(false);
 
+  // Whether the full (all-sections) top nav actually fits the viewport. Rather
+  // than relying on a fixed Tailwind breakpoint — which doesn't know how wide
+  // the label text actually renders — we measure the full nav's natural width
+  // against the available space and fall back to the condensed "More" layout
+  // whenever it wouldn't fit, at any resolution.
+  const fullMeasureRef = useRef<HTMLDivElement>(null);
+  const [isCompact, setIsCompact] = useState(true);
+
+  useLayoutEffect(() => {
+    const measureEl = fullMeasureRef.current;
+    if (!measureEl) return;
+
+    let rafId = 0;
+    const recompute = () => {
+      rafId = 0;
+      // Keep in sync with the `max-w-[calc(100vw-2rem)]` constraint on the nav
+      // container, plus a small safety margin.
+      const available = window.innerWidth - 32;
+      const needed = measureEl.scrollWidth;
+      setIsCompact(needed > available);
+    };
+    // Both listeners below can fire multiple times for the same visual resize
+    // (the window "resize" event and the ResizeObserver watching the measurer,
+    // whose width also changes since it uses viewport-relative clamp() sizing).
+    // Coalesce them into a single rAF-scheduled measurement so a continuous
+    // window drag never does more than one forced layout read per frame.
+    const schedule = () => {
+      if (rafId) return;
+      rafId = requestAnimationFrame(recompute);
+    };
+
+    schedule();
+    window.addEventListener("resize", schedule, { passive: true });
+    const resizeObserver = new ResizeObserver(schedule);
+    resizeObserver.observe(measureEl);
+    return () => {
+      if (rafId) cancelAnimationFrame(rafId);
+      window.removeEventListener("resize", schedule);
+      resizeObserver.disconnect();
+    };
+  }, []);
+
   useEffect(() => {
     if (!moreOpen) return;
     const onKey = (e: KeyboardEvent) => {
@@ -75,20 +117,57 @@ const Navigation = ({ onSectionClick, activeSection }: NavigationProps) => {
 
   return (
     <>
-      {/* Desktop nav — only from lg up, where all sections plus the theme toggle
-          actually fit in one row. Below that (e.g. portrait iPad Air at 820px)
-          the tablet nav below takes over instead of letting this one scroll
-          horizontally. */}
-      <nav className="fixed top-6 left-1/2 transform -translate-x-1/2 z-50 hidden lg:block max-w-[calc(100vw-2rem)]">
+      {/* Hidden measurer — an off-screen clone of the full (all-sections) nav
+          used purely to read its natural, unwrapped width via scrollWidth.
+          This lets us decide whether the full nav actually fits the current
+          viewport instead of guessing from a fixed Tailwind breakpoint, which
+          leaves gaps where the real content still overflows into a
+          horizontal scrollbar. */}
+      <div
+        aria-hidden="true"
+        className="fixed top-0 left-0 pointer-events-none opacity-0"
+        style={{ visibility: "hidden", zIndex: -1 }}
+      >
         <div
-          className="rounded-2xl p-1.5 lg:p-2 overflow-x-auto"
+          ref={fullMeasureRef}
+          className="inline-flex items-center gap-x-[clamp(0.25rem,-0.8rem+1.6vw,0.5rem)] p-[clamp(0.375rem,-0.15rem+0.8vw,0.5rem)] w-max"
+        >
+          {sections.map((section) => (
+            <span
+              key={section.id}
+              className="px-[clamp(0.75rem,-2.4rem+4.8vw,1.5rem)] py-[clamp(0.625rem,0.1rem+0.8vw,0.75rem)] text-[clamp(0.75rem,0.225rem+0.8vw,0.875rem)] font-medium whitespace-nowrap"
+            >
+              {section.label}
+            </span>
+          ))}
+          <span className="h-8 w-px mx-1" />
+          <span className="w-14 h-7" />
+        </div>
+      </div>
+
+      {/* Desktop nav — shown whenever all sections plus the theme toggle
+          actually fit in one row (measured live, not a fixed breakpoint).
+          Sizing uses fluid clamp()-based padding/font-size so it shrinks
+          continuously as the viewport narrows, instead of staying one fixed
+          size and then jumping straight to the compact layout. The swap to
+          the compact nav below is softened with an opacity crossfade. */}
+      <nav
+        className="fixed top-6 left-1/2 transform -translate-x-1/2 z-50 hidden md:block max-w-[calc(100vw-2rem)] transition-opacity duration-300 ease-out"
+        style={{ opacity: isCompact ? 0 : 1, pointerEvents: isCompact ? "none" : "auto" }}
+        aria-hidden={isCompact}
+      >
+        <div
+          className="rounded-2xl p-[clamp(0.375rem,-0.15rem+0.8vw,0.5rem)]"
           style={{
             background: "var(--nav-bg)",
             border: "1px solid var(--nav-border)",
             boxShadow: "var(--nav-shadow)",
           }}
         >
-          <div ref={containerRef} className="flex items-center space-x-1 lg:space-x-2 relative">
+          <div
+            ref={containerRef}
+            className="flex items-center gap-x-[clamp(0.25rem,-0.8rem+1.6vw,0.5rem)] relative"
+          >
             {pillStyle && (
               <div
                 className="absolute inset-y-0 rounded-xl bg-slate-900/10 dark:bg-white/15 transition-all duration-300 ease-out pointer-events-none"
@@ -103,7 +182,8 @@ const Navigation = ({ onSectionClick, activeSection }: NavigationProps) => {
                 }}
                 onClick={() => onSectionClick(section.id)}
                 aria-current={activeSection === section.id ? "page" : undefined}
-                className={`px-3 lg:px-6 py-2.5 lg:py-3 rounded-xl text-xs lg:text-sm font-medium transition-colors duration-300 relative z-10 whitespace-nowrap ${
+                tabIndex={isCompact ? -1 : undefined}
+                className={`px-[clamp(0.75rem,-2.4rem+4.8vw,1.5rem)] py-[clamp(0.625rem,0.1rem+0.8vw,0.75rem)] rounded-xl text-[clamp(0.75rem,0.225rem+0.8vw,0.875rem)] font-medium transition-colors duration-300 relative z-10 whitespace-nowrap ${
                   activeSection === section.id
                     ? "text-slate-900 dark:text-white"
                     : "text-slate-600 dark:text-white/80 hover:text-slate-900 dark:hover:text-white hover:bg-slate-900/5 dark:hover:bg-white/5"
@@ -120,11 +200,16 @@ const Navigation = ({ onSectionClick, activeSection }: NavigationProps) => {
         </div>
       </nav>
 
-      {/* Tablet nav — md to lg (e.g. iPad Air portrait). Same pill styling as
-          desktop, but only the primary sections plus a "More" dropdown for the
+      {/* Compact nav — shown whenever the full nav wouldn't fit even at its
+          smallest fluid size (measured live). Same pill styling as the full
+          nav, but only the primary sections plus a "More" dropdown for the
           rest, instead of letting the full set overflow into a horizontal
-          scrollbar. */}
-      <nav className="fixed top-6 left-1/2 transform -translate-x-1/2 z-50 hidden md:block lg:hidden max-w-[calc(100vw-2rem)]">
+          scrollbar. Crossfades in via opacity as the full nav fades out. */}
+      <nav
+        className="fixed top-6 left-1/2 transform -translate-x-1/2 z-50 hidden md:block max-w-[calc(100vw-2rem)] transition-opacity duration-300 ease-out"
+        style={{ opacity: isCompact ? 1 : 0, pointerEvents: isCompact ? "auto" : "none" }}
+        aria-hidden={!isCompact}
+      >
         <div
           className="rounded-2xl p-1.5 relative"
           style={{
@@ -139,6 +224,7 @@ const Navigation = ({ onSectionClick, activeSection }: NavigationProps) => {
                 key={section.id}
                 onClick={() => onSectionClick(section.id)}
                 aria-current={activeSection === section.id ? "page" : undefined}
+                tabIndex={!isCompact ? -1 : undefined}
                 className={`px-3 py-2.5 rounded-xl text-xs font-medium transition-colors duration-300 whitespace-nowrap ${
                   activeSection === section.id
                     ? "text-slate-900 dark:text-white bg-slate-900/10 dark:bg-white/15"
@@ -154,6 +240,7 @@ const Navigation = ({ onSectionClick, activeSection }: NavigationProps) => {
                 onClick={() => setTabletMoreOpen((v) => !v)}
                 aria-current={moreActive ? "page" : undefined}
                 aria-expanded={tabletMoreOpen}
+                tabIndex={!isCompact ? -1 : undefined}
                 className={`px-3 py-2.5 rounded-xl text-xs font-medium transition-colors duration-300 whitespace-nowrap ${
                   moreActive || tabletMoreOpen
                     ? "text-slate-900 dark:text-white bg-slate-900/10 dark:bg-white/15"
@@ -205,7 +292,7 @@ const Navigation = ({ onSectionClick, activeSection }: NavigationProps) => {
 
       {tabletMoreOpen && (
         <button
-          className="fixed inset-0 z-40 hidden md:block lg:hidden"
+          className="fixed inset-0 z-40 hidden md:block"
           aria-label="Close menu"
           onClick={() => setTabletMoreOpen(false)}
         />
