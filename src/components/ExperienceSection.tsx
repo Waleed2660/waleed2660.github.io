@@ -63,7 +63,16 @@ const ExperienceSection = () => {
       location: "Manchester, UK",
       logo: "/work_exp/sainsburys.webp",
       period: "Mar 2025 to Present",
-      tech: ["Java", "Spring Boot", "Apache Kafka", "Kubernetes", "AWS"],
+      tech: [
+        "Java",
+        "Spring Boot",
+        "Apache Kafka",
+        "Kubernetes",
+        "AWS",
+        "K6",
+        "Terraform",
+        "New Relic",
+      ],
       brandColor:
         "bg-gradient-to-br from-orange-500/10 to-amber-500/10 border-orange-500/30 hover:border-orange-500/50",
       bulletColor: "text-orange-600 dark:text-orange-400/80",
@@ -229,14 +238,19 @@ const ExperienceSection = () => {
                         ))}
                       </div>
 
-                      {/* Description — peeks out behind a fade so the card reads as
-                          having more to show, with the chevron floating over it. */}
+                      {/* Description — blurred and fading out when collapsed so the
+                          card reads as having more to show without being legible,
+                          with the chevron floating over it. */}
                       <div
                         className={`relative overflow-hidden transition-all duration-500 mt-4 ${
                           expandedCards.has(index) ? "max-h-[1200px]" : "max-h-24 fade-mask-b pb-4"
                         }`}
                       >
-                        <div className="border-t border-slate-200 dark:border-white/10 pt-4">
+                        <div
+                          className={`border-t border-slate-200 dark:border-white/10 pt-4 transition-[filter] duration-500 ${
+                            expandedCards.has(index) ? "blur-0" : "blur-[3px]"
+                          }`}
+                        >
                           <ul className="space-y-3">
                             {exp.description.map((item, i) => (
                               <li key={i} className="flex items-start gap-3">

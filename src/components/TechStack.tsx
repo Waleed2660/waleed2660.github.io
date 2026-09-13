@@ -105,6 +105,7 @@ function buildLayout(rows: number[]) {
 const TechStack = () => {
   const clusterRef = useRef<HTMLDivElement>(null);
   const nodeRefs = useRef<Array<HTMLLIElement | null>>([]);
+  const buttonRefs = useRef<Array<HTMLButtonElement | null>>([]);
   const [scale, setScale] = useState(1);
   const [narrow, setNarrow] = useState(false);
 
@@ -134,6 +135,11 @@ const TechStack = () => {
     slots.forEach((p, i) => {
       const node = nodeRefs.current[i];
       if (node) node.style.transform = `translate3d(-50%, -50%, 0) scale(${p.base})`;
+      const btn = buttonRefs.current[i];
+      if (btn) {
+        btn.style.borderColor = "";
+        btn.style.backgroundColor = "";
+      }
     });
   }, [slots]);
 
@@ -195,11 +201,25 @@ const TechStack = () => {
         const bx = cx + p.x * scale;
         const by = cy + p.y * scale;
         const d = Math.hypot(effective.x - bx, effective.y - by);
+        let t = 0;
         if (d < CURSOR_RADIUS) {
-          const t = 1 - d / CURSOR_RADIUS;
+          t = 1 - d / CURSOR_RADIUS;
           s += CURSOR_GAIN * t * t;
         }
         node.style.transform = `translate3d(-50%, -50%, 0) scale(${s})`;
+
+        // Same proximity drives the hover-style border/background glow, so
+        // the wave "touches" bubbles visually the same way a real hover does.
+        const btn = buttonRefs.current[i];
+        if (btn) {
+          if (t > 0) {
+            btn.style.borderColor = `color-mix(in srgb, var(--bubble-border), hsl(var(--brand) / 0.55) ${t * 100}%)`;
+            btn.style.backgroundColor = `color-mix(in srgb, var(--bubble-bg), var(--bubble-bg-hover) ${t * 100}%)`;
+          } else {
+            btn.style.borderColor = "";
+            btn.style.backgroundColor = "";
+          }
+        }
       }
 
       schedule();
@@ -286,6 +306,7 @@ const TechStack = () => {
                     }}
                   >
                     <button
+                      ref={(el) => (buttonRefs.current[i] = el)}
                       type="button"
                       aria-label={tech.name}
                       className="w-full h-full rounded-full flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-brand"
