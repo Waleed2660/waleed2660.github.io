@@ -102,7 +102,6 @@
     --bubble-bg: rgba(255, 255, 255, 0.06);
     --bubble-bg-hover: rgba(255, 255, 255, 0.12);
     --bubble-border: rgba(255, 255, 255, 0.1);
-    --resume-card-bg: rgba(255, 255, 255, 0.1);
   }
 
   html:not(.dark) {
@@ -177,7 +176,6 @@
     --bubble-bg: rgba(255, 255, 255, 0.85);
     --bubble-bg-hover: #ffffff;
     --bubble-border: rgba(100, 116, 139, 0.22);
-    --resume-card-bg: rgba(0, 0, 0, 0.04);
   }
 }
 

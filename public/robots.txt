@@ -1,14 +1,18 @@
 User-agent: Googlebot
 Allow: /
+Disallow: /resume.pdf
 
 User-agent: Bingbot
 Allow: /
+Disallow: /resume.pdf
 
 User-agent: Twitterbot
 Allow: /
+Disallow: /resume.pdf
 
 User-agent: facebookexternalhit
 Allow: /
+Disallow: /resume.pdf
 
 User-agent: *
 Allow: /
