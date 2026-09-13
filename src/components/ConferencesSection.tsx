@@ -304,6 +304,8 @@ const PhotoGrid = ({
             {!isErrored && (
               <img
                 src={photo.src}
+                srcSet={`${photo.src.replace(/\.webp$/, "-640w.webp")} 640w, ${photo.src} 1200w`}
+                sizes="(max-width: 640px) 45vw, 300px"
                 alt={photo.alt}
                 loading={i === 0 ? "eager" : "lazy"}
                 decoding="async"

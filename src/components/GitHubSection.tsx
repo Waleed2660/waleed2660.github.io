@@ -318,13 +318,13 @@ const GitHubSection = () => {
                 <div className="text-slate-500 dark:text-white/50 text-xs">Stars</div>
               </div>
               <div className="flex flex-col items-center gap-1 py-2">
-                <div className="text-2xl font-bold text-brand">
+                <div className="text-2xl font-bold text-sky-600 dark:text-sky-400">
                   {stats ? stats.followers : "N/A"}
                 </div>
                 <div className="text-slate-500 dark:text-white/50 text-xs">Followers</div>
               </div>
               <div className="flex flex-col items-center gap-1 py-2">
-                <div className="text-2xl font-bold text-brand">
+                <div className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">
                   {stats ? stats.public_repos : "N/A"}
                 </div>
                 <div className="text-slate-500 dark:text-white/50 text-xs">Repos</div>
@@ -367,7 +367,7 @@ const GitHubSection = () => {
               </div>
               <div className="flex flex-col items-center text-center gap-2 px-1">
                 <Trophy className="w-4 h-4 text-amber-500" />
-                <div className="text-xl font-bold text-slate-800 dark:text-white">
+                <div className="text-xl font-bold text-amber-600 dark:text-amber-400">
                   {stats?.streak ? stats.streak.longestStreak : "N/A"}
                 </div>
                 <div className="text-slate-500 dark:text-white/50 text-[10px] uppercase tracking-wide leading-tight">

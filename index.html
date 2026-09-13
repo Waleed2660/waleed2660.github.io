@@ -2,6 +2,17 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <!-- Preload the display face used by the hero heading so it's fetched in
+         parallel with the stylesheet instead of being discovered only after
+         the CSS parses, which shortens the fallback-to-webfont swap window
+         and reduces the layout shift it causes below the heading. -->
+    <link
+      rel="preload"
+      href="/fonts/newsreader-latin.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
     <script>
       (function () {
         try {

@@ -50,6 +50,8 @@ const BUBBLE = 92; // rendered bubble diameter
 const DOME_FALLOFF = 0.26; // how much smaller the furthest bubbles sit
 const CURSOR_RADIUS = 190; // magnifier reach in px
 const CURSOR_GAIN = 0.32; // peak extra scale under the cursor
+const WAVE_PERIOD_S = 3; // seconds for one left-to-right sweep, then it loops
+const WAVE_ROW_CYCLES = 2; // vertical up/down passes per sweep, so top and bottom rows get hit too
 
 // Explicit honeycomb rows, chosen so the counts sum to exactly the number of
 // icons — no partial ring, so no orphan bubble dangling off the cluster.
@@ -94,6 +96,7 @@ function buildLayout(rows: number[]) {
   return {
     width: maxX * 2 + BUBBLE,
     height: maxY * 2 + BUBBLE,
+    maxX,
     points,
     order,
   };
@@ -134,49 +137,72 @@ const TechStack = () => {
     });
   }, [slots]);
 
-  // Cursor magnifier. Every position is precomputed, so each frame is pure maths
-  // plus one compositor-only transform write per bubble — no layout reads.
+  // Cursor magnifier, plus an idle "wave" that pops bubbles the same way while
+  // nobody's hovering: a virtual point sweeps left-to-right on a loop and
+  // feeds the exact same distance/scale maths as the real cursor, so bubbles
+  // grow (icon + card together) precisely like they do on hover. Every
+  // position is precomputed, so each frame is pure maths plus one
+  // compositor-only transform write per bubble — no layout reads.
   useEffect(() => {
     const cluster = clusterRef.current;
     if (!cluster) return;
 
-    const fine = window.matchMedia("(hover: hover) and (pointer: fine)");
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
-    if (!fine.matches || reduced.matches) {
+    if (reduced.matches) {
       applyBase();
       return;
     }
+
+    const fine = window.matchMedia("(hover: hover) and (pointer: fine)");
 
     let rafId = 0;
     let visible = true;
     let pointer: { x: number; y: number } | null = null;
     let rect = cluster.getBoundingClientRect();
+    const waveStart = performance.now();
 
     const measure = () => {
       rect = cluster.getBoundingClientRect();
     };
 
-    const render = () => {
+    const render = (now: number) => {
       rafId = 0;
       const cx = rect.left + rect.width / 2;
       const cy = rect.top + rect.height / 2;
+
+      // While nothing is actively hovered, drive the same magnifier maths
+      // with a virtual point swept across the cluster instead of the cursor.
+      // Only a small pad either side (so it restarts quickly) and a vertical
+      // sine so the sweep reaches the top and bottom rows too, not just the
+      // horizontal centre line.
+      let effective = pointer;
+      if (!effective) {
+        const t = ((now - waveStart) / 1000) % WAVE_PERIOD_S;
+        const progress = t / WAVE_PERIOD_S;
+        const pad = CURSOR_RADIUS * 0.5;
+        const vx = rect.left - pad + progress * (rect.width + pad * 2);
+        const vy =
+          cy + Math.sin(progress * Math.PI * 2 * WAVE_ROW_CYCLES) * (rect.height / 2) * 0.85;
+        effective = { x: vx, y: vy };
+      }
+
       for (let i = 0; i < slots.length; i++) {
         const node = nodeRefs.current[i];
         if (!node) continue;
         const p = slots[i];
         let s = p.base;
-        if (pointer) {
-          // Bubble centre in viewport space, derived from cached numbers only.
-          const bx = cx + p.x * scale;
-          const by = cy + p.y * scale;
-          const d = Math.hypot(pointer.x - bx, pointer.y - by);
-          if (d < CURSOR_RADIUS) {
-            const t = 1 - d / CURSOR_RADIUS;
-            s += CURSOR_GAIN * t * t;
-          }
+        // Bubble centre in viewport space, derived from cached numbers only.
+        const bx = cx + p.x * scale;
+        const by = cy + p.y * scale;
+        const d = Math.hypot(effective.x - bx, effective.y - by);
+        if (d < CURSOR_RADIUS) {
+          const t = 1 - d / CURSOR_RADIUS;
+          s += CURSOR_GAIN * t * t;
         }
         node.style.transform = `translate3d(-50%, -50%, 0) scale(${s})`;
       }
+
+      schedule();
     };
 
     const schedule = () => {
@@ -185,23 +211,26 @@ const TechStack = () => {
 
     const onMove = (e: MouseEvent) => {
       pointer = { x: e.clientX, y: e.clientY };
-      schedule();
     };
     const onLeave = () => {
       pointer = null;
-      schedule();
     };
 
-    // Only listen while the cluster is actually on screen.
+    // Only run the loop while the cluster is actually on screen.
     const io = new IntersectionObserver(
       ([entry]) => {
         visible = entry.isIntersecting;
         if (visible) {
           measure();
-          window.addEventListener("mousemove", onMove, { passive: true });
+          schedule();
+          if (fine.matches) cluster.addEventListener("mousemove", onMove, { passive: true });
         } else {
-          window.removeEventListener("mousemove", onMove);
+          cluster.removeEventListener("mousemove", onMove);
           pointer = null;
+          if (rafId) {
+            cancelAnimationFrame(rafId);
+            rafId = 0;
+          }
           applyBase();
         }
       },
@@ -211,12 +240,11 @@ const TechStack = () => {
 
     window.addEventListener("scroll", measure, { passive: true });
     window.addEventListener("resize", measure, { passive: true });
-    cluster.addEventListener("mouseleave", onLeave);
-    applyBase();
+    if (fine.matches) cluster.addEventListener("mouseleave", onLeave);
 
     return () => {
       io.disconnect();
-      window.removeEventListener("mousemove", onMove);
+      cluster.removeEventListener("mousemove", onMove);
       window.removeEventListener("scroll", measure);
       window.removeEventListener("resize", measure);
       cluster.removeEventListener("mouseleave", onLeave);

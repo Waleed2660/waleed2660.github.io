@@ -48,8 +48,12 @@ const Navigation = ({ onSectionClick, activeSection }: NavigationProps) => {
 
   // Sections with no room in the bottom pill, reachable through the "More" sheet
   const overflowSections = sections.filter((s) => !mobileSections.some((m) => m.id === s.id));
+  // Same primary/overflow split as mobile, but with the full (non-abbreviated) labels
+  // used elsewhere on desktop — reused for the tablet-width nav below.
+  const primarySections = sections.filter((s) => mobileSections.some((m) => m.id === s.id));
   const [moreOpen, setMoreOpen] = useState(false);
   const moreActive = overflowSections.some((s) => s.id === activeSection);
+  const [tabletMoreOpen, setTabletMoreOpen] = useState(false);
 
   useEffect(() => {
     if (!moreOpen) return;
@@ -60,10 +64,22 @@ const Navigation = ({ onSectionClick, activeSection }: NavigationProps) => {
     return () => window.removeEventListener("keydown", onKey);
   }, [moreOpen]);
 
+  useEffect(() => {
+    if (!tabletMoreOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setTabletMoreOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [tabletMoreOpen]);
+
   return (
     <>
-      {/* Desktop nav */}
-      <nav className="fixed top-6 left-1/2 transform -translate-x-1/2 z-50 hidden md:block max-w-[calc(100vw-2rem)]">
+      {/* Desktop nav — only from lg up, where all sections plus the theme toggle
+          actually fit in one row. Below that (e.g. portrait iPad Air at 820px)
+          the tablet nav below takes over instead of letting this one scroll
+          horizontally. */}
+      <nav className="fixed top-6 left-1/2 transform -translate-x-1/2 z-50 hidden lg:block max-w-[calc(100vw-2rem)]">
         <div
           className="rounded-2xl p-1.5 lg:p-2 overflow-x-auto"
           style={{
@@ -103,6 +119,97 @@ const Navigation = ({ onSectionClick, activeSection }: NavigationProps) => {
           </div>
         </div>
       </nav>
+
+      {/* Tablet nav — md to lg (e.g. iPad Air portrait). Same pill styling as
+          desktop, but only the primary sections plus a "More" dropdown for the
+          rest, instead of letting the full set overflow into a horizontal
+          scrollbar. */}
+      <nav className="fixed top-6 left-1/2 transform -translate-x-1/2 z-50 hidden md:block lg:hidden max-w-[calc(100vw-2rem)]">
+        <div
+          className="rounded-2xl p-1.5 relative"
+          style={{
+            background: "var(--nav-bg)",
+            border: "1px solid var(--nav-border)",
+            boxShadow: "var(--nav-shadow)",
+          }}
+        >
+          <div className="flex items-center space-x-1">
+            {primarySections.map((section) => (
+              <button
+                key={section.id}
+                onClick={() => onSectionClick(section.id)}
+                aria-current={activeSection === section.id ? "page" : undefined}
+                className={`px-3 py-2.5 rounded-xl text-xs font-medium transition-colors duration-300 whitespace-nowrap ${
+                  activeSection === section.id
+                    ? "text-slate-900 dark:text-white bg-slate-900/10 dark:bg-white/15"
+                    : "text-slate-600 dark:text-white/80 hover:text-slate-900 dark:hover:text-white hover:bg-slate-900/5 dark:hover:bg-white/5"
+                }`}
+              >
+                {section.label}
+              </button>
+            ))}
+
+            <div className="relative">
+              <button
+                onClick={() => setTabletMoreOpen((v) => !v)}
+                aria-current={moreActive ? "page" : undefined}
+                aria-expanded={tabletMoreOpen}
+                className={`px-3 py-2.5 rounded-xl text-xs font-medium transition-colors duration-300 whitespace-nowrap ${
+                  moreActive || tabletMoreOpen
+                    ? "text-slate-900 dark:text-white bg-slate-900/10 dark:bg-white/15"
+                    : "text-slate-600 dark:text-white/80 hover:text-slate-900 dark:hover:text-white hover:bg-slate-900/5 dark:hover:bg-white/5"
+                }`}
+              >
+                More
+              </button>
+
+              {tabletMoreOpen && (
+                <div
+                  className="absolute top-full right-0 mt-2 min-w-[10rem] rounded-2xl overflow-hidden p-1.5"
+                  style={{
+                    background: "var(--nav-bg)",
+                    border: "1px solid var(--nav-border)",
+                    boxShadow: "var(--nav-shadow)",
+                  }}
+                >
+                  {overflowSections.map((section) => (
+                    <button
+                      key={section.id}
+                      onClick={() => {
+                        setTabletMoreOpen(false);
+                        onSectionClick(section.id);
+                      }}
+                      aria-current={activeSection === section.id ? "page" : undefined}
+                      className="flex w-full items-center rounded-xl px-4 min-h-[44px] text-sm font-medium text-left transition-colors duration-200 text-slate-700 dark:text-white/80"
+                      style={{
+                        background:
+                          activeSection === section.id
+                            ? "var(--nav-icon-active-bg)"
+                            : "transparent",
+                      }}
+                    >
+                      {section.label}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <div className="h-8 w-px bg-slate-300/70 dark:bg-white/10 mx-1" />
+            <div className="flex items-center justify-center">
+              <ThemeToggle size="sm" />
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      {tabletMoreOpen && (
+        <button
+          className="fixed inset-0 z-40 hidden md:block lg:hidden"
+          aria-label="Close menu"
+          onClick={() => setTabletMoreOpen(false)}
+        />
+      )}
 
       {/* Mobile bottom nav — compact icon-only floating pill */}
       <nav
