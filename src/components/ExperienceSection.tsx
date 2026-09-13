@@ -69,7 +69,8 @@ const ExperienceSection = () => {
       bulletColor: "text-orange-600 dark:text-orange-400/80",
       description: [
         "Part of Digital Fulfilment team, developing critical backend services that calculate accurate delivery timelines for customer orders, contributing to Sainsbury's online platform serving millions of weekly shoppers across the UK",
-        "Currently developing a new order reservation proposition, enabling advanced inventory management and improved customer experience through real-time stock availability",
+        "Delivered a new order reservation proposition, enabling advanced inventory management and improved customer experience through real-time stock availability",
+        "Built extensive expertise in k6, developing a feature-rich, smart automated load testing suite for API and Kafka testing",
         "Building event-driven microservices using Spring Boot and Apache Kafka, processing high-throughput event streams across multiple topics powering real-time order processing and inventory updates",
         "Architecting solutions using diverse data stores (PostgreSQL, MongoDB, DynamoDB) to optimize for different data access patterns and performance requirements",
         "Managing deployments and infrastructure on AWS using Kubernetes, ensuring high availability and scalability of services",
