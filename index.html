@@ -2,6 +2,17 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <!-- Preload the display face used by the hero heading so it's fetched in
+         parallel with the stylesheet instead of being discovered only after
+         the CSS parses, which shortens the fallback-to-webfont swap window
+         and reduces the layout shift it causes below the heading. -->
+    <link
+      rel="preload"
+      href="/fonts/newsreader-latin.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
     <script>
       (function () {
         try {
@@ -97,9 +108,9 @@
         "sameAs": ["https://github.com/Waleed2660", "https://www.linkedin.com/in/waleed-t/"]
       }
     </script>
-    <script type="module" crossorigin src="/assets/index-BapFF96C.js"></script>
+    <script type="module" crossorigin src="/assets/index-D_k7S8s0.js"></script>
     <link rel="modulepreload" crossorigin href="/assets/vendor-CQeHmLAp.js">
-    <link rel="stylesheet" crossorigin href="/assets/index-C8OSawlG.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-DBS8otfS.css">
   </head>
 
   <body>
