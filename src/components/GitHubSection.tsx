@@ -223,11 +223,17 @@ const ContributionGraph = ({ calendar }: { calendar: Record<string, number> }) =
         <select
           value={selectedYear}
           onChange={(e) => setSelectedYear(e.target.value)}
-          className="text-xs bg-transparent border border-slate-900/10 dark:border-white/15 rounded-lg px-2 py-1 text-slate-500 dark:text-white/60 focus:outline-none focus:ring-1 focus:ring-brand cursor-pointer"
+          className="text-xs bg-white dark:bg-slate-900 border border-slate-900/10 dark:border-white/15 rounded-lg px-2 py-1 text-slate-500 dark:text-white/60 focus:outline-none focus:ring-1 focus:ring-brand cursor-pointer"
         >
-          <option value="">Last 12 months</option>
+          <option value="" className="bg-white dark:bg-slate-900 text-slate-700 dark:text-white/80">
+            Last 12 months
+          </option>
           {years.map((y) => (
-            <option key={y} value={y}>
+            <option
+              key={y}
+              value={y}
+              className="bg-white dark:bg-slate-900 text-slate-700 dark:text-white/80"
+            >
               {y}
             </option>
           ))}
