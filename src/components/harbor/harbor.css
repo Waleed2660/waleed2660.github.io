@@ -1,0 +1,1150 @@
+/* Isometric harbour hero. Static geometry is painted once; only small sprites
+   animate, and only via transform/opacity so motion stays on the compositor. */
+
+.hb-viewport {
+  --hb-ink: rgba(203, 213, 225, 0.62);
+  --hb-ink-soft: rgba(203, 213, 225, 0.28);
+  --hb-top: #1f2747;
+  --hb-left: #171d38;
+  --hb-right: #11162c;
+  --hb-band: #0c1022;
+  --hb-label: rgba(241, 245, 249, 0.86);
+  --hb-name-edge: hsl(18 55% 24%);
+  --hb-name-awash: hsl(196 65% 24% / 0.8);
+  --hb-name-under: hsl(196 60% 20% / 0.55);
+  --hb-accent: hsl(var(--brand));
+  --hb-water-band: hsl(200 60% 20% / 0.85);
+  --hb-foam: rgba(255, 255, 255, 0.85);
+  --hb-sea: hsl(197 58% 25%);
+  --hb-sea-edge: hsl(207 58% 17%);
+  --hb-slab-shallow: hsl(195 62% 32%);
+  --hb-slab-deep: hsl(212 65% 10%);
+  --hb-slab-rim: rgba(186, 230, 253, 0.75);
+  --hb-slab-turn: rgba(2, 6, 23, 0.4);
+  --hb-slab-shadow: rgba(0, 0, 0, 0.6);
+  --hb-sand: hsl(34 30% 34%);
+  --hb-sand-crest: hsl(38 34% 46%);
+  --hb-sand-grain: hsl(28 30% 20% / 0.85);
+  --hb-pebble: hsl(28 10% 26%);
+  --hb-shell: hsl(20 30% 66%);
+  --hb-fish: hsl(38 92% 66%);
+
+  position: relative;
+  width: 100%;
+  height: clamp(359px, min(67.5svh, 65.5vw), 760px);
+  overflow: hidden;
+}
+
+html:not(.dark) .hb-viewport {
+  --hb-ink: #8a97ab;
+  --hb-ink-soft: rgba(100, 116, 139, 0.35);
+  --hb-top: #ffffff;
+  --hb-left: #eef2f7;
+  --hb-right: #dfe5ee;
+  --hb-band: #c9d2df;
+  --hb-label: #334155;
+  --hb-name-edge: hsl(18 55% 26%);
+  --hb-name-awash: hsl(203 62% 30% / 0.75);
+  --hb-name-under: hsl(205 62% 24% / 0.5);
+  --hb-water-band: hsl(196 72% 34% / 0.85);
+  --hb-foam: #fff;
+  --hb-sea: hsl(188 78% 56%);
+  --hb-sea-mid: hsl(193 74% 46%);
+  --hb-sea-edge: hsl(205 72% 33%);
+  --hb-slab-shallow: hsl(188 76% 54%);
+  --hb-slab-deep: hsl(208 72% 30%);
+  --hb-slab-rim: rgba(255, 255, 255, 0.95);
+  --hb-slab-turn: rgba(15, 40, 80, 0.22);
+  --hb-slab-shadow: rgba(30, 41, 59, 0.32);
+  --hb-sand: hsl(38 62% 70%);
+  --hb-sand-crest: hsl(42 70% 84%);
+  --hb-sand-grain: hsl(30 40% 48% / 0.65);
+  --hb-pebble: hsl(30 14% 52%);
+  --hb-shell: hsl(18 70% 92%);
+  --hb-fish: hsl(22 92% 60%);
+  background: radial-gradient(
+    ellipse 70% 55% at 50% 45%,
+    rgba(255, 244, 222, 0.75),
+    rgba(255, 244, 222, 0) 70%
+  );
+}
+
+.hb-stage {
+  position: absolute;
+  pointer-events: none;
+  left: 50%;
+  top: 0;
+  transform-origin: top center;
+}
+
+.hb-sprite {
+  position: absolute;
+  overflow: visible;
+}
+svg.hb-sprite {
+  left: 0;
+  top: 0;
+}
+
+/* ---- Faces & strokes ---------------------------------------------------- */
+
+.hb-stage polygon,
+.hb-stage path,
+.hb-stage ellipse,
+.hb-stage rect,
+.hb-stage circle,
+.hb-stage line {
+  stroke: var(--hb-ink);
+  stroke-width: 1;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+.hb-top {
+  fill: var(--hb-top);
+}
+.hb-left {
+  fill: var(--hb-left);
+}
+.hb-right {
+  fill: var(--hb-right);
+}
+.hb-hull-band {
+  fill: var(--hb-band);
+}
+.hb-stage .hb-rib line,
+.hb-stage path.hb-rib {
+  stroke: var(--hb-ink-soft);
+  fill: none;
+}
+.hb-stage .hb-ink {
+  fill: none;
+}
+/* Panels outlined by their own fill colour, so adjoining pieces join without
+   a visible seam or an anti-aliasing gap. */
+.hb-stage .hb-top.hb-seamless {
+  stroke: var(--hb-top);
+}
+.hb-stage .hb-left.hb-seamless {
+  stroke: var(--hb-left);
+}
+.hb-stage .hb-hull-band.hb-seamless {
+  stroke: var(--hb-band);
+}
+.hb-stage .hb-thin {
+  stroke: var(--hb-ink-soft);
+}
+.hb-window {
+  fill: var(--hb-accent);
+}
+.hb-stripe {
+  fill: var(--hb-accent);
+  opacity: 0.85;
+}
+
+.hb-label {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 600;
+  fill: var(--hb-label);
+  stroke: none !important;
+  letter-spacing: 0.01em;
+}
+.hb-crate-label {
+  font-size: 11px;
+  font-weight: 700;
+}
+.hb-hull-label {
+  font-size: 13px;
+  letter-spacing: 0.14em;
+  fill: var(--hb-ink);
+}
+.hb-manifest {
+  font-size: 10.5px;
+  letter-spacing: 0.16em;
+  fill: var(--hb-ink);
+}
+.hb-tiny {
+  font-size: 8.5px;
+  letter-spacing: 0.08em;
+}
+
+/* ---- Water -------------------------------------------------------------- */
+
+.hb-stage .hb-wake,
+.hb-stage .hb-ripple-static {
+  fill: none;
+  stroke: var(--hb-ink-soft);
+}
+.hb-stage .hb-wake {
+  stroke: var(--hb-foam);
+  stroke-width: 1.6;
+  stroke-dasharray: 18 7 6 9;
+  opacity: 0.55;
+  stroke-linecap: round;
+}
+
+/* Water slab: sea surface on top, a cut-away wall of water and sand in front. */
+.hb-slab-sea-0 {
+  stop-color: var(--hb-sea);
+}
+.hb-slab-sea-mid {
+  stop-color: var(--hb-sea-mid, var(--hb-sea));
+}
+.hb-slab-sea-1 {
+  stop-color: var(--hb-sea-edge);
+}
+.hb-slab-turn-0 {
+  stop-color: var(--hb-slab-turn);
+  stop-opacity: 0;
+}
+.hb-slab-turn-1 {
+  stop-color: var(--hb-slab-turn);
+}
+.hb-slab circle {
+  fill: var(--hb-sand-grain);
+  stroke: none;
+}
+.hb-stage .hb-slab-top {
+  fill: url(#hb-slab-sea);
+  stroke: var(--hb-slab-rim);
+  stroke-opacity: 0.35;
+}
+.hb-stage .hb-slab-deep {
+  fill: var(--hb-slab-deep);
+  stroke: none;
+}
+.hb-stage .hb-slab-shallow {
+  fill: var(--hb-slab-shallow);
+  stroke: none;
+}
+.hb-stage .hb-slab-sand {
+  fill: var(--hb-sand);
+  stroke: none;
+}
+.hb-stage .hb-slab-grain {
+  fill: url(#hb-slab-grain);
+  stroke: none;
+}
+.hb-stage .hb-slab-turn {
+  fill: url(#hb-slab-turn);
+  stroke: none;
+}
+.hb-stage .hb-slab-crest {
+  fill: none;
+  stroke: var(--hb-sand-crest);
+  stroke-width: 1.5;
+}
+.hb-stage .hb-slab-pebble {
+  fill: var(--hb-pebble);
+  stroke: none;
+}
+.hb-stage .hb-slab-shell {
+  fill: var(--hb-shell);
+  stroke: var(--hb-sand-grain);
+  stroke-width: 0.6;
+}
+.hb-stage .hb-fish path {
+  fill: var(--hb-fish);
+  fill-opacity: 1;
+  stroke: none;
+}
+.hb-stage .hb-fish {
+  offset-rotate: auto;
+}
+.hb-stage .hb-slab-floor {
+  fill: none;
+  stroke: var(--hb-sand-grain);
+  stroke-width: 1.2;
+}
+.hb-stage .hb-slab-rim {
+  fill: none;
+  stroke: var(--hb-slab-rim);
+  stroke-width: 2;
+}
+.hb-stage .hb-slab-shadow {
+  fill: none;
+  stroke: var(--hb-slab-shadow);
+  stroke-width: 12;
+}
+
+/* ---- Annotations (nod to the blueprint reference) ----------------------- */
+
+/* ---- Lighthouse --------------------------------------------------------- */
+
+.hb-lamp .hb-left,
+.hb-lamp .hb-top {
+  fill: var(--hb-accent);
+}
+.hb-stage .hb-beam-fill {
+  stroke: none;
+}
+.hb-beam-plane {
+  width: 0;
+  height: 0;
+  transform-origin: 0 0;
+  pointer-events: none;
+}
+.hb-beam {
+  transform-origin: 0 50%;
+  transform: rotate(10deg);
+  pointer-events: none;
+  mix-blend-mode: normal;
+}
+
+/* ---- Shark ---------------------------------------------------------------- */
+
+.hb-shark {
+  position: absolute;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+.hb-shark-tilt,
+.hb-shark-spin,
+.hb-shark-carrier,
+.hb-shark-leaf {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 0;
+  -webkit-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+}
+.hb-shark-tilt {
+  transform: rotateX(-35.264deg);
+}
+/* Rest pose (reduced motion): front-left of the island. */
+.hb-shark-spin {
+  transform: rotateY(-135deg);
+}
+.hb-shark-flat {
+  transform: rotateX(90deg);
+}
+.hb-shark-upright {
+  transform: rotateY(90deg);
+}
+.hb-stage .hb-shark-shadow {
+  fill: hsl(205 70% 9% / 0.42);
+  stroke: none;
+}
+.hb-stage .hb-fin-body {
+  fill: #334155;
+  stroke: none;
+}
+.hb-stage .hb-fin-edge {
+  fill: none;
+  stroke: #7c8ba1;
+  stroke-width: 1.4;
+  stroke-linecap: round;
+}
+.hb-stage .hb-fin-foam,
+.hb-stage .hb-fin-wake {
+  fill: none;
+  stroke: var(--hb-foam);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+}
+.hb-stage .hb-fin-wake {
+  stroke-width: 0.9;
+  opacity: 0.4;
+}
+
+/* ---- Colour groups -------------------------------------------------------
+   Each group re-points the face/ink vars, so shapes keep their shading logic.
+   Hue, then top/left/right lightness steps; ink is a deeper shade of the hue. */
+
+.hb-c-rust,
+.hb-c-teal,
+.hb-c-blue,
+.hb-c-green,
+.hb-c-mustard,
+.hb-c-red,
+.hb-c-purple,
+.hb-c-whale {
+  --hb-top: hsl(var(--h) var(--s) var(--l));
+  --hb-left: hsl(var(--h) var(--s) calc(var(--l) - 8%));
+  --hb-right: hsl(var(--h) var(--s) calc(var(--l) - 15%));
+  --hb-ink: hsl(var(--h) var(--s) calc(var(--l) + 22%) / 0.75);
+  --hb-ink-soft: hsl(var(--h) var(--s) calc(var(--l) + 18%) / 0.4);
+  --hb-label: #fff;
+}
+.hb-c-rust {
+  --h: 14;
+  --s: 62%;
+  --l: 44%;
+}
+.hb-c-teal {
+  --h: 178;
+  --s: 52%;
+  --l: 34%;
+}
+.hb-c-blue {
+  --h: 208;
+  --s: 70%;
+  --l: 44%;
+}
+.hb-c-green {
+  --h: 150;
+  --s: 46%;
+  --l: 34%;
+}
+.hb-c-mustard {
+  --h: 40;
+  --s: 78%;
+  --l: 46%;
+}
+.hb-c-red {
+  --h: 356;
+  --s: 62%;
+  --l: 46%;
+}
+.hb-c-purple {
+  --h: 268;
+  --s: 55%;
+  --l: 48%;
+}
+.hb-c-whale {
+  --h: 208;
+  --s: 70%;
+  --l: 38%;
+}
+
+.hb-c-hull {
+  --hb-left: #16223f;
+  --hb-right: #101a33;
+  --hb-band: hsl(356 60% 40%);
+  --hb-ink: rgba(186, 205, 235, 0.6);
+}
+.hb-stage .hb-c-hull .hb-hull-label {
+  fill: rgba(226, 232, 240, 0.9);
+}
+.hb-c-deck {
+  --hb-top: hsl(150 30% 24%);
+}
+.hb-c-white {
+  --hb-top: #e9edf3;
+  --hb-left: #cdd5e1;
+  --hb-right: #aeb9c9;
+  --hb-ink: #64748b;
+}
+.hb-c-crane {
+  --hb-top: hsl(44 92% 56%);
+  --hb-left: hsl(42 88% 47%);
+  --hb-right: hsl(38 84% 40%);
+  --hb-ink: hsl(36 70% 26% / 0.85);
+  --hb-ink-soft: hsl(36 70% 26% / 0.5);
+  --hb-label: hsl(30 60% 18%);
+}
+.hb-c-glass {
+  --hb-top: #1a2230;
+  --hb-left: #121a26;
+  --hb-right: #0b1119;
+  --hb-ink: rgba(148, 163, 184, 0.5);
+}
+.hb-stage .hb-glare {
+  fill: rgba(255, 255, 255, 0.1);
+  stroke: none;
+}
+.hb-c-radar {
+  --hb-top: #f07a2e;
+  --hb-left: #d35f1b;
+  --hb-right: #a94812;
+}
+/* Safety-yellow mooring bollards, no outline. */
+.hb-bollard {
+  --hb-top: #fcd34d;
+  --hb-left: #eab308;
+  --hb-right: #a16207;
+}
+.hb-stage .hb-bollard polygon {
+  stroke: none;
+}
+.hb-stage .hb-antenna {
+  fill: none;
+  stroke: #94a3b8;
+  stroke-width: 1.2;
+  stroke-linecap: round;
+}
+.hb-stage .hb-antenna-tip {
+  fill: #ef4444;
+  stroke: none;
+}
+
+/* ---- Radar (CSS 3D, orthographic) ---------------------------------------- */
+.hb-radar {
+  position: absolute;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+.hb-radar-tilt,
+.hb-radar-spin {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 0;
+  transform-style: preserve-3d;
+}
+.hb-radar-tilt {
+  /* asin(tan 30deg): a horizontal circle projects to the scene's iso ellipse. */
+  transform: rotateX(-35.264deg);
+}
+.hb-radar-spin {
+  transform: rotateY(-35deg);
+  will-change: transform;
+}
+.hb-radar-face,
+.hb-radar-arm,
+.hb-radar-hub {
+  position: absolute;
+  overflow: visible;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+.hb-radar-face--front {
+  transform: translateZ(0.6px);
+}
+.hb-radar-face--back {
+  transform: rotateY(180deg) translateZ(0.6px);
+}
+.hb-stage .hb-radar-face path {
+  stroke: #7c2d12;
+  stroke-width: 0.6;
+  stroke-linejoin: round;
+}
+.hb-stage .hb-radar-face--front path {
+  fill: #f97316;
+}
+.hb-stage .hb-radar-face--back path {
+  fill: #c2410c;
+}
+/* Feed arm: a flat plate lying on the horizontal plane, pointing out the front. */
+.hb-radar-arm {
+  width: 3px;
+  background: #ea580c;
+  transform-origin: 50% 0;
+  transform: rotateX(90deg);
+  -webkit-backface-visibility: visible;
+  backface-visibility: visible;
+}
+/* Top edge plate so the dish keeps some body when it turns edge-on. */
+.hb-radar-rim {
+  position: absolute;
+  height: 3px;
+  background: #ea580c;
+  transform-origin: 50% 0;
+  transform: rotateX(90deg) translateY(-1.5px);
+}
+.hb-radar-hub {
+  width: 6px;
+  background: #9a3412;
+  -webkit-backface-visibility: visible;
+  backface-visibility: visible;
+}
+
+.hb-c-black {
+  --hb-top: #2b2f36;
+  --hb-left: #1c1f24;
+  --hb-right: #131518;
+  --hb-ink: rgba(148, 163, 184, 0.55);
+  --hb-label: #f8fafc;
+}
+.hb-stage .hb-island-rim {
+  fill: hsl(26 30% 26%);
+  stroke: hsl(26 30% 16% / 0.7);
+}
+.hb-stage .hb-island-rock {
+  fill: hsl(30 26% 38%);
+  stroke: hsl(26 30% 18% / 0.7);
+}
+.hb-stage .hb-island-grass {
+  fill: hsl(110 40% 36%);
+  stroke: hsl(110 45% 22% / 0.6);
+}
+.hb-stage .hb-tuft {
+  fill: none;
+  stroke: hsl(105 55% 52%);
+  stroke-width: 1.3;
+  stroke-linecap: round;
+}
+.hb-stage .hb-foam-line {
+  fill: none;
+  stroke: var(--hb-foam);
+  stroke-width: 1.6;
+  stroke-dasharray: 10 4 3 4;
+  stroke-linecap: round;
+  opacity: 0.75;
+}
+/* Light theme: the quay reads as weathered concrete rather than white. */
+html:not(.dark) .hb-quay {
+  --hb-top: #aeb4bc;
+  --hb-left: #8f97a2;
+  --hb-ink: #3f4a5a;
+}
+.hb-stage .hb-submerged {
+  fill: var(--hb-water-band);
+  stroke: none;
+}
+html:not(.dark) .hb-stage .hb-island-rim {
+  fill: hsl(28 30% 42%);
+}
+html:not(.dark) .hb-stage .hb-island-rock {
+  fill: hsl(32 32% 56%);
+}
+html:not(.dark) .hb-stage .hb-island-grass {
+  fill: hsl(110 42% 48%);
+}
+.hb-stripe--red {
+  fill: hsl(356 68% 50%);
+  opacity: 1;
+}
+.hb-roof {
+  --hb-top: hsl(356 62% 42%);
+}
+.hb-c-whale .hb-eye {
+  fill: #fff;
+}
+
+html:not(.dark) .hb-c-rust {
+  --l: 54%;
+}
+html:not(.dark) .hb-c-teal {
+  --l: 42%;
+}
+html:not(.dark) .hb-c-blue {
+  --l: 52%;
+}
+html:not(.dark) .hb-c-green {
+  --l: 42%;
+}
+html:not(.dark) .hb-c-mustard {
+  --l: 52%;
+}
+html:not(.dark) .hb-c-purple {
+  --l: 56%;
+}
+html:not(.dark) .hb-c-red {
+  --l: 54%;
+}
+html:not(.dark) .hb-c-whale {
+  --l: 42%;
+}
+html:not(.dark) .hb-c-rust,
+html:not(.dark) .hb-c-teal,
+html:not(.dark) .hb-c-blue,
+html:not(.dark) .hb-c-green,
+html:not(.dark) .hb-c-mustard,
+html:not(.dark) .hb-c-red,
+html:not(.dark) .hb-c-purple,
+html:not(.dark) .hb-c-whale {
+  --hb-ink: hsl(var(--h) var(--s) calc(var(--l) - 24%) / 0.8);
+  --hb-ink-soft: hsl(var(--h) var(--s) calc(var(--l) - 20%) / 0.45);
+}
+html:not(.dark) .hb-c-hull {
+  --hb-left: #23345c;
+  --hb-right: #1a2849;
+  --hb-ink: #1a2849;
+}
+html:not(.dark) .hb-c-deck {
+  --hb-top: hsl(150 28% 40%);
+}
+html:not(.dark) .hb-c-white {
+  --hb-top: #ffffff;
+  --hb-left: #eef2f7;
+  --hb-right: #d9e0ea;
+  --hb-ink: #8a97ab;
+}
+
+/* ---- Crates ------------------------------------------------------------- */
+
+.hb-buoy-body {
+  pointer-events: auto;
+  cursor: pointer;
+}
+.hb-crate {
+  pointer-events: auto;
+  cursor: default;
+  transition: transform 260ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.hb-crate:hover {
+  transform: translateY(-7px);
+}
+/* Slide out along the crate's front-facing plan axis (+y): 12 units on screen. */
+.hb-crate--slide:hover {
+  transform: translate(-10.4px, 6px);
+}
+.hb-stage .hb-crate:hover polygon {
+  stroke: var(--hb-accent);
+}
+.hb-stage .hb-crate:hover .hb-crate-label {
+  fill: #fff;
+}
+
+/* The trolley hangs under the boom; its top face would paint over the boom. */
+.hb-trolley .hb-top {
+  display: none;
+}
+
+.hb-cable {
+  border-left: 1px solid var(--hb-ink);
+  border-right: 1px solid var(--hb-ink);
+  transform-origin: top center;
+}
+
+.hb-tip {
+  position: absolute;
+  transform: translate(-50%, -100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: var(--tooltip-bg);
+  color: #fff;
+  font-size: 12px;
+  line-height: 1.25;
+  white-space: nowrap;
+  pointer-events: none;
+  box-shadow: 0 8px 20px -8px rgba(0, 0, 0, 0.45);
+  animation: hb-tip-in 180ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.hb-tip strong {
+  font-weight: 600;
+  color: hsl(var(--brand));
+}
+.hb-tip span {
+  opacity: 0.8;
+}
+
+/* ---- Buoys, whale, name ------------------------------------------------- */
+
+.hb-flag {
+  fill: var(--hb-top);
+}
+.hb-whale-clip {
+  overflow: hidden;
+}
+.hb-whale {
+  position: absolute;
+  width: 140px;
+  height: 90px;
+  margin: -45px 0 0 -70px;
+  /* Resting pose (reduced motion): mid-leap. */
+  transform: translate(194px, -90px);
+}
+.hb-stage .hb-eye {
+  fill: var(--hb-ink);
+  stroke: none;
+}
+.hb-whale-crate {
+  fill: var(--hb-left);
+}
+.hb-whale-crate--hot {
+  fill: var(--hb-accent);
+}
+.hb-splash {
+  position: absolute;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+.hb-splash-ring {
+  position: absolute;
+  left: -36px;
+  top: -11px;
+  width: 72px;
+  height: 22px;
+  border: 2px solid var(--hb-foam);
+  border-radius: 50%;
+  box-shadow: 0 0 6px var(--hb-foam);
+  opacity: 0;
+}
+.hb-spray {
+  position: absolute;
+  left: -30px;
+  top: -34px;
+  overflow: visible;
+  opacity: 0;
+}
+.hb-stage .hb-spray circle {
+  fill: var(--hb-foam);
+  stroke: none;
+}
+
+.hb-name-wrap {
+  position: absolute;
+  pointer-events: none;
+}
+/* The name is a weathered steel plate floating almost flush with the water.
+   The h1's own glyphs draw the rusted edge plus the part seen through the
+   water; ::after paints the face on top (background-clip text cannot sit
+   above its own text-shadow). Pre-transform (1, 1) maps to straight down on
+   screen once the floor matrix is applied. */
+.hb-name {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  width: max-content;
+  margin: 0 auto;
+  font-family: var(--font-display);
+  font-size: 48px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  color: var(--hb-name-edge);
+  transform-origin: center;
+  text-shadow:
+    1px 1px 0 var(--hb-name-edge),
+    2px 2px 0 var(--hb-name-under),
+    3px 3px 1px var(--hb-name-under),
+    0 0 2px rgba(255, 255, 255, 0.45),
+    0 0 6px rgba(255, 255, 255, 0.18);
+}
+/* Light-mode sunlight: soft cast shadows. */
+.hb-stage .hb-cast {
+  display: none;
+}
+html:not(.dark) .hb-stage .hb-cast {
+  display: inline;
+  fill: rgba(8, 47, 73, 0.22);
+  stroke: none;
+}
+.hb-name::after {
+  content: attr(data-text);
+  content: attr(data-text) / "";
+  position: absolute;
+  inset: 0;
+  color: transparent;
+  text-shadow: none;
+  background:
+    linear-gradient(to bottom, transparent 50%, var(--hb-name-awash) 96%),
+    radial-gradient(ellipse 13% 45% at 7% 40%, hsl(22 78% 40% / 0.95), transparent 72%),
+    radial-gradient(ellipse 16% 55% at 22% 72%, hsl(16 70% 30% / 0.95), transparent 74%),
+    radial-gradient(ellipse 10% 40% at 33% 20%, hsl(30 85% 48% / 0.9), transparent 70%),
+    radial-gradient(ellipse 13% 48% at 46% 58%, hsl(24 75% 38% / 0.92), transparent 72%),
+    radial-gradient(ellipse 18% 55% at 60% 30%, hsl(18 68% 33% / 0.9), transparent 74%),
+    radial-gradient(ellipse 11% 42% at 75% 70%, hsl(28 82% 44% / 0.92), transparent 70%),
+    radial-gradient(ellipse 15% 50% at 92% 38%, hsl(18 70% 32% / 0.95), transparent 74%),
+    repeating-linear-gradient(97deg, rgba(255, 255, 255, 0.07) 0 1px, transparent 1px 6px),
+    linear-gradient(172deg, #a3adb8, #73808e 55%, #56616d);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+/* ---- Motion ------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: no-preference) {
+  .hb-hoist {
+    animation: hb-hoist 10s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+  }
+  .hb-cable {
+    animation: hb-cable 10s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+  }
+  .hb-stage .hb-beam-fill {
+    stroke: none;
+  }
+  .hb-beam {
+    animation: hb-sweep 9s ease-in-out infinite;
+  }
+  .hb-lh {
+    animation: hb-sway 5.2s ease-in-out infinite alternate;
+  }
+  .hb-buoy {
+    animation: hb-bob 3.6s ease-in-out infinite alternate;
+  }
+  .hb-radar-spin {
+    animation: hb-radar-spin 2.4s linear infinite;
+  }
+  .hb-buoy-body.hb-rocking {
+    animation: hb-rock 2.6s ease-out;
+  }
+  .hb-whale {
+    animation: hb-leap 9s linear -2.5s infinite;
+  }
+  /* Splashes are timed to hb-leap (9s): surfacing at ~54%, diving at ~76%. */
+  .hb-splash-ring {
+    animation: hb-ring 9s ease-out infinite;
+  }
+  .hb-splash-ring--late {
+    animation-name: hb-ring-late;
+  }
+  .hb-spray {
+    animation: hb-spray 9s ease-out infinite;
+  }
+  .hb-splash--rise > * {
+    animation-delay: 2.3s;
+  }
+  .hb-splash--dive > * {
+    animation-delay: 4.3s;
+  }
+  .hb-fish {
+    animation: hb-fish-swim linear infinite;
+  }
+  .hb-name-wrap {
+    animation: hb-float 5s ease-in-out infinite alternate;
+  }
+  /* One lap = 18s; fin/foam visibility flips at the orbit's left/right ends. */
+  .hb-shark-spin {
+    animation: hb-shark-spin 18s linear infinite;
+  }
+  .hb-fin-front {
+    animation: hb-fin-front 18s linear infinite;
+  }
+  .hb-fin-back {
+    animation: hb-fin-back 18s linear infinite;
+  }
+  .hb-anim {
+    will-change: transform;
+  }
+}
+
+.hb-paused .hb-anim,
+.hb-paused .hb-anim * {
+  animation-play-state: paused !important;
+}
+
+/* Crane cycle: wait aloft, lower, rest on deck, lift away. */
+@keyframes hb-hoist {
+  0%,
+  12% {
+    transform: translateY(-110px);
+  }
+  44%,
+  62% {
+    transform: translateY(0);
+  }
+  94%,
+  100% {
+    transform: translateY(-110px);
+  }
+}
+@keyframes hb-cable {
+  0%,
+  12% {
+    transform: scaleY(0.247);
+  }
+  44%,
+  62% {
+    transform: scaleY(1);
+  }
+  94%,
+  100% {
+    transform: scaleY(0.247);
+  }
+}
+
+@keyframes hb-sweep {
+  0%,
+  100% {
+    transform: rotate(-50deg);
+    opacity: 0.75;
+  }
+  50% {
+    transform: rotate(70deg);
+    opacity: 1;
+  }
+}
+
+@keyframes hb-sway {
+  from {
+    transform: translateX(-3px) rotate(-1.4deg);
+  }
+  to {
+    transform: translateX(3px) rotate(1.4deg);
+  }
+}
+
+@keyframes hb-radar-spin {
+  from {
+    transform: rotateY(0deg);
+  }
+  to {
+    transform: rotateY(-360deg);
+  }
+}
+
+@keyframes hb-shark-spin {
+  from {
+    transform: rotateY(0deg);
+  }
+  to {
+    transform: rotateY(-360deg);
+  }
+}
+@keyframes hb-fin-front {
+  0%,
+  49.9% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes hb-fin-back {
+  0%,
+  49.9% {
+    opacity: 0;
+  }
+  50%,
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Damped rock about the waterline, like a buoy knocked by a wave. */
+@keyframes hb-rock {
+  0% {
+    transform: rotate(0deg);
+  }
+  10% {
+    transform: rotate(16deg);
+  }
+  26% {
+    transform: rotate(-12deg);
+  }
+  42% {
+    transform: rotate(8deg);
+  }
+  58% {
+    transform: rotate(-5deg);
+  }
+  74% {
+    transform: rotate(2.5deg);
+  }
+  88% {
+    transform: rotate(-1deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes hb-bob {
+  from {
+    transform: translateY(-2px) rotate(-2deg);
+  }
+  to {
+    transform: translateY(2px) rotate(2deg);
+  }
+}
+
+/* Parabolic leap sampled at nine points; the clip box hides the underwater part. */
+@keyframes hb-leap {
+  0%,
+  52% {
+    transform: translate(0, 110px) rotate(-40deg);
+  }
+  55.5% {
+    transform: translate(49px, 44.4px) rotate(-30deg);
+  }
+  59% {
+    transform: translate(97px, -2.5px) rotate(-20deg);
+  }
+  62.5% {
+    transform: translate(146px, -30.6px) rotate(-10deg);
+  }
+  66% {
+    transform: translate(194px, -40px) rotate(0deg);
+  }
+  69.5% {
+    transform: translate(243px, -30.6px) rotate(10deg);
+  }
+  73% {
+    transform: translate(292px, -2.5px) rotate(20deg);
+  }
+  76.5% {
+    transform: translate(340px, 44.4px) rotate(30deg);
+  }
+  80%,
+  100% {
+    transform: translate(389px, 110px) rotate(40deg);
+  }
+}
+@keyframes hb-fish-swim {
+  0% {
+    offset-distance: 0%;
+    opacity: 0;
+  }
+  5%,
+  95% {
+    opacity: 1;
+  }
+  100% {
+    offset-distance: 100%;
+    opacity: 0;
+  }
+}
+@keyframes hb-ring {
+  0% {
+    transform: scale(0.2);
+    opacity: 0;
+  }
+  2% {
+    opacity: 1;
+  }
+  16%,
+  100% {
+    transform: scale(1.7);
+    opacity: 0;
+  }
+}
+@keyframes hb-ring-late {
+  0%,
+  4% {
+    transform: scale(0.2);
+    opacity: 0;
+  }
+  6% {
+    opacity: 0.8;
+  }
+  22%,
+  100% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+}
+@keyframes hb-spray {
+  0% {
+    transform: translateY(10px) scale(0.5);
+    opacity: 0;
+  }
+  2% {
+    opacity: 1;
+  }
+  8% {
+    transform: translateY(-6px) scale(1.1);
+    opacity: 1;
+  }
+  15%,
+  100% {
+    transform: translateY(8px) scale(1.2);
+    opacity: 0;
+  }
+}
+
+@keyframes hb-float {
+  from {
+    transform: translateY(-3px);
+  }
+  to {
+    transform: translateY(3px);
+  }
+}
+@keyframes hb-tip-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, calc(-100% + 4px));
+  }
+}
+
+.hb-lh {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
