@@ -31,7 +31,7 @@
 
   position: relative;
   width: 100%;
-  height: clamp(359px, min(67.5svh, 65.5vw), 760px);
+  height: clamp(200px, min(67.5svh, 58vw), 760px);
   overflow: hidden;
 }
 
