@@ -17,7 +17,7 @@ interface HomeSectionProps {
 
 const HomeSection = ({ onNavigate }: HomeSectionProps) => {
   return (
-    <section className="min-h-screen flex flex-col items-center justify-center pt-24 pb-12 md:pt-28 md:pb-10 overflow-hidden">
+    <section className="min-h-screen flex flex-col items-center justify-center pt-24 pb-28 md:pt-28 md:pb-10 overflow-hidden">
       <HarborScene name={NAME} yoe={getYOE()} />
 
       <p className="sr-only">
