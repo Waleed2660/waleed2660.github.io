@@ -9,9 +9,6 @@
   --hb-right: #11162c;
   --hb-band: #0c1022;
   --hb-label: rgba(241, 245, 249, 0.86);
-  --hb-name-edge: hsl(18 55% 24%);
-  --hb-name-awash: hsl(196 65% 24% / 0.8);
-  --hb-name-under: hsl(196 60% 20% / 0.55);
   --hb-accent: hsl(var(--brand));
   --hb-water-band: hsl(200 60% 20% / 0.85);
   --hb-foam: rgba(255, 255, 255, 0.85);
@@ -36,9 +33,6 @@ html:not(.dark) .hb-viewport {
   --hb-right: #dfe5ee;
   --hb-band: #c9d2df;
   --hb-label: #334155;
-  --hb-name-edge: hsl(18 55% 26%);
-  --hb-name-awash: hsl(203 62% 30% / 0.75);
-  --hb-name-under: hsl(205 62% 24% / 0.5);
   --hb-water-band: hsl(196 72% 34% / 0.85);
   --hb-foam: #fff;
   --hb-sea-0: hsl(186 22% 82%);
@@ -103,6 +97,9 @@ svg.hb-sprite {
 }
 .hb-stage .hb-ink {
   fill: none;
+}
+.hb-stage path.hb-roof {
+  opacity: 0.6;
 }
 /* Panels outlined by their own fill colour, so adjoining pieces join without
    a visible seam or an anti-aliasing gap. */
@@ -285,6 +282,161 @@ svg.hb-sprite {
   opacity: 0.4;
 }
 
+/* ---- Terminal dressing --------------------------------------------------- */
+
+.hb-c-steel {
+  --hb-top: #6b7380;
+  --hb-left: #4b525d;
+  --hb-right: #383e47;
+  --hb-ink: rgba(15, 20, 28, 0.6);
+}
+.hb-c-wood {
+  --hb-top: hsl(32 42% 50%);
+  --hb-left: hsl(30 40% 38%);
+  --hb-right: hsl(28 38% 30%);
+  --hb-ink: hsl(28 40% 20% / 0.7);
+}
+.hb-c-cone {
+  --hb-top: #f97316;
+  --hb-left: #ea580c;
+  --hb-ink: rgba(124, 45, 18, 0.6);
+}
+.hb-c-hivis {
+  --hb-top: hsl(72 95% 55%);
+  --hb-left: hsl(72 90% 46%);
+  --hb-right: hsl(72 85% 38%);
+  --hb-ink: hsl(72 60% 20% / 0.6);
+}
+.hb-c-overall {
+  --hb-top: #1e3a8a;
+  --hb-left: #1e3a8a;
+  --hb-right: #172554;
+  --hb-ink: rgba(0, 0, 0, 0.4);
+}
+.hb-stage .hb-skin {
+  fill: #e0b48c;
+  stroke: none;
+}
+.hb-stage .hb-hardhat {
+  fill: #facc15;
+  stroke: rgba(113, 63, 18, 0.6);
+  stroke-width: 0.5;
+}
+.hb-door {
+  fill: #475569;
+}
+/* Ground paint: black lines with an orange edge. */
+.hb-stage .hb-mark {
+  fill: none;
+}
+.hb-stage .hb-mark-under .hb-mark {
+  stroke: hsl(24 95% 52% / 0.75);
+  stroke-width: 3.4;
+  stroke-linecap: square;
+}
+.hb-stage .hb-mark-over .hb-mark {
+  stroke: hsl(220 15% 8% / 0.85);
+  stroke-width: 1.4;
+}
+.hb-stage .hb-mark-dash {
+  stroke-dasharray: 10 7;
+}
+.hb-bay-num {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  fill: hsl(220 15% 8% / 0.85);
+  stroke: hsl(24 95% 52% / 0.75);
+  stroke-width: 1.6;
+  paint-order: stroke;
+}
+.hb-stage .hb-hazard {
+  fill: url(#hb-hatch);
+  stroke: hsl(24 95% 52% / 0.8);
+  stroke-width: 1.2;
+}
+.hb-hatch-stripe {
+  fill: hsl(220 15% 8% / 0.7);
+}
+
+/* Floodlights: lit lamps and warm ground pools after dark only. */
+.hb-stage .hb-lamp {
+  fill: #fff4c2;
+  stroke: none;
+}
+.hb-stage .hb-lamp-glow,
+.hb-stage .hb-light-pool {
+  stroke: none;
+  fill: url(#hb-pool-grad);
+}
+.hb-pool-stop-in {
+  stop-color: hsl(42 100% 70%);
+  stop-opacity: 0.32;
+}
+.hb-pool-stop-out {
+  stop-color: hsl(42 100% 70%);
+  stop-opacity: 0;
+}
+html:not(.dark) .hb-stage .hb-lamp-glow,
+html:not(.dark) .hb-stage .hb-light-pool {
+  display: none;
+}
+html:not(.dark) .hb-stage .hb-lamp {
+  fill: #e2e8f0;
+}
+
+/* Billboard: plain terminal signage, galvanised frame, lit from above after dark. */
+.hb-c-board {
+  --hb-top: #8a919b;
+  --hb-left: #6b7380;
+  --hb-right: #565d68;
+  --hb-ink: rgba(15, 20, 28, 0.55);
+}
+.hb-stage .hb-board-face {
+  fill: #e9e7e1;
+  stroke: none;
+}
+.dark .hb-stage .hb-board-face {
+  fill: #a9adb3;
+}
+.hb-board-wash {
+  fill: url(#hb-board-wash-grad);
+}
+.hb-board-wash-in {
+  stop-color: hsl(42 100% 80%);
+  stop-opacity: 0.35;
+}
+.hb-board-wash-out {
+  stop-color: hsl(42 100% 80%);
+  stop-opacity: 0;
+}
+html:not(.dark) .hb-board-wash {
+  display: none;
+}
+.hb-board-name {
+  font-family: var(--font-sans);
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  fill: #1e293b;
+}
+.hb-board-role {
+  font-family: var(--font-sans);
+  font-size: 6px;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  fill: #475569;
+}
+.hb-stage .hb-board-band {
+  fill: #1e3a5f;
+  stroke: none;
+}
+.hb-stage .hb-board-arm {
+  stroke: #4b525d;
+  stroke-width: 1.2;
+}
+
 /* ---- Colour groups -------------------------------------------------------
    Each group re-points the face/ink vars, so shapes keep their shading logic.
    Hue, then top/left/right lightness steps; ink is a deeper shade of the hue. */
@@ -349,13 +501,45 @@ svg.hb-sprite {
   --hb-left: #16223f;
   --hb-right: #101a33;
   --hb-band: hsl(356 60% 40%);
-  --hb-ink: rgba(186, 205, 235, 0.6);
+  --hb-ink: #0a1122;
 }
 .hb-stage .hb-c-hull .hb-hull-label {
   fill: rgba(226, 232, 240, 0.9);
 }
 .hb-c-deck {
   --hb-top: hsl(150 30% 24%);
+  --hb-rim: hsl(215 16% 16%);
+  --hb-seam: rgba(0, 0, 0, 0.28);
+}
+.hb-stage .hb-deck-rim {
+  fill: var(--hb-rim);
+  stroke: var(--hb-rim);
+}
+.hb-stage .hb-deck-seam {
+  fill: none;
+  stroke: var(--hb-seam);
+  stroke-width: 0.8;
+}
+.hb-c-hatch {
+  --hb-top: hsl(150 26% 30%);
+  --hb-left: hsl(150 26% 19%);
+  --hb-right: hsl(150 26% 15%);
+  --hb-ink: rgba(0, 0, 0, 0.3);
+}
+.hb-stage .hb-hawse {
+  fill: #0b0f14;
+  stroke: none;
+}
+.hb-stage .hb-chain {
+  fill: none;
+  stroke: #3a3f47;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+.hb-stage .hb-chain-link {
+  stroke: #7b828d;
+  stroke-width: 1.4;
+  stroke-dasharray: 1.4 1.2;
 }
 .hb-c-white {
   --hb-top: #e9edf3;
@@ -625,6 +809,13 @@ html:not(.dark) .hb-c-hull {
 }
 html:not(.dark) .hb-c-deck {
   --hb-top: hsl(150 28% 40%);
+  --hb-rim: hsl(215 14% 30%);
+  --hb-seam: rgba(0, 0, 0, 0.2);
+}
+html:not(.dark) .hb-c-hatch {
+  --hb-top: hsl(150 26% 46%);
+  --hb-left: hsl(150 26% 34%);
+  --hb-right: hsl(150 26% 28%);
 }
 html:not(.dark) .hb-c-white {
   --hb-top: #ffffff;
@@ -658,17 +849,25 @@ html:not(.dark) .hb-c-white {
   fill: #fff;
 }
 
-/* The trolley hangs under the boom; its top face would paint over the boom. */
-.hb-trolley .hb-top {
-  display: none;
-}
-
 /* The hoist's spreader keeps its dark steel tone in both themes. */
 .hb-spreader {
   --hb-top: #1f2747;
   --hb-left: #171d38;
   --hb-right: #11162c;
   --hb-ink: #0b0f1e;
+}
+
+/* Cargo ops stack among themselves only, then sit in the mid plane as one layer. */
+.hb-cargo {
+  position: absolute;
+  inset: 0;
+  isolation: isolate;
+  pointer-events: none;
+}
+.hb-hook {
+  left: 0;
+  top: 0;
+  z-index: 10;
 }
 
 .hb-cable {
@@ -703,7 +902,7 @@ html:not(.dark) .hb-c-white {
   opacity: 0.8;
 }
 
-/* ---- Buoys, whale, name ------------------------------------------------- */
+/* ---- Buoys, whale ------------------------------------------------------- */
 
 .hb-flag {
   fill: var(--hb-top);
@@ -758,37 +957,6 @@ html:not(.dark) .hb-c-white {
   stroke: none;
 }
 
-.hb-name-wrap {
-  position: absolute;
-  pointer-events: none;
-}
-/* The name is a weathered steel plate floating almost flush with the water.
-   The h1's own glyphs draw the rusted edge plus the part seen through the
-   water; ::after paints the face on top (background-clip text cannot sit
-   above its own text-shadow). Pre-transform (1, 1) maps to straight down on
-   screen once the floor matrix is applied. */
-.hb-name {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  width: max-content;
-  margin: 0 auto;
-  font-family: var(--font-display);
-  font-size: 48px;
-  font-weight: 700;
-  line-height: 1;
-  letter-spacing: -0.01em;
-  white-space: nowrap;
-  color: var(--hb-name-edge);
-  transform-origin: center;
-  text-shadow:
-    1px 1px 0 var(--hb-name-edge),
-    2px 2px 0 var(--hb-name-under),
-    3px 3px 1px var(--hb-name-under),
-    0 0 2px rgba(255, 255, 255, 0.45),
-    0 0 6px rgba(255, 255, 255, 0.18);
-}
 /* Light-mode sunlight: soft cast shadows. */
 .hb-stage .hb-cast {
   display: none;
@@ -798,37 +966,9 @@ html:not(.dark) .hb-stage .hb-cast {
   fill: rgba(8, 47, 73, 0.22);
   stroke: none;
 }
-.hb-name::after {
-  content: attr(data-text);
-  content: attr(data-text) / "";
-  position: absolute;
-  inset: 0;
-  color: transparent;
-  text-shadow: none;
-  background:
-    linear-gradient(to bottom, transparent 50%, var(--hb-name-awash) 96%),
-    radial-gradient(ellipse 13% 45% at 7% 40%, hsl(22 78% 40% / 0.95), transparent 72%),
-    radial-gradient(ellipse 16% 55% at 22% 72%, hsl(16 70% 30% / 0.95), transparent 74%),
-    radial-gradient(ellipse 10% 40% at 33% 20%, hsl(30 85% 48% / 0.9), transparent 70%),
-    radial-gradient(ellipse 13% 48% at 46% 58%, hsl(24 75% 38% / 0.92), transparent 72%),
-    radial-gradient(ellipse 18% 55% at 60% 30%, hsl(18 68% 33% / 0.9), transparent 74%),
-    radial-gradient(ellipse 11% 42% at 75% 70%, hsl(28 82% 44% / 0.92), transparent 70%),
-    radial-gradient(ellipse 15% 50% at 92% 38%, hsl(18 70% 32% / 0.95), transparent 74%),
-    repeating-linear-gradient(97deg, rgba(255, 255, 255, 0.07) 0 1px, transparent 1px 6px),
-    linear-gradient(172deg, #a3adb8, #73808e 55%, #56616d);
-  -webkit-background-clip: text;
-  background-clip: text;
-}
-
 /* ---- Motion ------------------------------------------------------------- */
 
 @media (prefers-reduced-motion: no-preference) {
-  .hb-hoist {
-    animation: hb-hoist 10s cubic-bezier(0.65, 0, 0.35, 1) infinite;
-  }
-  .hb-cable {
-    animation: hb-cable 10s cubic-bezier(0.65, 0, 0.35, 1) infinite;
-  }
   .hb-stage .hb-beam-fill {
     stroke: none;
   }
@@ -866,9 +1006,6 @@ html:not(.dark) .hb-stage .hb-cast {
   .hb-splash--dive > * {
     animation-delay: 4.3s;
   }
-  .hb-name-wrap {
-    animation: hb-float 5s ease-in-out infinite alternate;
-  }
   /* One lap = 18s; fin/foam visibility flips at the orbit's left/right ends. */
   .hb-shark-spin {
     animation: hb-shark-spin 18s linear infinite;
@@ -881,41 +1018,26 @@ html:not(.dark) .hb-stage .hb-cast {
   }
 }
 
+/* Phones: no motion and no promoted layers, so the stage paints as one flat
+   surface that survives pinch zoom. */
+.hb-static *,
+.hb-static *::before,
+.hb-static *::after {
+  animation: none !important;
+  transition: none !important;
+  will-change: auto !important;
+}
+/* Still frame: whale nose-down just before re-entry (~74% of hb-leap). */
+.hb-static .hb-whale {
+  transform: translate(312px, 18px) rotate(24deg);
+}
+
 .hb-paused .hb-anim,
 .hb-paused .hb-anim * {
   animation-play-state: paused !important;
 }
 
 /* Crane cycle: wait aloft, lower, rest on deck, lift away. */
-@keyframes hb-hoist {
-  0%,
-  12% {
-    transform: translateY(-110px);
-  }
-  44%,
-  62% {
-    transform: translateY(0);
-  }
-  94%,
-  100% {
-    transform: translateY(-110px);
-  }
-}
-@keyframes hb-cable {
-  0%,
-  12% {
-    transform: scaleY(0.247);
-  }
-  44%,
-  62% {
-    transform: scaleY(1);
-  }
-  94%,
-  100% {
-    transform: scaleY(0.247);
-  }
-}
-
 @keyframes hb-sweep {
   0%,
   100% {
@@ -1092,14 +1214,6 @@ html:not(.dark) .hb-stage .hb-cast {
   }
 }
 
-@keyframes hb-float {
-  from {
-    transform: translateY(-3px);
-  }
-  to {
-    transform: translateY(3px);
-  }
-}
 @keyframes hb-tip-in {
   from {
     opacity: 0;
