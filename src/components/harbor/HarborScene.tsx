@@ -187,16 +187,26 @@ const bowCurve = (
 // the rest sits under the deck.
 const bowVisible = (reach: number) => ({ from: Math.atan2(reach, 35) });
 
-// Foam hugging the hull where it meets the water: along the flank, round the bow.
+// Foam hugging the hull where it meets the water: along the flank, round the
+// bow. Offset from the keel curve (base 146, reach 40) so it stays concentric.
 const SHIP_FOAM = (() => {
-  const from = Math.atan2(46, 39);
+  const g = 4;
+  const from = Math.atan2(40 + g, 35 + g);
   const bow: Pt[] = [];
   for (let i = 0; i <= BOW_STEPS; i++) {
     const t = Math.PI - ((Math.PI - from) * i) / BOW_STEPS;
-    bow.push(iso(149 + 46 * Math.sin(t), 35 - 39 * Math.cos(t), -8));
+    bow.push(iso(146 + (40 + g) * Math.sin(t), 35 - (35 + g) * Math.cos(t), -8));
   }
-  return `M${pts([iso(-158, 75, -8), iso(149, 74, -8), ...bow]).replace(/ /g, "L")}`;
+  return `M${pts([iso(-158, 70 + g, -8), ...bow]).replace(/ /g, "L")}`;
 })();
+
+// Mooring lines: quay bollard -> ship cleat, sagging toward the water. A
+// spring line leads aft and a bow line leads forward, like a real berth; both
+// cleats sit forward of the deck cargo so the lines stay visible.
+const CLEATS = [
+  { x: 134, y: 1 },
+  { x: 166, y: 8 },
+];
 
 const BRIDGE_H = 40;
 const CAB_Z = DECK_Z + BRIDGE_H + 3;
@@ -253,6 +263,10 @@ const Ship = ({ onHover }: { onHover: (t: HoverTip) => void }) => {
       <g className="hb-c-deck">
         <polygon className="hb-top" points={deck} />
       </g>
+
+      {CLEATS.map((c) => (
+        <Box key={c.x} x={c.x} y={c.y} z={DECK_Z} w={5} d={5} h={4} className="hb-bollard" />
+      ))}
 
       {/* Bridge: white accommodation block, then a wraparound glass wheelhouse. */}
       <g className="hb-c-white">
@@ -397,6 +411,76 @@ const quayTop = pts(
 );
 const quayFoam = `M${pts([...QUAY_RIGHT, ...QUAY_LEFT].map(([x, y]) => iso(x, y, 0))).replace(/ /g, "L")}`;
 
+// Weathering: grime blotches (clusters of plan circles so each reads as one
+// irregular stain), oil spots, hairline cracks, and rust runs below the bollards.
+const QUAY_BOLLARDS = [40, 110, 180, 250, 310];
+const QUAY_GRIME = (() => {
+  let seed = 7;
+  const rnd = () => {
+    seed = (seed * 9301 + 49297) % 233280;
+    return seed / 233280;
+  };
+  const ellipse = (x: number, y: number, r: number) => {
+    const [cx, cy] = iso(x, y, QUAY.h);
+    return { cx: r1(cx), cy: r1(cy), rx: r1(r * 1.22), ry: r1(r * 0.71) };
+  };
+  const stains: ReturnType<typeof ellipse>[] = [];
+  for (let i = 0; i < 9; i++) {
+    const x = QUAY.x0 + 20 + rnd() * (QUAY.x1 - QUAY.x0 - 40);
+    const y = QUAY.y0 + 14 + rnd() * (QUAY.y1 - QUAY.y0 - 28);
+    const r = 8 + rnd() * 14;
+    for (let k = 0; k < 3; k++)
+      stains.push(
+        ellipse(x + (rnd() - 0.5) * r * 1.6, y + (rnd() - 0.5) * r, r * (0.45 + rnd() * 0.5))
+      );
+  }
+  const oil = [
+    ellipse(132, -134, 5),
+    ellipse(138, -131, 3),
+    ellipse(226, -168, 6),
+    ellipse(72, -150, 3.5),
+  ];
+  const crack = (x: number, y: number, len: number) => {
+    const p: Pt[] = [];
+    for (let i = 0; i <= 5; i++)
+      p.push(iso(x + (len * i) / 5, y + (rnd() - 0.5) * 6 + i * 1.5, QUAY.h));
+    return `M${pts(p).replace(/ /g, "L")}`;
+  };
+  const cracks = [crack(30, -190, 46), crack(196, -138, 38), crack(268, -196, 30)].join("");
+  // Runs drip down the wall facing the ship below the bollards clear of the label.
+  const rust = [40, 250, 310]
+    .map((bx, i) => {
+      const x = bx + 3 + (i % 2) * 2;
+      const len = 9 + (i % 3) * 3;
+      const [ax, ay] = iso(x, QUAY.y1, QUAY.h - 1);
+      const [bx2, by2] = iso(x + 2, QUAY.y1, QUAY.h - 1);
+      return `M${r1(ax)} ${r1(ay)}L${r1(bx2)} ${r1(by2)}L${r1(bx2)} ${r1(by2 + len)}L${r1(ax)} ${r1(ay + len * 0.7)}Z`;
+    })
+    .join("");
+  return { stains, oil, cracks, rust };
+})();
+const QuayGrime = () => (
+  <>
+    <clipPath id="hb-quay-clip">
+      <polygon points={quayTop} />
+    </clipPath>
+    <g clipPath="url(#hb-quay-clip)">
+      <g className="hb-grime">
+        {QUAY_GRIME.stains.map((e, i) => (
+          <ellipse key={i} {...e} />
+        ))}
+      </g>
+      <g className="hb-oil">
+        {QUAY_GRIME.oil.map((e, i) => (
+          <ellipse key={i} {...e} />
+        ))}
+      </g>
+      <path className="hb-crack" d={QUAY_GRIME.cracks} />
+    </g>
+    <path className="hb-rust-run" d={QUAY_GRIME.rust} />
+  </>
+);
+
 const Quay = ({ yoe }: { yoe: string }) => (
   <g className="hb-quay">
     <polygon className="hb-top hb-seamless" points={quayTop} />
@@ -407,14 +491,32 @@ const Quay = ({ yoe }: { yoe: string }) => (
     <polygon className="hb-submerged" points={quayWall(QUAY_RIGHT, 0, QUAY_WATERLINE)} />
     <polygon className="hb-submerged" points={quayWall(QUAY_LEFT, 0, QUAY_WATERLINE)} />
     <path className="hb-foam-line" d={quayFoam} />
-    {[40, 110, 180, 250, 310].map((bx) => (
+    <QuayGrime />
+    {QUAY_BOLLARDS.map((bx) => (
       <Box key={bx} x={bx} y={-120} z={QUAY_Z} w={8} d={8} h={8} className="hb-bollard" />
     ))}
-    <g transform={onLeftFace((QUAY.x0 + QUAY.x1) / 2, QUAY.y1, QUAY_WATERLINE + 4)}>
+    <g transform={onLeftFace((QUAY.x0 + QUAY.x1) / 2 + 22, QUAY.y1, QUAY_WATERLINE + 4)}>
       <text className="hb-label hb-manifest" textAnchor="middle">{`${yoe} AT SEA`}</text>
     </g>
   </g>
 );
+
+const MOORING = (() => {
+  const line = ([ax, ay, az]: number[], [bx, by, bz]: number[], sag: number) => {
+    const p: Pt[] = [];
+    for (let i = 0; i <= 20; i++) {
+      const t = i / 20;
+      p.push(
+        iso(ax + (bx - ax) * t, ay + (by - ay) * t, az + (bz - az) * t - sag * 4 * t * (1 - t))
+      );
+    }
+    return `M${pts(p).replace(/ /g, "L")}`;
+  };
+  return [
+    line([114, -116, QUAY_Z + 6], [CLEATS[0].x + 2, CLEATS[0].y + 2, DECK_Z + 3], 22),
+    line([314, -116, QUAY_Z + 6], [CLEATS[1].x + 2, CLEATS[1].y + 2, DECK_Z + 3], 20),
+  ];
+})();
 
 const QUAY_CRATES_BACK: Crate[] = [
   { x: 20, y: -200, level: 0, color: "rust" },
@@ -529,10 +631,6 @@ const Hoist = ({ onHover }: { onHover: (t: HoverTip) => void }) => {
   const cableLen = HOIST_TOP[1] - TROLLEY[1];
   return (
     <>
-      <div
-        className="hb-sprite hb-cable hb-anim"
-        style={{ left: TROLLEY[0] - 6, top: TROLLEY[1], width: 12, height: cableLen }}
-      />
       <Sprite {...HOIST_BOX} className="hb-hoist hb-anim">
         <g
           className="hb-crate"
@@ -549,9 +647,15 @@ const Hoist = ({ onHover }: { onHover: (t: HoverTip) => void }) => {
             w={CRATE.w - 12}
             d={CRATE.d - 8}
             h={3}
+            className="hb-spreader"
           />
         </g>
       </Sprite>
+      {/* After the crate so the cable lands on the spreader instead of behind it. */}
+      <div
+        className="hb-sprite hb-cable hb-anim"
+        style={{ left: TROLLEY[0] - 6, top: TROLLEY[1], width: 12, height: cableLen }}
+      />
       <Sprite x={TROLLEY[0] - 30} y={TROLLEY[1] - 30} w={60} h={40}>
         <Box
           x={CRANE_X}
@@ -971,19 +1075,16 @@ const NAME_FLOOR = `matrix(${C}, 0.5, ${-C}, 0.5, 0, 0)`;
 const LH_BASE: Pt = iso(LH.x, LH.y, 0);
 
 /* ---------------------------------------------------------------------------
-   Water slab: a rounded-rectangle tray of sea lying on the floor plane. Only
-   the near half of its outline (outward normal facing the viewer) grows a
-   wall, cut through the water column and the sand bed beneath it.
+   Puddle: a flat film of water on the floor plane. Crisp, uneven shoreline
+   with stepped depth contours inward, and flat silhouette reflections of
+   everything standing in it (static shapes, no filters, painted once).
 --------------------------------------------------------------------------- */
 
-const SLAB = { x0: -420, y0: -280, x1: 490, y1: 430, r: 355 };
-const SLAB_DEPTH = 60;
-const SAND_DEPTH = 19;
-const WATER_BANDS = 12;
+const SLAB = { x0: -420, y0: -340, x1: 550, y1: 430, r: 355 };
 
-// Outline in world units, resampled every ~6 units; `a` is the outward normal
-// in degrees, `s` the running arc length (drives the sand ripple).
-const SLAB_OUTLINE = (() => {
+// Rounded-rectangle outline resampled every ~6 units, each point carrying its
+// outward normal angle so contours can be inset along it.
+const SLAB_BASE = (() => {
   const { x0, y0, x1, y1, r } = SLAB;
   const raw: { p: Pt; a: number }[] = [];
   const corners: [number, number, number][] = [
@@ -993,243 +1094,192 @@ const SLAB_OUTLINE = (() => {
     [x0 + r, y0 + r, 180],
   ];
   for (const [cx, cy, a0] of corners)
-    for (let i = 0; i <= 64; i++) {
+    for (let i = 0; i < 64; i++) {
       const a = a0 + (90 * i) / 64;
       const t = (a * Math.PI) / 180;
       raw.push({ p: [cx + r * Math.cos(t), cy + r * Math.sin(t)], a });
     }
-  const out: { p: Pt; a: number; s: number }[] = [];
-  let s = 0;
+  const dense: { p: Pt; a: number }[] = [];
   raw.forEach((q, i) => {
-    const prev = raw[i - 1];
-    if (prev) {
-      const len = Math.hypot(q.p[0] - prev.p[0], q.p[1] - prev.p[1]);
-      const n = Math.max(1, Math.round(len / 6));
-      for (let k = 1; k < n; k++)
-        out.push({
-          p: [
-            prev.p[0] + ((q.p[0] - prev.p[0]) * k) / n,
-            prev.p[1] + ((q.p[1] - prev.p[1]) * k) / n,
-          ],
-          a: q.a,
-          s: s + (len * k) / n,
-        });
-      s += len;
-    }
-    out.push({ ...q, s });
+    const next = raw[(i + 1) % raw.length];
+    const len = Math.hypot(next.p[0] - q.p[0], next.p[1] - q.p[1]);
+    const n = Math.max(1, Math.round(len / 6));
+    for (let k = 0; k < n; k++)
+      dense.push({
+        p: [q.p[0] + ((next.p[0] - q.p[0]) * k) / n, q.p[1] + ((next.p[1] - q.p[1]) * k) / n],
+        a: q.a,
+      });
   });
-  return out;
+  return dense;
 })();
-const SLAB_FRONT = SLAB_OUTLINE.filter(({ a }) => a >= -45 && a <= 135);
-const sandTop = (s: number) =>
-  -(SLAB_DEPTH - SAND_DEPTH) + 2.6 * Math.sin(s * 0.042) + 1.3 * Math.sin(s * 0.13 + 1);
-const slabBand = (z0: (s: number) => number, z1: (s: number) => number) =>
-  pts([
-    ...SLAB_FRONT.map(({ p, s }) => iso(p[0], p[1], z0(s))),
-    ...SLAB_FRONT.map(({ p, s }) => iso(p[0], p[1], z1(s))).reverse(),
-  ]);
-const slabRun = (z: number, dy = 0) =>
-  `M${pts(SLAB_FRONT.map(({ p }) => iso(p[0], p[1], z)).map(([x, y]) => [x, y + dy] as Pt)).replace(/ /g, "L")}`;
-const SLAB_TOP = `M${pts(SLAB_OUTLINE.map(({ p }) => iso(...p))).replace(/ /g, "L")}Z`;
-const SLAB_CENTRE = iso((SLAB.x0 + SLAB.x1) / 2, (SLAB.y0 + SLAB.y1) / 2);
-const SLAB_KEEL = iso(SLAB.x1 - SLAB.r * (1 - Math.SQRT1_2), SLAB.y1 - SLAB.r * (1 - Math.SQRT1_2));
-// Pebbles and shells bedded in the sand: [arc length, depth above the floor, size, shell?]
-const SLAB_STONES: [number, number, number, boolean][] = [
-  [260, 7, 3.2, false],
-  [300, 5, 2.2, false],
-  [520, 9, 4, true],
-  [760, 6, 2.6, false],
-  [990, 8, 3.6, false],
-  [1020, 5, 2, false],
-  [1230, 9, 3.6, true],
-  [1420, 6, 3, false],
-  [1660, 7, 2.4, false],
-];
 
-// Schools patrol the front wall on rails following the slab's curve. `z` is the
-// depth below the surface, `dur` a lap in seconds, `n` the school size.
-const FISH_SCHOOLS = [
-  { z: -17, dur: 38, n: 4, scale: 1.3, reverse: false },
-  { z: -29, dur: 52, n: 3, scale: 1.05, reverse: true },
-  { z: -23, dur: 30, n: 3, scale: 1.45, reverse: false },
+// Shoreline wobble: a few incommensurate waves with jittered phase so it never
+// reads as a regular scallop. Each inner contour adds its own drift so the
+// steps pinch and widen like real shallows.
+const shoreline = (th: number) =>
+  18 * Math.sin(2 * th + 0.6) +
+  12 * Math.sin(3 * th + 2.1 + 0.4 * Math.sin(th)) +
+  7 * Math.sin(7 * th + 0.3) +
+  3 * Math.sin(13 * th + 1.9) +
+  1.4 * Math.sin(29 * th + 0.8);
+const CONTOURS = [
+  { inset: 0, drift: 0 },
+  { inset: 24, drift: 12 },
+  { inset: 74, drift: 28 },
+  { inset: 150, drift: 40 },
 ];
-const FISH_COLOURS = [
-  "hsl(28 95% 58%)",
-  "hsl(48 95% 60%)",
-  "hsl(350 85% 66%)",
-  "hsl(172 70% 52%)",
-  "hsl(268 75% 72%)",
-  "hsl(200 90% 78%)",
-];
-const FISH_RAILS = FISH_SCHOOLS.map(({ z, reverse }) => {
-  const run = SLAB_FRONT.map(({ p }) => iso(p[0], p[1], z));
-  return `M${pts(reverse ? run.reverse() : run).replace(/ /g, "L")}`;
-});
-
-const WaterSlab = () => {
-  const front0 = SLAB_FRONT[0].s;
-  const stones = SLAB_STONES.map(([ds, h, size, shell]) => {
-    const target = front0 + ds;
-    const q = SLAB_FRONT.find(({ s }) => s >= target) ?? SLAB_FRONT[SLAB_FRONT.length - 1];
-    const [x, y] = iso(q.p[0], q.p[1], -SLAB_DEPTH + h);
-    return { x: r1(x), y: r1(y), size, shell };
+const contourPath = (inset: number, drift: number, seed: number) => {
+  const N = SLAB_BASE.length;
+  const ring = SLAB_BASE.map((q, i) => {
+    const th = (2 * Math.PI * i) / N;
+    const d =
+      shoreline(th) - inset + drift * Math.sin(2 * th + seed) * Math.sin(3 * th + seed * 1.7);
+    const t = (q.a * Math.PI) / 180;
+    return iso(q.p[0] + d * Math.cos(t), q.p[1] + d * Math.sin(t));
   });
-  const [kx, ky] = SLAB_KEEL;
-  const fadeXs = SLAB_FRONT.map(({ p }) => iso(p[0], p[1])[0]);
-  const fx0 = Math.min(...fadeXs);
-  const fx1 = Math.max(...fadeXs);
-  return (
-    <svg
-      className="hb-sprite hb-slab"
-      width={STAGE_W}
-      height={STAGE_H}
-      viewBox={`0 0 ${STAGE_W} ${STAGE_H}`}
-      aria-hidden="true"
-      focusable="false"
-    >
-      <defs>
-        <radialGradient
-          id="hb-slab-sea"
-          gradientUnits="userSpaceOnUse"
-          cx={SLAB_CENTRE[0]}
-          cy={SLAB_CENTRE[1]}
-          r={560}
-          gradientTransform={`translate(${r1(SLAB_CENTRE[0])} ${r1(SLAB_CENTRE[1])}) scale(1 0.58) translate(${r1(-SLAB_CENTRE[0])} ${r1(-SLAB_CENTRE[1])})`}
-        >
-          <stop className="hb-slab-sea-0" offset="0" />
-          <stop className="hb-slab-sea-mid" offset="0.55" />
-          <stop className="hb-slab-sea-1" offset="1" />
-        </radialGradient>
-        <linearGradient
-          id="hb-slab-turn"
-          gradientUnits="userSpaceOnUse"
-          x1={r1(kx - 140)}
-          y1={0}
-          x2={r1(kx + 220)}
-          y2={0}
-        >
-          <stop className="hb-slab-turn-0" offset="0" />
-          <stop className="hb-slab-turn-1" offset="1" />
-        </linearGradient>
-        <pattern id="hb-slab-grain" width={13} height={9} patternUnits="userSpaceOnUse">
-          <circle cx={2} cy={2} r={0.8} />
-          <circle cx={8.5} cy={1.5} r={0.6} />
-          <circle cx={5} cy={5.5} r={0.9} />
-          <circle cx={11} cy={6.5} r={0.6} />
-          <circle cx={1} cy={7.5} r={0.5} />
-        </pattern>
-        <linearGradient
-          id="hb-slab-fade"
-          gradientUnits="userSpaceOnUse"
-          x1={r1(fx0)}
-          y1={0}
-          x2={r1(fx1)}
-          y2={0}
-        >
-          <stop offset="0" stopColor="#fff" stopOpacity="0" />
-          <stop offset="0.14" stopColor="#fff" stopOpacity="1" />
-          <stop offset="0.9" stopColor="#fff" stopOpacity="1" />
-          <stop offset="1" stopColor="#fff" stopOpacity="0" />
-        </linearGradient>
-        <mask
-          id="hb-slab-mask"
-          maskUnits="userSpaceOnUse"
-          x={0}
-          y={0}
-          width={STAGE_W}
-          height={STAGE_H}
-        >
-          <rect width={STAGE_W} height={STAGE_H} fill="url(#hb-slab-fade)" />
-        </mask>
-        <filter id="hb-slab-soft" x="-5%" y="-20%" width="110%" height="140%">
-          <feGaussianBlur stdDeviation="5" />
-        </filter>
-      </defs>
-      <g mask="url(#hb-slab-mask)">
-        <path className="hb-slab-shadow" d={slabRun(-SLAB_DEPTH, 6)} filter="url(#hb-slab-soft)" />
-        <polygon
-          className="hb-slab-deep"
-          points={slabBand(
-            () => 0,
-            () => -SLAB_DEPTH
-          )}
-        />
-        {FISH_SCHOOLS.map(({ dur, n, scale, reverse }, si) =>
-          Array.from({ length: n }, (_, i) => (
-            <g
-              key={`${si}-${i}`}
-              className="hb-fish hb-anim"
-              style={{
-                ["--hb-fish" as string]: FISH_COLOURS[(si * 3 + i * 2 + si) % FISH_COLOURS.length],
-                offsetPath: `path('${FISH_RAILS[si]}')`,
-                offsetDistance: `${r1(((i + 0.4 * si) / n) * 100)}%`,
-                animationDuration: `${dur}s`,
-                animationDelay: `${r1((-i * dur) / n - si * 3)}s`,
-              }}
-            >
-              <g
-                transform={`translate(0 ${[0, 3, -2.5, 1.5][i % 4]}) scale(${scale} ${reverse ? -scale : scale})`}
-              >
-                <path d="M-4 0Q0-2.5 4 0Q0 2.5-4 0ZM-4 0L-7-2.2V2.2Z" />
-              </g>
-            </g>
-          ))
-        )}
-        {Array.from({ length: WATER_BANDS }, (_, i) => {
-          const zTop = -((SLAB_DEPTH - SAND_DEPTH + 3) * i) / WATER_BANDS;
-          const zBot = -((SLAB_DEPTH - SAND_DEPTH + 3) * (i + 1)) / WATER_BANDS;
-          return (
-            <polygon
-              key={i}
-              className="hb-slab-shallow"
-              style={{ fillOpacity: r1((1 - i / WATER_BANDS) * 0.9) }}
-              points={slabBand(
-                () => zTop,
-                () => zBot
-              )}
-            />
-          );
-        })}
-        <polygon className="hb-slab-sand" points={slabBand(sandTop, () => -SLAB_DEPTH)} />
-        <polygon className="hb-slab-grain" points={slabBand(sandTop, () => -SLAB_DEPTH)} />
-        <path
-          className="hb-slab-crest"
-          d={`M${pts(SLAB_FRONT.map(({ p, s }) => iso(p[0], p[1], sandTop(s)))).replace(/ /g, "L")}`}
-        />
-        {stones.map(({ x, y, size, shell }, i) =>
-          shell ? (
-            <path
-              key={i}
-              className="hb-slab-shell"
-              d={`M${r1(x - size * 1.3)} ${y}A${r1(size * 1.3)} ${r1(size * 1.1)} 0 0 1 ${r1(x + size * 1.3)} ${y}Z`}
-            />
-          ) : (
-            <ellipse key={i} className="hb-slab-pebble" cx={x} cy={y} rx={size * 1.4} ry={size} />
-          )
-        )}
-        <polygon
-          className="hb-slab-turn"
-          points={slabBand(
-            () => 0,
-            () => -SLAB_DEPTH
-          )}
-        />
-        <path className="hb-slab-floor" d={slabRun(-SLAB_DEPTH)} />
-      </g>
-      <path className="hb-slab-top" d={SLAB_TOP} />
-      <polygon
-        className="hb-cast"
-        points={pts([
-          iso(QUAY.x0 + 6, QUAY.y1 - 4, 0),
-          iso(QUAY.x1 - 6, QUAY.y1 - 4, 0),
-          iso(QUAY.x1 + 14, QUAY.y1 + 22, 0),
-          iso(QUAY.x0 + 20, QUAY.y1 + 22, 0),
-        ])}
-      />
-      <path className="hb-slab-rim" d={slabRun(0)} mask="url(#hb-slab-mask)" />
-    </svg>
-  );
+  return `M${pts(ring).replace(/ /g, "L")}Z`;
 };
+const SLAB_RINGS = CONTOURS.map(({ inset, drift }, i) => contourPath(inset, drift, i * 1.3));
+const SLAB_TOP = SLAB_RINGS[0];
+
+// Reflections: mirror z -> -z about the waterline. A box at height z..z+h
+// reflects to -(z+h)..-z; drawing all three faces gives its silhouette.
+type WBox = [number, number, number, number, number, number];
+const mirrorBox = ([x, y, z, w, d, h]: WBox) => {
+  const f = box(x, y, -(z + h), w, d, h);
+  return [f.top, f.left, f.right];
+};
+const crateBox = (c: Crate, baseZ: number): WBox => [
+  c.x,
+  c.y,
+  baseZ + c.level * CRATE.h,
+  CRATE.w,
+  CRATE.d,
+  CRATE.h,
+];
+const CRANE_TOWER_Y = -160;
+const REFLECT_BOXES: WBox[] = [
+  // Ship superstructure + cargo
+  [-156, 8, DECK_Z, 44, 54, BRIDGE_H],
+  [-160, 4, DECK_Z + BRIDGE_H, 52, 62, 3],
+  [-152, 13, CAB_Z, 36, 44, CAB_H],
+  [-155, 10, CAB_Z + CAB_H, 42, 50, 3],
+  ...[...CRATES, HOIST_CRATE].map((c) => crateBox(c, DECK_Z)),
+  // Quay, cargo and crane
+  [QUAY.x0, QUAY.y0, 0, QUAY.x1 - QUAY.x0, QUAY.y1 - QUAY.y0, QUAY_Z],
+  ...[...QUAY_CRATES_BACK, ...QUAY_CRATES_FRONT].map((c) => crateBox(c, QUAY_Z)),
+  [CRANE_X, CRANE_TOWER_Y, QUAY_Z, 14, 14, BOOM_Z - QUAY_Z],
+  [CRANE_X - 4, CRANE_TOWER_Y + 14, CAB_GLASS_Z - 4, 22, 22, CAB_GLASS_H + 9],
+  [CRANE_X - 2, -202, BOOM_Z - 18, 18, 28, 18],
+  [CRANE_X, -196, BOOM_Z, 14, BOOM_END_Y + 196, 10],
+];
+const REFLECT_HULL = [
+  pts([iso(-160, 70, 0), iso(150, 70, 0), iso(150, 70, -DECK_Z), iso(-160, 70, -DECK_Z)]),
+  pts([iso(-160, 0, -DECK_Z), ...bowCurve(150, 44, -DECK_Z), iso(-160, 70, -DECK_Z)]),
+  pts([
+    ...bowCurve(150, 44, -DECK_Z, bowVisible(44)),
+    ...bowCurve(146, 40, 0, { ...bowVisible(40), reverse: true }),
+  ]),
+];
+// Lighthouse: tapered tower + lantern as a trapezoid stack under the island.
+const REFLECT_TOWER = (() => {
+  const k = Math.SQRT2 * C;
+  const [bx, by] = iso(LH.x, LH.y);
+  const seg = (z0: number, z1: number, r0: number, rt: number) =>
+    pts([
+      [bx - r0 * k, by + z0],
+      [bx + r0 * k, by + z0],
+      [bx + rt * k, by + z1],
+      [bx - rt * k, by + z1],
+    ]);
+  const top = LH.base + LH.height;
+  return [
+    seg(ISLAND_H, LH.base, 27, 25),
+    seg(LH.base, top, 15, 10),
+    seg(top, top + 17, 11, 11),
+    seg(top + 17, top + 26, 13, 2),
+  ];
+})();
+// Reflections fade with distance from the waterline: each piece joins a tier
+// by its height, and each tier is one group so overlaps never double up.
+const REFLECT_TIERS = (() => {
+  const tiers = [
+    { below: 60, fade: 1, polys: [] as string[] },
+    { below: 130, fade: 0.6, polys: [] as string[] },
+    { below: Infinity, fade: 0.3, polys: [] as string[] },
+  ];
+  const add = (z: number, polys: string[]) => tiers.find((t) => z < t.below)!.polys.push(...polys);
+  REFLECT_BOXES.forEach((b) => add(b[2], mirrorBox(b)));
+  add(0, REFLECT_HULL);
+  const top = LH.base + LH.height;
+  [ISLAND_H, LH.base, top, top + 17].forEach((z, i) => add(z, [REFLECT_TOWER[i]]));
+  return tiers;
+})();
+const REFLECT_LAMP: Pt = (() => {
+  const [bx, by] = iso(LH.x, LH.y);
+  return [bx, by + LH.base + LH.height + 9];
+})();
+
+const WaterSlab = () => (
+  <svg
+    className="hb-sprite hb-slab"
+    width={STAGE_W}
+    height={STAGE_H}
+    viewBox={`0 0 ${STAGE_W} ${STAGE_H}`}
+    aria-hidden="true"
+    focusable="false"
+  >
+    <defs>
+      <clipPath id="hb-slab-clip">
+        <path d={SLAB_TOP} />
+      </clipPath>
+      {/* Thin horizontal breaks so reflections read as resting on water. */}
+      <pattern id="hb-ripple" width={10} height={5} patternUnits="userSpaceOnUse">
+        <rect width={10} height={3.4} fill="#fff" />
+      </pattern>
+      <mask
+        id="hb-ripple-mask"
+        maskUnits="userSpaceOnUse"
+        x={0}
+        y={0}
+        width={STAGE_W}
+        height={STAGE_H}
+      >
+        <rect width={STAGE_W} height={STAGE_H} fill="url(#hb-ripple)" />
+      </mask>
+    </defs>
+    {SLAB_RINGS.map((d, i) => (
+      <path key={i} className={`hb-slab-ring hb-slab-ring-${i}`} d={d} />
+    ))}
+    <g className="hb-reflect" clipPath="url(#hb-slab-clip)">
+      <g mask="url(#hb-ripple-mask)">
+        {REFLECT_TIERS.map((tier, k) => (
+          <g key={k} className="hb-reflect-body" style={{ opacity: tier.fade }}>
+            {tier.polys.map((p, i) => (
+              <polygon key={i} points={p} />
+            ))}
+          </g>
+        ))}
+        <ellipse
+          className="hb-reflect-lamp"
+          cx={r1(REFLECT_LAMP[0])}
+          cy={r1(REFLECT_LAMP[1])}
+          rx={9}
+          ry={5}
+        />
+      </g>
+    </g>
+    <polygon
+      className="hb-cast"
+      points={pts([
+        iso(QUAY.x0 + 6, QUAY.y1 - 4, 0),
+        iso(QUAY.x1 - 6, QUAY.y1 - 4, 0),
+        iso(QUAY.x1 + 14, QUAY.y1 + 22, 0),
+        iso(QUAY.x0 + 20, QUAY.y1 + 22, 0),
+      ])}
+    />
+  </svg>
+);
 
 /* ---------------------------------------------------------------------------
    Scene
@@ -1361,6 +1411,12 @@ const HarborScene = ({ name, yoe }: HarborSceneProps) => {
             focusable="false"
           >
             <path className="hb-wake" d={SHIP_FOAM} />
+            {MOORING.map((d) => (
+              <g key={d} className="hb-rope">
+                <path d={d} />
+                <path className="hb-rope-twist" d={d} />
+              </g>
+            ))}
           </svg>
           <Sprite x={330} y={140} w={440} h={250} className="hb-ship hb-anim">
             <Ship onHover={setTip} />

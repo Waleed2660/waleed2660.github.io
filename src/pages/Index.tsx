@@ -197,10 +197,10 @@ const Index = () => {
 
       <div className="min-h-screen relative overflow-hidden">
         <div className="fixed inset-0 pointer-events-none overflow-hidden">
-          <div className="absolute -top-48 -left-48 w-[700px] h-[700px] rounded-full bg-brand/10 blur-[60px] md:blur-[120px] will-change-transform" />
-          <div className="absolute -top-32 -right-64 w-[600px] h-[600px] rounded-full bg-blue-700/10 dark:bg-blue-700/20 blur-[50px] md:blur-[100px] will-change-transform" />
-          <div className="absolute -bottom-64 -left-32 w-[600px] h-[600px] rounded-full bg-brand/8 dark:bg-brand/10 blur-[55px] md:blur-[110px] will-change-transform" />
-          <div className="absolute -bottom-32 -right-32 w-[500px] h-[500px] rounded-full bg-blue-800/8 dark:bg-blue-600/12 blur-[90px] hidden md:block will-change-transform" />
+          <div className="glow-blob glow-brand absolute -top-[432px] -left-[432px] w-[1180px] h-[1180px]" />
+          <div className="glow-blob glow-blue absolute -top-[328px] -right-[456px] w-[1000px] h-[1000px]" />
+          <div className="glow-blob glow-brand-soft absolute -bottom-[476px] -left-[348px] w-[1040px] h-[1040px]" />
+          <div className="glow-blob glow-blue-deep absolute -bottom-[308px] -right-[308px] w-[860px] h-[860px] hidden md:block" />
         </div>
 
         <div className="fixed inset-0 pointer-events-none">

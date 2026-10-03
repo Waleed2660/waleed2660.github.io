@@ -15,19 +15,12 @@
   --hb-accent: hsl(var(--brand));
   --hb-water-band: hsl(200 60% 20% / 0.85);
   --hb-foam: rgba(255, 255, 255, 0.85);
-  --hb-sea: hsl(197 58% 25%);
-  --hb-sea-edge: hsl(207 58% 17%);
-  --hb-slab-shallow: hsl(195 62% 32%);
-  --hb-slab-deep: hsl(212 65% 10%);
-  --hb-slab-rim: rgba(186, 230, 253, 0.75);
-  --hb-slab-turn: rgba(2, 6, 23, 0.4);
-  --hb-slab-shadow: rgba(0, 0, 0, 0.6);
-  --hb-sand: hsl(34 30% 34%);
-  --hb-sand-crest: hsl(38 34% 46%);
-  --hb-sand-grain: hsl(28 30% 20% / 0.85);
-  --hb-pebble: hsl(28 10% 26%);
-  --hb-shell: hsl(20 30% 66%);
-  --hb-fish: hsl(38 92% 66%);
+  --hb-sea-0: hsl(194 24% 27%);
+  --hb-sea-1: hsl(197 28% 23.5%);
+  --hb-sea-2: hsl(201 32% 20.5%);
+  --hb-sea-3: hsl(205 36% 18%);
+  --hb-reflect: hsl(222 45% 8%);
+  --hb-reflect-opacity: 0.32;
 
   position: relative;
   width: 100%;
@@ -48,20 +41,12 @@ html:not(.dark) .hb-viewport {
   --hb-name-under: hsl(205 62% 24% / 0.5);
   --hb-water-band: hsl(196 72% 34% / 0.85);
   --hb-foam: #fff;
-  --hb-sea: hsl(188 78% 56%);
-  --hb-sea-mid: hsl(193 74% 46%);
-  --hb-sea-edge: hsl(205 72% 33%);
-  --hb-slab-shallow: hsl(188 76% 54%);
-  --hb-slab-deep: hsl(208 72% 30%);
-  --hb-slab-rim: rgba(255, 255, 255, 0.95);
-  --hb-slab-turn: rgba(15, 40, 80, 0.22);
-  --hb-slab-shadow: rgba(30, 41, 59, 0.32);
-  --hb-sand: hsl(38 62% 70%);
-  --hb-sand-crest: hsl(42 70% 84%);
-  --hb-sand-grain: hsl(30 40% 48% / 0.65);
-  --hb-pebble: hsl(30 14% 52%);
-  --hb-shell: hsl(18 70% 92%);
-  --hb-fish: hsl(22 92% 60%);
+  --hb-sea-0: hsl(186 22% 82%);
+  --hb-sea-1: hsl(190 25% 75%);
+  --hb-sea-2: hsl(194 28% 68%);
+  --hb-sea-3: hsl(198 32% 61%);
+  --hb-reflect: hsl(205 40% 26%);
+  --hb-reflect-opacity: 0.2;
   background: radial-gradient(
     ellipse 70% 55% at 50% 45%,
     rgba(255, 244, 222, 0.75),
@@ -177,94 +162,44 @@ svg.hb-sprite {
 }
 .hb-stage .hb-wake {
   stroke: var(--hb-foam);
-  stroke-width: 1.6;
-  stroke-dasharray: 18 7 6 9;
-  opacity: 0.55;
+  stroke-width: 1.2;
+  opacity: 0.3;
   stroke-linecap: round;
 }
 
-/* Water slab: sea surface on top, a cut-away wall of water and sand in front. */
-.hb-slab-sea-0 {
-  stop-color: var(--hb-sea);
-}
-.hb-slab-sea-mid {
-  stop-color: var(--hb-sea-mid, var(--hb-sea));
-}
-.hb-slab-sea-1 {
-  stop-color: var(--hb-sea-edge);
-}
-.hb-slab-turn-0 {
-  stop-color: var(--hb-slab-turn);
-  stop-opacity: 0;
-}
-.hb-slab-turn-1 {
-  stop-color: var(--hb-slab-turn);
-}
-.hb-slab circle {
-  fill: var(--hb-sand-grain);
+/* Puddle: crisp shoreline, stepped depth contours, flat silhouette reflections. */
+.hb-stage .hb-slab-ring {
   stroke: none;
 }
-.hb-stage .hb-slab-top {
-  fill: url(#hb-slab-sea);
-  stroke: var(--hb-slab-rim);
-  stroke-opacity: 0.35;
+.hb-stage .hb-slab-ring-0 {
+  fill: var(--hb-sea-0);
 }
-.hb-stage .hb-slab-deep {
-  fill: var(--hb-slab-deep);
-  stroke: none;
+.hb-stage .hb-slab-ring-1 {
+  fill: var(--hb-sea-1);
 }
-.hb-stage .hb-slab-shallow {
-  fill: var(--hb-slab-shallow);
-  stroke: none;
+.hb-stage .hb-slab-ring-2 {
+  fill: var(--hb-sea-2);
 }
-.hb-stage .hb-slab-sand {
-  fill: var(--hb-sand);
-  stroke: none;
+.hb-stage .hb-slab-ring-3 {
+  fill: var(--hb-sea-3);
 }
-.hb-stage .hb-slab-grain {
-  fill: url(#hb-slab-grain);
-  stroke: none;
+.hb-reflect {
+  opacity: var(--hb-reflect-opacity);
 }
-.hb-stage .hb-slab-turn {
-  fill: url(#hb-slab-turn);
-  stroke: none;
-}
-.hb-stage .hb-slab-crest {
-  fill: none;
-  stroke: var(--hb-sand-crest);
-  stroke-width: 1.5;
-}
-.hb-stage .hb-slab-pebble {
-  fill: var(--hb-pebble);
-  stroke: none;
-}
-.hb-stage .hb-slab-shell {
-  fill: var(--hb-shell);
-  stroke: var(--hb-sand-grain);
+.hb-stage .hb-reflect-body polygon {
+  fill: var(--hb-reflect);
+  stroke: var(--hb-reflect);
   stroke-width: 0.6;
 }
-.hb-stage .hb-fish path {
-  fill: var(--hb-fish);
-  fill-opacity: 1;
+.hb-stage .hb-reflect-lamp {
+  fill: var(--hb-accent);
   stroke: none;
+  opacity: 0.35;
 }
-.hb-stage .hb-fish {
-  offset-rotate: auto;
-}
-.hb-stage .hb-slab-floor {
-  fill: none;
-  stroke: var(--hb-sand-grain);
-  stroke-width: 1.2;
-}
-.hb-stage .hb-slab-rim {
-  fill: none;
-  stroke: var(--hb-slab-rim);
-  stroke-width: 2;
-}
-.hb-stage .hb-slab-shadow {
-  fill: none;
-  stroke: var(--hb-slab-shadow);
-  stroke-width: 12;
+@media (max-width: 480px) {
+  .hb-reflect {
+    display: none;
+  }
 }
 
 /* ---- Annotations (nod to the blueprint reference) ----------------------- */
@@ -365,8 +300,8 @@ svg.hb-sprite {
   --hb-top: hsl(var(--h) var(--s) var(--l));
   --hb-left: hsl(var(--h) var(--s) calc(var(--l) - 8%));
   --hb-right: hsl(var(--h) var(--s) calc(var(--l) - 15%));
-  --hb-ink: hsl(var(--h) var(--s) calc(var(--l) + 22%) / 0.75);
-  --hb-ink-soft: hsl(var(--h) var(--s) calc(var(--l) + 18%) / 0.4);
+  --hb-ink: hsl(var(--h) var(--s) calc(var(--l) - 22%) / 0.75);
+  --hb-ink-soft: hsl(var(--h) var(--s) calc(var(--l) - 18%) / 0.45);
   --hb-label: #fff;
 }
 .hb-c-rust {
@@ -453,12 +388,54 @@ svg.hb-sprite {
 }
 /* Safety-yellow mooring bollards, no outline. */
 .hb-bollard {
-  --hb-top: #fcd34d;
-  --hb-left: #eab308;
-  --hb-right: #a16207;
+  --hb-top: #4b5563;
+  --hb-left: #374151;
+  --hb-right: #1f2937;
 }
 .hb-stage .hb-bollard polygon {
   stroke: none;
+}
+/* Mooring rope: hemp base with a dashed lay to read as twisted strands. */
+.hb-stage .hb-rope path {
+  fill: none;
+  stroke: hsl(36 32% 52%);
+  stroke-width: 1.8;
+  stroke-linecap: round;
+}
+.hb-stage .hb-rope .hb-rope-twist {
+  stroke: hsl(30 30% 30%);
+  stroke-width: 1.8;
+  stroke-dasharray: 1 2.2;
+  opacity: 0.55;
+}
+html:not(.dark) .hb-stage .hb-rope path {
+  stroke: hsl(36 38% 58%);
+}
+/* Quay weathering. Each layer is one group so overlapping blobs merge. */
+.hb-stage .hb-grime {
+  opacity: 0.1;
+}
+.hb-stage .hb-grime ellipse {
+  fill: #2a2f36;
+  stroke: none;
+}
+.hb-stage .hb-oil {
+  opacity: 0.22;
+}
+.hb-stage .hb-oil ellipse {
+  fill: #11151b;
+  stroke: none;
+}
+.hb-stage .hb-crack {
+  fill: none;
+  stroke: #4b5360;
+  stroke-width: 0.6;
+  opacity: 0.55;
+}
+.hb-stage .hb-rust-run {
+  fill: hsl(22 55% 30%);
+  stroke: none;
+  opacity: 0.35;
 }
 .hb-stage .hb-antenna {
   fill: none;
@@ -572,13 +549,12 @@ svg.hb-sprite {
 .hb-stage .hb-foam-line {
   fill: none;
   stroke: var(--hb-foam);
-  stroke-width: 1.6;
-  stroke-dasharray: 10 4 3 4;
+  stroke-width: 1.2;
   stroke-linecap: round;
-  opacity: 0.75;
+  opacity: 0.3;
 }
 /* Light theme: the quay reads as weathered concrete rather than white. */
-html:not(.dark) .hb-quay {
+.hb-quay {
   --hb-top: #aeb4bc;
   --hb-left: #8f97a2;
   --hb-ink: #3f4a5a;
@@ -685,6 +661,14 @@ html:not(.dark) .hb-c-white {
 /* The trolley hangs under the boom; its top face would paint over the boom. */
 .hb-trolley .hb-top {
   display: none;
+}
+
+/* The hoist's spreader keeps its dark steel tone in both themes. */
+.hb-spreader {
+  --hb-top: #1f2747;
+  --hb-left: #171d38;
+  --hb-right: #11162c;
+  --hb-ink: #0b0f1e;
 }
 
 .hb-cable {
@@ -882,9 +866,6 @@ html:not(.dark) .hb-stage .hb-cast {
   .hb-splash--dive > * {
     animation-delay: 4.3s;
   }
-  .hb-fish {
-    animation: hb-fish-swim linear infinite;
-  }
   .hb-name-wrap {
     animation: hb-float 5s ease-in-out infinite alternate;
   }
@@ -897,9 +878,6 @@ html:not(.dark) .hb-stage .hb-cast {
   }
   .hb-fin-back {
     animation: hb-fin-back 18s linear infinite;
-  }
-  .hb-anim {
-    will-change: transform;
   }
 }
 
@@ -1064,20 +1042,6 @@ html:not(.dark) .hb-stage .hb-cast {
   80%,
   100% {
     transform: translate(389px, 110px) rotate(40deg);
-  }
-}
-@keyframes hb-fish-swim {
-  0% {
-    offset-distance: 0%;
-    opacity: 0;
-  }
-  5%,
-  95% {
-    opacity: 1;
-  }
-  100% {
-    offset-distance: 100%;
-    opacity: 0;
   }
 }
 @keyframes hb-ring {

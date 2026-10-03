@@ -286,6 +286,36 @@ html.theme-switching *:not([data-theme-toggle]):not([data-theme-toggle] *) {
 }
 
 @layer utilities {
+  /* Ambient glows. Radial gradients instead of blur() filters: iOS Safari
+     re-rasterizes filter layers at pinch-zoom scale, which can exhaust GPU
+     memory and kill the tab. */
+  .glow-blob {
+    --glow: transparent;
+    border-radius: 9999px;
+    background: radial-gradient(closest-side, var(--glow), var(--glow) 25%, transparent);
+  }
+  .glow-brand {
+    --glow: hsl(var(--brand) / 0.1);
+  }
+  .glow-brand-soft {
+    --glow: hsl(var(--brand) / 0.08);
+  }
+  .glow-blue {
+    --glow: rgb(29 78 216 / 0.1);
+  }
+  .glow-blue-deep {
+    --glow: rgb(30 64 175 / 0.08);
+  }
+  .dark .glow-brand-soft {
+    --glow: hsl(var(--brand) / 0.1);
+  }
+  .dark .glow-blue {
+    --glow: rgb(29 78 216 / 0.2);
+  }
+  .dark .glow-blue-deep {
+    --glow: rgb(37 99 235 / 0.12);
+  }
+
   .glass {
     background: var(--glass-bg);
     border: 1px solid var(--glass-border);
