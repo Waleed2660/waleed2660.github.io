@@ -31,13 +31,23 @@ const countLines = (dir: string, exts: string[]): number => {
   return total;
 };
 
+// Keep in sync with CAREER_START in src/components/HomeSection.tsx
+const getYOE = (): number =>
+  Math.floor((Date.now() - new Date(2022, 6, 1).getTime()) / (1000 * 60 * 60 * 24 * 365.25));
+
 // https://vitejs.dev/config/
 export default defineConfig(() => ({
   server: {
     host: "::",
     port: 8080,
   },
-  plugins: [react()],
+  plugins: [
+    react(),
+    {
+      name: "inject-yoe",
+      transformIndexHtml: (html: string) => html.replaceAll("%YOE%", String(getYOE())),
+    },
+  ],
   define: {
     __BUILD_TIME__: JSON.stringify(new Date().toISOString()),
     __GIT_COMMITS__: getGitCommits(),
