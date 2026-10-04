@@ -212,7 +212,6 @@ const Index = () => {
                 left: s.left,
                 top: s.top,
                 animation: `twinkle ${s.duration} ease-in-out infinite ${s.delay}`,
-                transform: "translateZ(0)",
               }}
             />
           ))}

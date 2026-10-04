@@ -327,7 +327,6 @@ html.theme-switching *:not([data-theme-toggle]):not([data-theme-toggle] *) {
     border: 1px solid var(--glass-border);
     box-shadow: var(--glass-shadow);
     position: relative;
-    transform: translateZ(0);
   }
 
   .glass-strong::before {

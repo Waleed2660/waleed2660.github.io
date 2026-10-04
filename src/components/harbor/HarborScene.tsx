@@ -6,6 +6,7 @@ import {
   type CSSProperties,
   type ReactNode,
 } from "react";
+import { MoveHorizontal } from "lucide-react";
 import { box, iso, onLeftFace, onRightFace, pts, C, S, STAGE_H, STAGE_W, type Pt } from "./iso";
 import "./harbor.css";
 
@@ -1117,20 +1118,35 @@ const cableLen = (z: number) => TROLLEY_Z - (z + SPREADER.h);
 const CABLE_H0 = cableLen(HOOK_HOME.z);
 
 const CARGO_START_DELAY = 500;
+// Phone still frame: first crate hoisted clear of the stacks, hanging over the
+// water just behind the hull (back edge at y = 0), clear of the quay edge.
+const CARGO_STILL_POSE: ReturnType<typeof cargoPose> = (() => {
+  const hook: Spot = { y: -CRATE.d - 3, z: TRAVEL_Z };
+  const crates = CARGO_PLAN.home.map((p, i) => (i === 0 ? { y: hook.y, z: hook.z - CRATE.h } : p));
+  return { hook, crates, carry: 0 };
+})();
 
-const CargoOps = ({ paused, onHover }: { paused: boolean; onHover: (t: HoverTip) => void }) => {
+const CargoOps = ({
+  paused,
+  still,
+  onHover,
+}: {
+  paused: boolean;
+  still: boolean;
+  onHover: (t: HoverTip) => void;
+}) => {
   const crateRefs = useRef<(HTMLDivElement | null)[]>([]);
   const hitRefs = useRef<(SVGGElement | null)[]>([]);
   const spreaderRef = useRef<HTMLDivElement | null>(null);
   const cableRef = useRef<HTMLDivElement | null>(null);
   const trolleyRef = useRef<HTMLDivElement | null>(null);
   const timeRef = useRef(0);
-  const poseRef = useRef(cargoPose(0));
+  const poseRef = useRef(still ? CARGO_STILL_POSE : cargoPose(0));
   const orderRef = useRef("");
 
   useEffect(() => {
     const apply = () => {
-      const pose = cargoPose(timeRef.current);
+      const pose = still ? CARGO_STILL_POSE : cargoPose(timeRef.current);
       poseRef.current = pose;
       const { home } = CARGO_PLAN;
       pose.crates.forEach((p, i) => {
@@ -1177,9 +1193,9 @@ const CargoOps = ({ paused, onHover }: { paused: boolean; onHover: (t: HoverTip)
         ).toFixed(4)})`;
     };
 
-    const still = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
     apply();
-    if (paused || still.matches) return;
+    if (paused || still || reduce.matches) return;
     let raf = 0;
     let last = 0;
     const tick = (now: number) => {
@@ -1199,7 +1215,7 @@ const CargoOps = ({ paused, onHover }: { paused: boolean; onHover: (t: HoverTip)
       clearTimeout(wait);
       cancelAnimationFrame(raf);
     };
-  }, [paused]);
+  }, [paused, still]);
 
   const { home } = CARGO_PLAN;
   return (
@@ -1976,6 +1992,13 @@ const Radar = ({
 
 // Empty sky above the crane is cropped off so the slab wall gets the room.
 const STAGE_TOP = 40;
+// Narrow screens get a cropped, enlarged scene that pans sideways, opening on
+// the ship and crane (as a fraction of the stage width).
+const PAN_QUERY = "(max-width: 640px)";
+const PAN_FOCUS_X = 0.55;
+// The pan view also trims the outer water rim below the slab to zoom in further.
+const PAN_BOTTOM = 740;
+const PAN_PEEK = 56;
 
 const HarborScene = ({ name, yoe }: HarborSceneProps) => {
   const viewportRef = useRef<HTMLDivElement | null>(null);
@@ -1990,16 +2013,53 @@ const HarborScene = ({ name, yoe }: HarborSceneProps) => {
       Math.min(window.screen.width, window.screen.height) < 600
   );
   const [tip, setTip] = useState<HoverTip>(null);
+  const scrollerRef = useRef<HTMLDivElement | null>(null);
+  const [pan, setPan] = useState(() => window.matchMedia(PAN_QUERY).matches);
+  const [panned, setPanned] = useState(false);
+  const panWidth = r1(STAGE_W * scale);
+
+  useEffect(() => {
+    const mq = window.matchMedia(PAN_QUERY);
+    const sync = () => setPan(mq.matches);
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
+
+  // Keep the focal point centred until the visitor pans themselves.
+  useLayoutEffect(() => {
+    const node = scrollerRef.current;
+    if (!node) return;
+    node.scrollLeft = pan && !panned ? panWidth * PAN_FOCUS_X - node.clientWidth / 2 : 0;
+  }, [pan, panned, panWidth]);
+
+  // One gentle sideways nudge the first time the scene is seen, hinting it moves.
+  useEffect(() => {
+    const node = scrollerRef.current;
+    if (!pan || panned || paused || !node) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const out = window.setTimeout(() => node.scrollBy({ left: PAN_PEEK, behavior: "smooth" }), 900);
+    const back = window.setTimeout(
+      () => node.scrollBy({ left: -PAN_PEEK, behavior: "smooth" }),
+      1500
+    );
+    return () => {
+      clearTimeout(out);
+      clearTimeout(back);
+    };
+    // Only on first sight: later visibility changes shouldn't nudge again.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pan, paused]);
 
   useLayoutEffect(() => {
     const node = viewportRef.current;
     if (!node) return;
-    const measure = () => setScale(node.clientHeight / (STAGE_H - STAGE_TOP));
+    const span = (pan ? PAN_BOTTOM : STAGE_H) - STAGE_TOP;
+    const measure = () => setScale(node.clientHeight / span);
     measure();
     const ro = new ResizeObserver(measure);
     ro.observe(node);
     return () => ro.disconnect();
-  }, []);
+  }, [pan]);
 
   useEffect(() => {
     const node = viewportRef.current;
@@ -2012,93 +2072,109 @@ const HarborScene = ({ name, yoe }: HarborSceneProps) => {
   }, []);
 
   return (
-    <div ref={viewportRef} className="hb-viewport">
+    <div ref={viewportRef} className={`hb-viewport${pan ? " hb-viewport--pan" : ""}`}>
       <h1 className="sr-only">{name}</h1>
       <div
-        className={`hb-stage${paused ? " hb-paused" : ""}${still ? " hb-static" : ""}`}
-        style={{
-          width: STAGE_W,
-          height: STAGE_H,
-          transform: `translate(-50%, ${r1(-STAGE_TOP * scale)}px) scale(${scale})`,
-        }}
+        ref={scrollerRef}
+        className="hb-scroller"
+        onTouchStart={() => setPanned(true)}
+        onPointerDown={() => setPanned(true)}
+        onWheel={(e) => e.deltaX !== 0 && setPanned(true)}
       >
-        {/* Water */}
-        <WaterSlab />
-
-        {/* Back plane */}
-        <SharkRig half="back" />
-        <div
-          className="hb-lh hb-anim"
-          style={{ transformOrigin: `${LH_BASE[0]}px ${LH_BASE[1]}px` }}
-        >
-          <Sprite x={80} y={110} w={300} h={290}>
-            <Lighthouse />
-          </Sprite>
-        </div>
-        <SharkRig half="front" />
-        <Sprite x={560} y={-60} w={640} h={460}>
-          <Quay yoe={yoe} />
-          <Billboard name={name} />
-          <QuayCrates crates={QUAY_CRATES_BACK} onHover={setTip} />
-          <Crane />
-          <QuayPropsBack />
-          <QuayCrates crates={QUAY_CRATES_FRONT} onHover={setTip} />
-          <QuayPropsFront />
-        </Sprite>
-
-        {/* Mid plane */}
-        <>
-          <svg
-            className="hb-sprite"
-            width={STAGE_W}
-            height={STAGE_H}
-            viewBox={`0 0 ${STAGE_W} ${STAGE_H}`}
-            aria-hidden="true"
-            focusable="false"
+        <div className="hb-pan" style={pan ? { width: panWidth } : undefined}>
+          <div
+            className={`hb-stage${paused ? " hb-paused" : ""}${still ? " hb-static" : ""}`}
+            style={{
+              width: STAGE_W,
+              height: STAGE_H,
+              transform: `translate(-50%, ${r1(-STAGE_TOP * scale)}px) scale(${scale})`,
+            }}
           >
-            <path className="hb-wake" d={SHIP_FOAM} />
-            {MOORING.map((d) => (
-              <g key={d} className="hb-rope">
-                <path d={d} />
-                <path className="hb-rope-twist" d={d} />
-              </g>
-            ))}
-          </svg>
-          <Sprite x={330} y={140} w={440} h={250} className="hb-ship hb-anim">
-            <Ship onHover={setTip} />
-          </Sprite>
-          <Radar at={RADAR_AUX} w={22} h={6} period="1.6s" />
-          <Radar at={RADAR_MAIN} w={34} h={9} period="2.4s" />
-          <CargoOps paused={paused || still} onHover={setTip} />
-          {/* In front of the cargo slot, so it must paint over the moving crates. */}
-          <Sprite x={560} y={-60} w={640} h={460}>
-            <Worker x={138} y={-152} />
-          </Sprite>
-        </>
+            {/* Water */}
+            <WaterSlab />
 
-        {/* Front plane */}
-        <>
-          {BUOYS.map((b) => (
-            <Buoy key={b.label} {...b} />
-          ))}
-          <Whale />
-        </>
+            {/* Back plane */}
+            <SharkRig half="back" />
+            <div
+              className="hb-lh hb-anim"
+              style={{ transformOrigin: `${LH_BASE[0]}px ${LH_BASE[1]}px` }}
+            >
+              <Sprite x={80} y={110} w={300} h={290}>
+                <Lighthouse />
+              </Sprite>
+            </div>
+            <SharkRig half="front" />
+            <Sprite x={560} y={-60} w={640} h={460}>
+              <Quay yoe={yoe} />
+              <Billboard name={name} />
+              <QuayCrates crates={QUAY_CRATES_BACK} onHover={setTip} />
+              <Crane />
+              <QuayPropsBack />
+              <QuayCrates crates={QUAY_CRATES_FRONT} onHover={setTip} />
+              <QuayPropsFront />
+            </Sprite>
 
-        {/* Beam last so the light is never hidden behind the ship */}
-        <div
-          className="hb-lh hb-anim"
-          style={{ transformOrigin: `${LH_BASE[0]}px ${LH_BASE[1]}px` }}
-        >
-          <Beam />
-        </div>
+            {/* Mid plane */}
+            <>
+              <svg
+                className="hb-sprite"
+                width={STAGE_W}
+                height={STAGE_H}
+                viewBox={`0 0 ${STAGE_W} ${STAGE_H}`}
+                aria-hidden="true"
+                focusable="false"
+              >
+                <path className="hb-wake" d={SHIP_FOAM} />
+                {MOORING.map((d) => (
+                  <g key={d} className="hb-rope">
+                    <path d={d} />
+                    <path className="hb-rope-twist" d={d} />
+                  </g>
+                ))}
+              </svg>
+              <Sprite x={330} y={140} w={440} h={250} className="hb-ship hb-anim">
+                <Ship onHover={setTip} />
+              </Sprite>
+              <Radar at={RADAR_AUX} w={22} h={6} period="1.6s" />
+              <Radar at={RADAR_MAIN} w={34} h={9} period="2.4s" />
+              <CargoOps paused={paused} still={still} onHover={setTip} />
+              {/* In front of the cargo slot, so it must paint over the moving crates. */}
+              <Sprite x={560} y={-60} w={640} h={460}>
+                <Worker x={138} y={-152} />
+              </Sprite>
+            </>
 
-        {tip && (
-          <div className="hb-tip" style={{ left: tip.x, top: tip.y }} role="presentation">
-            <strong>{tip.label}</strong>
-            <span>{tip.tip}</span>
+            {/* Front plane */}
+            <>
+              {BUOYS.map((b) => (
+                <Buoy key={b.label} {...b} />
+              ))}
+              <Whale />
+            </>
+
+            {/* Beam last so the light is never hidden behind the ship */}
+            <div
+              className="hb-lh hb-anim"
+              style={{ transformOrigin: `${LH_BASE[0]}px ${LH_BASE[1]}px` }}
+            >
+              <Beam />
+            </div>
+
+            {tip && (
+              <div className="hb-tip" style={{ left: tip.x, top: tip.y }} role="presentation">
+                <strong>{tip.label}</strong>
+                <span>{tip.tip}</span>
+              </div>
+            )}
           </div>
-        )}
+        </div>
       </div>
+      {pan && (
+        <div className={`hb-pan-hint${panned ? " hb-pan-hint--gone" : ""}`} aria-hidden="true">
+          <MoveHorizontal className="w-3.5 h-3.5" />
+          Swipe to explore
+        </div>
+      )}
     </div>
   );
 };
