@@ -362,7 +362,7 @@ const ConferencesSection = () => {
           {visibleConferences.map((conf, index) => (
             <div
               key={index}
-              className="glass-strong rounded-3xl overflow-hidden hover:bg-slate-900/5 dark:hover:bg-white/10 hover:scale-[1.02] transition-all duration-500 group will-change-transform"
+              className="glass-strong rounded-3xl overflow-hidden hover:bg-slate-900/5 dark:hover:bg-white/10 hover:scale-[1.02] transition-all duration-500 group"
               style={{
                 contentVisibility: index > 0 ? "auto" : "visible",
                 containIntrinsicSize: "auto 600px",

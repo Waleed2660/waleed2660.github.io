@@ -279,7 +279,6 @@ const ExperienceSection = () => {
                       style={{
                         background: "var(--nav-bg)",
                         borderColor: "var(--nav-mobile-border)",
-                        backdropFilter: "blur(6px)",
                       }}
                     >
                       {expandedCards.has(index) ? "Show less" : "Read more"}

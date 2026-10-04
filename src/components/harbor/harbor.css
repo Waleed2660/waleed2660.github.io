@@ -25,6 +25,57 @@
   overflow: hidden;
 }
 
+.hb-scroller {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+.hb-pan {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+/* Narrow screens: taller viewport (so a bigger scene) that pans sideways. */
+.hb-viewport--pan {
+  height: clamp(300px, max(54svh, 100vw), 520px);
+}
+.hb-viewport--pan .hb-scroller {
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+}
+.hb-viewport--pan .hb-scroller::-webkit-scrollbar {
+  display: none;
+}
+
+.hb-pan-hint {
+  position: absolute;
+  left: 50%;
+  bottom: 6px;
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 9999px;
+  border: 1px solid var(--nav-mobile-border);
+  background: var(--nav-bg);
+  color: rgb(71 85 105);
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+.dark .hb-pan-hint {
+  color: rgb(255 255 255 / 0.7);
+}
+.hb-pan-hint--gone {
+  opacity: 0;
+}
+
 html:not(.dark) .hb-viewport {
   --hb-ink: #8a97ab;
   --hb-ink-soft: rgba(100, 116, 139, 0.35);
@@ -1027,9 +1078,74 @@ html:not(.dark) .hb-stage .hb-cast {
   transition: none !important;
   will-change: auto !important;
 }
-/* Still frame: whale nose-down just before re-entry (~74% of hb-leap). */
+/* Radar flattened to the 2D projection of its 3D pose: a 3D layer forces every
+   overlapping stage layer above it onto the compositor too. */
+.hb-static .hb-radar-tilt,
+.hb-static .hb-radar-spin {
+  transform-style: flat;
+}
+.hb-static .hb-radar-tilt {
+  transform: matrix(0.8192, 0.3312, 0, 0.8165, 0, 0);
+}
+.hb-static .hb-radar-spin {
+  transform: none;
+}
+.hb-static .hb-radar-face,
+.hb-static .hb-radar-arm,
+.hb-static .hb-radar-hub {
+  -webkit-backface-visibility: visible;
+  backface-visibility: visible;
+}
+.hb-static .hb-radar-face--front {
+  transform: translate(-0.42px, 0.52px);
+}
+.hb-static .hb-radar-face--back {
+  display: none;
+}
+.hb-static .hb-radar-arm {
+  transform: matrix(1, 0, -0.7002, 0.8632, 0, 0);
+}
+.hb-static .hb-radar-rim {
+  transform: matrix(1, 0, -0.7002, 0.8632, 1.0503, -1.2948);
+}
+
+/* Shark at its rest pose, the whole tilt/spin/carrier chain baked into each
+   leaf (carrier offset = SHARK_R; recompute if that changes). */
+.hb-static .hb-shark-tilt,
+.hb-static .hb-shark-spin,
+.hb-static .hb-shark-carrier,
+.hb-static .hb-shark-leaf {
+  -webkit-transform-style: flat;
+  transform-style: flat;
+}
+.hb-static .hb-shark-tilt,
+.hb-static .hb-shark-spin,
+.hb-static .hb-shark-carrier {
+  transform: none !important;
+}
+.hb-static .hb-shark-flat {
+  transform: matrix(-0.7071, 0.4082, -0.7071, -0.4082, -82.3072, 47.5196);
+}
+.hb-static .hb-shark-upright {
+  transform: matrix(0.7071, 0.4082, 0, 0.8165, -82.3072, 47.5196);
+}
+
+/* Still frame: whale just leaping clear of the surface (~60% of hb-leap), with the
+   rise splash caught mid-burst. */
 .hb-static .hb-whale {
-  transform: translate(312px, 18px) rotate(24deg);
+  transform: translate(111px, -10.5px) rotate(-17deg);
+}
+.hb-static .hb-splash--rise .hb-splash-ring {
+  opacity: 0.85;
+  transform: scale(1.1);
+}
+.hb-static .hb-splash--rise .hb-splash-ring--late {
+  opacity: 0.45;
+  transform: scale(1.7);
+}
+.hb-static .hb-splash--rise .hb-spray {
+  opacity: 1;
+  transform: translateY(-6px) scale(1.1);
 }
 
 .hb-paused .hb-anim,

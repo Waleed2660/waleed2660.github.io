@@ -51,7 +51,7 @@ const ResearchSection = () => {
         </p>
 
         {/* Education strip */}
-        <div className="glass-strong rounded-2xl p-6 mb-8 border border-slate-200 dark:border-white/10 divide-y divide-slate-200 dark:divide-white/10 hover:scale-[1.01] transition-all duration-500 will-change-transform">
+        <div className="glass-strong rounded-2xl p-6 mb-8 border border-slate-200 dark:border-white/10 divide-y divide-slate-200 dark:divide-white/10 hover:scale-[1.01] transition-all duration-500">
           {educationHistory.map((edu, i) => (
             <div key={i} className={`${i > 0 ? "pt-4 mt-4" : ""}`}>
               <div className="flex flex-wrap items-center gap-6">
@@ -106,7 +106,7 @@ const ResearchSection = () => {
           ))}
         </div>
 
-        <div className="glass-strong rounded-3xl overflow-hidden hover:scale-[1.01] transition-all duration-500 will-change-transform">
+        <div className="glass-strong rounded-3xl overflow-hidden hover:scale-[1.01] transition-all duration-500">
           <div
             className="bg-gradient-to-r from-brand/25 to-brand/5 px-8 py-5 flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 dark:border-white/5 cursor-pointer hover:bg-slate-900/[0.03] dark:hover:bg-white/5 transition-colors duration-300 group"
             onClick={() => navigate("/dissertation")}
