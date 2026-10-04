@@ -149,9 +149,6 @@ svg.hb-sprite {
 .hb-stage .hb-ink {
   fill: none;
 }
-.hb-stage path.hb-roof {
-  opacity: 0.6;
-}
 /* Panels outlined by their own fill colour, so adjoining pieces join without
    a visible seam or an anti-aliasing gap. */
 .hb-stage .hb-top.hb-seamless {
