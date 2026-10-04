@@ -1,10 +1,131 @@
-import { ArrowLeft, ExternalLink, Calendar, Award } from "lucide-react";
-import { useNavigate } from "react-router-dom";
-import { useEffect, useState, useMemo } from "react";
+import { ArrowLeft, Download, Maximize2, X } from "lucide-react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useEffect, useRef, useState, useMemo, type ReactNode } from "react";
+
+const PDF_URL = "/dissertation-assets/Dissertation_YOLOv3_TYP.pdf";
+const ASSETS = "/dissertation-assets";
+
+const SECTIONS = [
+  { id: "results", label: "Results" },
+  { id: "abstract", label: "Abstract" },
+  { id: "background", label: "Problem & data" },
+  { id: "architecture", label: "Architecture" },
+  { id: "training", label: "Training" },
+  { id: "challenges", label: "Challenges" },
+  { id: "conclusion", label: "Conclusion" },
+] as const;
+
+const RESULTS = [
+  { value: "76%", label: "Precision", note: "training set" },
+  { value: "65%", label: "Precision", note: "validation set" },
+  { value: "0.91", label: "mAP", note: "at IoU 0.5" },
+  { value: "1,638", label: "True positives", note: "detections" },
+];
+
+const prose = "max-w-[62ch] text-[1.0625rem] leading-[1.75] text-slate-700 dark:text-white/75";
+const strong = "font-semibold text-slate-900 dark:text-white";
+const h2 = "text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-6";
+const h3 = "text-lg font-semibold text-slate-900 dark:text-white mb-2";
+
+const Section = ({ id, title, children }: { id: string; title: string; children: ReactNode }) => (
+  <section id={id} aria-labelledby={`${id}-title`} className="scroll-mt-20 lg:scroll-mt-10">
+    <h2 id={`${id}-title`} className={h2}>
+      {title}
+    </h2>
+    {children}
+  </section>
+);
+
+interface FigureProps {
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+  caption: ReactNode;
+  className?: string;
+  imgClassName?: string;
+  eager?: boolean;
+}
+
+// Click-to-enlarge figure. Native <dialog> provides Esc-to-close and focus trapping.
+const Figure = ({
+  src,
+  alt,
+  width,
+  height,
+  caption,
+  className = "",
+  imgClassName = "",
+  eager,
+}: FigureProps) => {
+  const dialogRef = useRef<HTMLDialogElement>(null);
+  return (
+    <figure className={className}>
+      <button
+        type="button"
+        onClick={() => dialogRef.current?.showModal()}
+        className="group relative block w-full overflow-hidden rounded-xl border border-slate-300/70 dark:border-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+        aria-label={`Enlarge image: ${alt}`}
+      >
+        <img
+          src={src}
+          alt={alt}
+          width={width}
+          height={height}
+          loading={eager ? "eager" : "lazy"}
+          className={`w-full h-auto ${imgClassName}`}
+        />
+        <span className="absolute right-2 bottom-2 flex items-center gap-1.5 rounded-md bg-slate-950/75 px-2 py-1 text-xs font-medium text-white opacity-90 transition-opacity group-hover:opacity-100">
+          <Maximize2 className="w-3.5 h-3.5" aria-hidden="true" />
+          Enlarge
+        </span>
+      </button>
+      <figcaption className="mt-3 text-sm leading-relaxed text-slate-600 dark:text-white/60">
+        {caption}
+      </figcaption>
+      <dialog
+        ref={dialogRef}
+        onClick={(e) => e.target === e.currentTarget && dialogRef.current?.close()}
+        className="m-auto max-w-[96vw] max-h-[92vh] bg-transparent p-0 backdrop:bg-slate-950/85 backdrop:backdrop-blur-sm"
+      >
+        <img
+          src={src}
+          alt={alt}
+          className="max-w-[96vw] max-h-[85vh] w-auto h-auto rounded-lg bg-white"
+        />
+        <button
+          type="button"
+          onClick={() => dialogRef.current?.close()}
+          className="mt-3 mx-auto flex items-center gap-2 rounded-lg bg-white/10 px-4 py-2 text-sm text-white hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+        >
+          <X className="w-4 h-4" aria-hidden="true" />
+          Close
+        </button>
+      </dialog>
+    </figure>
+  );
+};
+
+const PdfButton = ({ className = "" }: { className?: string }) => (
+  <a
+    href={PDF_URL}
+    target="_blank"
+    rel="noopener noreferrer"
+    className={`inline-flex items-center gap-2 rounded-xl bg-brand px-5 py-3 font-semibold text-brand-contrast shadow-[0_8px_20px_-8px_hsl(var(--brand)/0.6)] transition-colors hover:bg-brand-strong focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-background ${className}`}
+  >
+    <Download className="w-4 h-4" aria-hidden="true" />
+    Read the full paper
+    <span className="font-normal opacity-80">PDF, 1.2 MB</span>
+  </a>
+);
 
 const Dissertation = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [isVisible, setIsVisible] = useState(false);
+  const [active, setActive] = useState<string>(SECTIONS[0].id);
+  const progressRef = useRef<HTMLDivElement>(null);
+  const chipRowRef = useRef<HTMLDivElement>(null);
 
   // Memoize particles to prevent recreation on every render
   const particles = useMemo(
@@ -21,21 +142,96 @@ const Dissertation = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    // Trigger fade-in animation after a brief delay
+    const previousTitle = document.title;
+    document.title = "Detecting Landfill Sites through YOLOv3 | Waleed Tariq";
     const timer = setTimeout(() => setIsVisible(true), 50);
-    return () => clearTimeout(timer);
+    return () => {
+      clearTimeout(timer);
+      document.title = previousTitle;
+    };
   }, []);
 
+  // Reading progress bar, written straight to the DOM to avoid re-rendering on scroll.
+  useEffect(() => {
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      const ratio = max > 0 ? Math.min(window.scrollY / max, 1) : 0;
+      if (progressRef.current) progressRef.current.style.transform = `scaleX(${ratio})`;
+      // Active contents entry: the last section whose top has passed 30% of the viewport.
+      let current: string = SECTIONS[0].id;
+      for (const { id } of SECTIONS) {
+        const el = document.getElementById(id);
+        if (el && el.getBoundingClientRect().top <= window.innerHeight * 0.3) current = id;
+      }
+      setActive((prev) => (prev === current ? prev : current));
+    };
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(update);
+    };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      cancelAnimationFrame(frame);
+    };
+  }, []);
+
+  // Keep the active chip in view in the horizontal mobile contents bar.
+  useEffect(() => {
+    const row = chipRowRef.current;
+    const chip = row?.querySelector<HTMLElement>(`a[href="#${active}"]`);
+    if (!row || !chip || row.scrollWidth <= row.clientWidth) return;
+    const left = chip.offsetLeft - (row.clientWidth - chip.offsetWidth) / 2;
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    row.scrollTo({ left, behavior: reduce ? "auto" : "smooth" });
+  }, [active]);
+
+  const tocLink = (id: string, label: string, mobile = false) => {
+    const isActive = active === id;
+    return (
+      <a
+        href={`#${id}`}
+        aria-current={isActive ? "location" : undefined}
+        className={
+          mobile
+            ? `shrink-0 rounded-full px-3 py-1.5 text-sm transition-colors ${
+                isActive
+                  ? "bg-brand text-brand-contrast font-semibold"
+                  : "text-slate-600 dark:text-white/65 hover:text-slate-900 dark:hover:text-white"
+              }`
+            : `block border-l-2 py-1.5 pl-4 text-sm transition-colors ${
+                isActive
+                  ? "border-brand text-slate-900 dark:text-white font-semibold"
+                  : "border-transparent text-slate-600 dark:text-white/60 hover:text-slate-900 dark:hover:text-white"
+              }`
+        }
+      >
+        {label}
+      </a>
+    );
+  };
+
   return (
-    <div className="min-h-screen relative overflow-hidden">
+    <div className="min-h-screen relative">
+      <div
+        ref={progressRef}
+        className="fixed top-0 left-0 right-0 z-50 h-[3px] origin-left bg-brand"
+        style={{ transform: "scaleX(0)" }}
+        aria-hidden="true"
+      />
+
       {/* Ambient orbs — matches the vibrancy of the Home page background */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden">
+      <div className="fixed inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
         <div className="absolute -top-48 -left-48 w-[700px] h-[700px] rounded-full bg-brand/10 blur-[60px] md:blur-[120px] will-change-transform" />
         <div className="absolute -top-32 -right-64 w-[600px] h-[600px] rounded-full bg-blue-700/10 dark:bg-blue-700/20 blur-[50px] md:blur-[100px] will-change-transform" />
         <div className="absolute -bottom-64 -left-32 w-[600px] h-[600px] rounded-full bg-brand/8 dark:bg-brand/10 blur-[55px] md:blur-[110px] will-change-transform" />
       </div>
       {isVisible && (
-        <div className="fixed inset-0 pointer-events-none opacity-30">
+        <div className="fixed inset-0 pointer-events-none opacity-30" aria-hidden="true">
           {particles.map((s) => (
             <div
               key={s.id}
@@ -51,599 +247,396 @@ const Dissertation = () => {
       )}
 
       <div
-        className={`relative z-10 max-w-5xl mx-auto px-6 py-12 transition-all duration-700 ${
+        className={`relative z-10 max-w-6xl mx-auto px-5 md:px-8 py-10 md:py-12 transition-all duration-700 ${
           isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
         }`}
       >
-        {/* Back button */}
         <button
           onClick={() => {
-            // Use browser back if possible, otherwise go to research section
-            if (window.history.length > 1) {
-              window.history.back();
+            // Go back to the homepage view the visitor came from; direct visitors land on Research.
+            if ((location.state as { fromHome?: boolean } | null)?.fromHome) {
+              navigate(-1);
             } else {
               navigate("/#research");
             }
           }}
-          className="flex items-center gap-2 text-slate-500 dark:text-white/60 hover:text-slate-900 dark:hover:text-white transition-colors mb-8"
+          className="flex items-center gap-2 text-slate-600 dark:text-white/60 hover:text-slate-900 dark:hover:text-white transition-colors mb-8"
         >
-          <ArrowLeft className="w-4 h-4" />
+          <ArrowLeft className="w-4 h-4" aria-hidden="true" />
           <span>Back to Home</span>
         </button>
 
-        {/* Header */}
-        <div className="glass-strong rounded-3xl p-8 md:p-12 mb-8">
-          <div className="flex items-start gap-4 mb-6">
-            <div className="glass rounded-2xl p-4">
-              <span className="text-4xl">🎓</span>
-            </div>
-            <div className="flex-1">
-              <h1 className="text-3xl md:text-5xl font-bold text-slate-900 dark:text-white mb-4 ">
-                Detecting Landfill Sites through YOLOv3
-              </h1>
-              <p className="text-xl text-slate-600 dark:text-white/70 mb-4">
-                Using Satellite Imagery and Deep Learning for Environmental Protection
-              </p>
-              <div className="flex flex-wrap gap-4 text-sm text-slate-500 dark:text-white/50">
-                <span className="flex items-center gap-2">
-                  <Calendar className="w-4 h-4" />
-                  March 2022
-                </span>
-                <span className="flex items-center gap-2">
-                  <Award className="w-4 h-4" />
-                  BSc (Hons) Computer Science
-                </span>
-              </div>
-            </div>
-          </div>
-
-          <div className="flex flex-wrap gap-2">
-            {[
-              "YOLOv3",
-              "Darknet",
-              "Computer Vision",
-              "Machine Learning",
-              "Object Detection",
-              "Satellite Imagery",
-            ].map((tag) => (
-              <span
-                key={tag}
-                className="glass rounded-xl px-3 py-1 text-slate-700 dark:text-white/80 text-xs"
-              >
-                {tag}
-              </span>
-            ))}
-          </div>
-        </div>
-
-        {/* Abstract */}
-        <div className="mb-16">
-          <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-6">Abstract</h2>
-          <p className="text-slate-600 dark:text-white/70 leading-relaxed mb-4">
-            Research in object detection in computer vision have grown exceptionally over the last
-            few years. The initial aim of this project was to put a machine learning model in use to
-            track down landfill sites using aerial data collected from satellites. As environmental
-            agencies across the world are struggling to keep up with violations in the waste
-            management industry, it has become a necessity to have a system that can help track
-            illegal landfill sites down to reduce environmental damage.
-          </p>
-          <p className="text-slate-600 dark:text-white/70 leading-relaxed">
-            This research outlines the architecture of YOLOv3 and how it is implemented to detect
-            landfill sites. It also evaluates the model's performance using industry standard
-            metrics. The results obtained from the model vary due to the complexity of the target
-            objects in dataset. All findings are concluded at the end of the research alongside
-            suggestions that can contribute towards achieving more accurate detections.
-          </p>
-        </div>
-
-        {/* Key Findings */}
-        <div className="mb-16">
-          <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-8">
-            Key Findings & Methodology
-          </h2>
-
-          <div className="grid md:grid-cols-2 gap-6">
-            <div className="glass rounded-2xl p-6 border border-brand/40 hover:border-brand transition-all hover:scale-[1.02] duration-300">
-              <div className="flex items-start gap-4 mb-3">
-                <div className="glass rounded-xl p-3 bg-blue-500/10">
-                  <span className="text-3xl">🚨</span>
-                </div>
-                <div className="flex-1">
-                  <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">
-                    The Problem
-                  </h3>
-                  <div className="flex items-baseline gap-2 mb-3">
-                    <span className="text-4xl font-bold text-brand">£924M</span>
-                    <span className="text-slate-500 dark:text-white/50 text-sm">
-                      in damages (2018-2019)
-                    </span>
-                  </div>
-                </div>
-              </div>
-              <p className="text-slate-600 dark:text-white/70 text-sm leading-relaxed">
-                Britain's environment agency disclosed compensation costs for illegal waste dumping
-                reached £924 Million, a staggering{" "}
-                <span className="text-orange-700 dark:text-orange-300 font-semibold">
-                  90% increase
-                </span>{" "}
-                since 2015. Traditional manual monitoring methods proved time-consuming and
-                inefficient.
-              </p>
-            </div>
-
-            <div className="glass rounded-2xl p-6 border border-green-600/70 dark:border-green-400/50 hover:border-green-700 dark:hover:border-green-400 transition-all hover:scale-[1.02] duration-300">
-              <div className="flex items-start gap-4 mb-3">
-                <div className="glass rounded-xl p-3 bg-green-500/10">
-                  <span className="text-3xl">🎯</span>
-                </div>
-                <div className="flex-1">
-                  <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">
-                    The Solution
-                  </h3>
-                  <div className="flex items-baseline gap-2 mb-3">
-                    <span className="text-4xl font-bold text-green-700 dark:text-green-300">
-                      106
-                    </span>
-                    <span className="text-slate-500 dark:text-white/50 text-sm">
-                      layer neural network
-                    </span>
-                  </div>
-                </div>
-              </div>
-              <p className="text-slate-600 dark:text-white/70 text-sm leading-relaxed">
-                Implemented YOLOv3 powered by Darknet-53. The model performs detection at{" "}
-                <span className="text-green-700 dark:text-green-300 font-semibold">
-                  three different scales
-                </span>
-                , making it capable of identifying both large and small waste dumps with remarkable
-                accuracy.
-              </p>
-            </div>
-
-            <div className="glass rounded-2xl p-6 border border-brand/40 hover:border-brand transition-all hover:scale-[1.02] duration-300">
-              <div className="flex items-start gap-4 mb-3">
-                <div className="glass rounded-xl p-3 bg-brand/10">
-                  <span className="text-3xl">🌍</span>
-                </div>
-                <div className="flex-1">
-                  <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">
-                    Dataset Preparation
-                  </h3>
-                  <div className="flex items-baseline gap-2 mb-3">
-                    <span className="text-4xl font-bold text-brand">9</span>
-                    <span className="text-slate-500 dark:text-white/50 text-sm">
-                      countries sampled
-                    </span>
-                  </div>
-                </div>
-              </div>
-              <p className="text-slate-600 dark:text-white/70 text-sm leading-relaxed">
-                Collected high-resolution satellite imagery from Google Earth covering sites in the
-                UK, USA, Canada, South Korea, China, Pakistan, Brazil, Nigeria, and India. Used{" "}
-                <span className="text-brand font-semibold">LabelImg</span> for precise annotation
-                with careful boundary detection.
-              </p>
-            </div>
-
-            <div className="glass rounded-2xl p-6 border border-yellow-600/70 dark:border-yellow-400/50 hover:border-yellow-700 dark:hover:border-yellow-400 transition-all hover:scale-[1.02] duration-300">
-              <div className="flex items-start gap-4 mb-3">
-                <div className="glass rounded-xl p-3 bg-yellow-500/10">
-                  <span className="text-3xl">📊</span>
-                </div>
-                <div className="flex-1">
-                  <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">
-                    Model Performance
-                  </h3>
-                  <div className="flex items-baseline gap-2 mb-3">
-                    <span className="text-4xl font-bold text-yellow-700 dark:text-yellow-300">
-                      76%
-                    </span>
-                    <span className="text-slate-500 dark:text-white/50 text-sm">
-                      precision achieved
-                    </span>
-                  </div>
-                </div>
-              </div>
-              <p className="text-slate-600 dark:text-white/70 text-sm leading-relaxed">
-                Achieved 76% precision on training data and 65% on validation dataset. Mean Average
-                Precision (mAP) of{" "}
-                <span className="text-yellow-700 dark:text-yellow-300 font-semibold">0.91</span> for
-                IoU threshold of 0.5, with{" "}
-                <span className="text-yellow-700 dark:text-yellow-300 font-semibold">
-                  1,638 true positive
-                </span>{" "}
-                detections successfully identified.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Technical Highlights */}
-        <div className="mb-16">
-          <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-8">
-            Technical Architecture
-          </h2>
-
-          {/* Architecture Diagram */}
-          <div className="glass rounded-2xl overflow-hidden mb-8 hover:scale-[1.02] hover:-translate-y-1 transition-all duration-300 cursor-pointer">
-            <div className="bg-gradient-to-r from-brand/20 to-brand/5 px-4 py-3 border-b border-slate-200 dark:border-white/5">
-              <h3 className="text-slate-900 dark:text-white font-semibold">
-                YOLOv3 Network Architecture
-              </h3>
-              <p className="text-slate-500 dark:text-white/50 text-xs mt-1">
-                106-layer convolutional neural network with multi-scale detection
-              </p>
-            </div>
-            <div className="p-4 bg-white/90 dark:bg-white/90">
-              <img
-                src="/dissertation/yolov3_architecture.webp"
-                alt="YOLOv3 Network Architecture showing 106 layers with three detection scales"
-                className="w-full rounded-lg"
-                loading="lazy"
-              />
-            </div>
-          </div>
-
-          <div className="space-y-4">
-            <div className="glass rounded-2xl p-6 hover:bg-slate-900/5 dark:hover:bg-white/10 hover:shadow-2xl hover:scale-[1.02] transition-all duration-300 group cursor-pointer">
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-brand/25 to-brand/5 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
-                  <span className="text-2xl">⚡</span>
-                </div>
-                <div className="flex-1">
-                  <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">
-                    Darknet-53 Backbone
-                  </h3>
-                  <div className="flex flex-wrap gap-4 mb-3">
-                    <div className="flex items-baseline gap-1">
-                      <span className="text-2xl font-bold text-brand">1457</span>
-                      <span className="text-slate-500 dark:text-white/50 text-xs">BFLOP/s</span>
-                    </div>
-                    <div className="flex items-baseline gap-1">
-                      <span className="text-2xl font-bold text-brand">78</span>
-                      <span className="text-slate-500 dark:text-white/50 text-xs">FPS</span>
-                    </div>
-                    <div className="flex items-baseline gap-1">
-                      <span className="text-2xl font-bold text-brand">53</span>
-                      <span className="text-slate-500 dark:text-white/50 text-xs">Conv layers</span>
-                    </div>
-                  </div>
-                  <p className="text-slate-600 dark:text-white/70 text-sm leading-relaxed">
-                    Neural network framework written in{" "}
-                    <span className="text-brand font-semibold">C and CUDA</span> with 53
-                    convolutional layers trained on ImageNet. Outperformed ResNet-152 and other
-                    competitors in both speed and accuracy.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="glass rounded-2xl p-6 hover:bg-slate-900/5 dark:hover:bg-white/10 hover:shadow-2xl hover:scale-[1.02] transition-all duration-300 group cursor-pointer">
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-green-500/20 to-green-600/20 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
-                  <span className="text-2xl">🔍</span>
-                </div>
-                <div className="flex-1">
-                  <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">
-                    Multi-Scale Detection
-                  </h3>
-                  <div className="flex flex-wrap gap-4 mb-3">
-                    <div className="flex items-center gap-2">
-                      <div className="px-2 py-1 bg-green-500/10 rounded text-green-700 dark:text-green-300 text-xs font-mono">
-                        Layer 82
-                      </div>
-                      <span className="text-slate-400 dark:text-white/40 text-xs">Stride 32</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="px-2 py-1 bg-green-500/10 rounded text-green-700 dark:text-green-300 text-xs font-mono">
-                        Layer 94
-                      </div>
-                      <span className="text-slate-400 dark:text-white/40 text-xs">Stride 16</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="px-2 py-1 bg-green-500/10 rounded text-green-700 dark:text-green-300 text-xs font-mono">
-                        Layer 106
-                      </div>
-                      <span className="text-slate-400 dark:text-white/40 text-xs">Stride 8</span>
-                    </div>
-                  </div>
-                  <p className="text-slate-600 dark:text-white/70 text-sm leading-relaxed">
-                    YOLOv3 performs predictions at{" "}
-                    <span className="text-green-700 dark:text-green-300 font-semibold">
-                      three scales
-                    </span>{" "}
-                    by downsampling images with varying stride values. This enables detection of
-                    objects at various sizes: from large landfills to smaller waste dumps.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="glass rounded-2xl p-6 hover:bg-slate-900/5 dark:hover:bg-white/10 hover:shadow-2xl hover:scale-[1.02] transition-all duration-300 group cursor-pointer">
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-brand/25 to-brand/5 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
-                  <span className="text-2xl">🔄</span>
-                </div>
-                <div className="flex-1">
-                  <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">
-                    Transfer Learning
-                  </h3>
-                  <div className="flex items-center gap-2 mb-3">
-                    <div className="glass px-3 py-1 rounded-lg text-slate-900 dark:text-white">
-                      <span className="text-brand font-semibold text-sm">ImageNet</span>
-                      <span className="text-slate-400 dark:text-white/40 text-xs mx-2">→</span>
-                      <span className="text-brand font-semibold text-sm">Satellite Data</span>
-                    </div>
-                  </div>
-                  <p className="text-slate-600 dark:text-white/70 text-sm leading-relaxed">
-                    Leveraged pre-trained weights from Darknet-53 trained on ImageNet,{" "}
-                    <span className="text-brand font-semibold">
-                      significantly reducing training time
-                    </span>{" "}
-                    while maintaining accuracy. The model adapted these weights to recognize
-                    patterns specific to waste dumps in satellite imagery.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="glass rounded-2xl p-6 hover:bg-slate-900/5 dark:hover:bg-white/10 hover:shadow-2xl hover:scale-[1.02] transition-all duration-300 group cursor-pointer">
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-orange-500/20 to-orange-600/20 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
-                  <span className="text-2xl">🎯</span>
-                </div>
-                <div className="flex-1">
-                  <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">
-                    Non-Max Suppression & IoU
-                  </h3>
-                  <div className="flex flex-wrap gap-3 mb-3">
-                    <div className="glass px-3 py-1 rounded-lg border border-orange-500/20">
-                      <span className="text-orange-700 dark:text-orange-300 text-xs font-semibold">
-                        IoU Threshold: 0.5
-                      </span>
-                    </div>
-                    <div className="glass px-3 py-1 rounded-lg border border-orange-500/20">
-                      <span className="text-orange-700 dark:text-orange-300 text-xs font-semibold">
-                        NMS Applied
-                      </span>
-                    </div>
-                  </div>
-                  <p className="text-slate-600 dark:text-white/70 text-sm leading-relaxed">
-                    Used Intersection over Union (IoU) and non-max suppression to filter overlapping
-                    bounding boxes, ensuring only the most confident predictions remain. This
-                    technique{" "}
-                    <span className="text-orange-700 dark:text-orange-300 font-semibold">
-                      reduced false positives
-                    </span>{" "}
-                    and improved detection accuracy dramatically.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Training Progression Visualization */}
-        <div className="mb-16">
-          <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-8">
-            Training Progression
-          </h2>
-
-          <p className="text-slate-600 dark:text-white/70 leading-relaxed mb-6">
-            The visual comparison below demonstrates the remarkable difference in model performance
-            between early and later training stages. At 200 iterations, the model was still learning
-            to distinguish relevant features and generated an overwhelming number of bounding box
-            predictions across the entire image. By 2,000 iterations, the model had effectively
-            learned to identify waste dumps with precision, filtering out false positives through
-            non-max suppression and IoU thresholding.
-          </p>
-
-          <div className="grid md:grid-cols-2 gap-6">
-            {/* 200 Iterations */}
-            <div className="glass rounded-2xl overflow-hidden hover:scale-[1.02] hover:-translate-y-1 transition-all duration-300 cursor-pointer">
-              <div className="bg-gradient-to-r from-red-500/20 to-orange-500/10 px-4 py-3 border-b border-slate-200 dark:border-white/5">
-                <h3 className="text-slate-900 dark:text-white font-semibold">
-                  Early Training (200 Iterations)
-                </h3>
-                <p className="text-slate-500 dark:text-white/50 text-xs mt-1">
-                  Excessive bounding box predictions
-                </p>
-              </div>
-              <div className="p-4">
-                <img
-                  src="/dissertation/200_iterations.webp"
-                  alt="Model predictions at 200 iterations showing excessive bounding boxes"
-                  className="w-full rounded-lg"
-                  loading="lazy"
-                />
-                <p className="text-slate-500 dark:text-white/60 text-xs mt-3 leading-relaxed">
-                  At this early stage, the model predicted thousands of potential objects, covering
-                  nearly the entire image with overlapping bounding boxes. The convolutional layers
-                  were still learning to extract meaningful features from satellite imagery.
-                </p>
-              </div>
-            </div>
-
-            {/* 2000 Iterations */}
-            <div className="glass rounded-2xl overflow-hidden hover:scale-[1.02] hover:-translate-y-1 transition-all duration-300 cursor-pointer">
-              <div className="bg-gradient-to-r from-emerald-500/18 to-emerald-500/5 px-4 py-3 border-b border-slate-200 dark:border-white/5">
-                <h3 className="text-slate-900 dark:text-white font-semibold">
-                  Refined Model (2,000 Iterations)
-                </h3>
-                <p className="text-slate-500 dark:text-white/50 text-xs mt-1">
-                  Accurate waste dump detection
-                </p>
-              </div>
-              <div className="p-4">
-                <img
-                  src="/dissertation/2000_iterations.webp"
-                  alt="Model predictions at 2000 iterations showing accurate detection"
-                  className="w-full rounded-lg"
-                  loading="lazy"
-                />
-                <p className="text-slate-500 dark:text-white/60 text-xs mt-3 leading-relaxed">
-                  After 2,000 iterations, the model achieved precise detection of actual waste
-                  dumps. Non-max suppression successfully filtered redundant boxes, and the model
-                  correctly identified target objects while ignoring similar-looking terrain
-                  features.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-6 glass rounded-2xl p-4 border border-brand/30">
-            <p className="text-slate-600 dark:text-white/70 text-sm leading-relaxed">
-              <span className="font-semibold text-slate-900 dark:text-white">Key Insight:</span>{" "}
-              This progression illustrates the critical importance of adequate training iterations
-              and the effectiveness of YOLOv3's architecture in learning complex patterns. The
-              model's ability to reduce false positives from thousands to just a handful
-              demonstrates the power of deep learning when properly trained on domain-specific data.
+        {/* Header: title on the left, the model's own output on the right */}
+        <header className="grid gap-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)] lg:items-center mb-14 md:mb-20">
+          <div>
+            <h1 className="text-4xl md:text-6xl font-bold leading-[1.05] text-slate-900 dark:text-white mb-5">
+              Detecting Landfill Sites through YOLOv3
+            </h1>
+            <p className="text-xl leading-snug text-slate-700 dark:text-white/75 mb-5 max-w-[36ch]">
+              Using Satellite Imagery and Deep Learning for Environmental Protection
             </p>
+            <p className="text-sm text-slate-600 dark:text-white/60 mb-8">
+              BSc (Hons) Computer Science · Lancaster University · March 2022
+            </p>
+            <PdfButton />
+            <ul
+              className="mt-8 flex flex-wrap gap-x-4 gap-y-1 text-sm text-slate-600 dark:text-white/55"
+              aria-label="Topics"
+            >
+              {[
+                "YOLOv3",
+                "Darknet",
+                "Computer Vision",
+                "Machine Learning",
+                "Object Detection",
+                "Satellite Imagery",
+              ].map((tag) => (
+                <li key={tag}>{tag}</li>
+              ))}
+            </ul>
           </div>
-        </div>
+          <Figure
+            src={`${ASSETS}/2000_iterations.webp`}
+            alt="Satellite image of an industrial site with bounding boxes drawn by the trained model around waste piles"
+            width={715}
+            height={455}
+            eager
+            className="lg:max-w-[715px] lg:justify-self-end w-full"
+            caption="The trained model's detections after 2,000 iterations: each box marks a waste dump it found in the satellite image."
+          />
+        </header>
 
-        {/* Challenges & Learnings */}
-        <div className="mb-16">
-          <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-8">
-            Challenges & Key Learnings
-          </h2>
-
-          <div className="space-y-4">
-            <div className="glass rounded-2xl p-6 border border-red-600/70 dark:border-red-400/50 hover:border-red-700 dark:hover:border-red-400 transition-all hover:scale-[1.01] duration-300">
-              <div className="flex items-start gap-4">
-                <div className="glass rounded-xl p-3 bg-red-500/10 flex-shrink-0">
-                  <span className="text-2xl">📝</span>
-                </div>
-                <div className="flex-1">
-                  <h3 className="text-slate-900 dark:text-white font-semibold mb-3 text-lg">
-                    Quality of Annotations
-                  </h3>
-                  <div className="flex items-center gap-2 mb-3">
-                    <div className="px-2 py-1 bg-red-500/10 rounded text-red-700 dark:text-red-300 text-xs font-semibold">
-                      Critical Learning
-                    </div>
-                  </div>
-                  <p className="text-slate-600 dark:text-white/70 text-sm leading-relaxed">
-                    Initially, waste piles were labeled incorrectly without visible borders, causing
-                    the model to misclassify neighboring mud piles as waste.{" "}
-                    <span className="text-red-700 dark:text-red-300 font-semibold">
-                      Re-annotating the entire dataset
-                    </span>{" "}
-                    with proper border visibility led to significant improvements in accuracy,
-                    proving that data quality trumps quantity.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="glass rounded-2xl p-6 border border-orange-600/70 dark:border-orange-400/50 hover:border-orange-700 dark:hover:border-orange-400 transition-all hover:scale-[1.01] duration-300">
-              <div className="flex items-start gap-4">
-                <div className="glass rounded-xl p-3 bg-orange-500/10 flex-shrink-0">
-                  <span className="text-2xl">⚖️</span>
-                </div>
-                <div className="flex-1">
-                  <h3 className="text-slate-900 dark:text-white font-semibold mb-3 text-lg">
-                    Training Infrastructure & Constraints
-                  </h3>
-                  <div className="flex flex-wrap gap-2 mb-3">
-                    <div className="px-2 py-1 bg-orange-500/10 rounded text-orange-700 dark:text-orange-300 text-xs font-semibold">
-                      Google Colab
-                    </div>
-                    <div className="px-2 py-1 bg-orange-500/10 rounded text-orange-700 dark:text-orange-300 text-xs font-semibold">
-                      NVIDIA GPU
-                    </div>
-                    <div className="px-2 py-1 bg-orange-500/10 rounded text-orange-700 dark:text-orange-300 text-xs font-semibold">
-                      Days of Training
-                    </div>
-                  </div>
-                  <p className="text-slate-600 dark:text-white/70 text-sm leading-relaxed mb-3">
-                    Models were trained over{" "}
-                    <span className="text-orange-700 dark:text-orange-300 font-semibold">
-                      several days on Google Colab
-                    </span>{" "}
-                    using NVIDIA GPUs. Larger network image sizes (608×608) improved small object
-                    detection but frequently caused{" "}
-                    <span className="text-orange-700 dark:text-orange-300 font-semibold">
-                      memory crashes
-                    </span>{" "}
-                    on the shared infrastructure.
-                  </p>
-                  <p className="text-slate-600 dark:text-white/70 text-sm leading-relaxed">
-                    Implemented{" "}
-                    <span className="text-orange-700 dark:text-orange-300 font-semibold">
-                      dynamic image scaling
-                    </span>{" "}
-                    every 10 iterations (alternating between 416×416 and 608×608) to balance
-                    detection quality with computational constraints, a practical compromise for
-                    cloud-based training environments.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="glass rounded-2xl p-6 border border-brand/40 hover:border-brand transition-all hover:scale-[1.01] duration-300">
-              <div className="flex items-start gap-4">
-                <div className="glass rounded-xl p-3 bg-blue-500/10 flex-shrink-0">
-                  <span className="text-2xl">🌏</span>
-                </div>
-                <div className="flex-1">
-                  <h3 className="text-slate-900 dark:text-white font-semibold mb-3 text-lg">
-                    Dataset Diversity
-                  </h3>
-                  <div className="flex flex-wrap gap-2 mb-3">
-                    <div className="px-2 py-1 bg-blue-500/10 rounded">
-                      <span className="text-brand text-xs">Developed: Well-contained</span>
-                    </div>
-                    <div className="px-2 py-1 bg-blue-500/10 rounded">
-                      <span className="text-brand text-xs">Developing: Visible targets</span>
-                    </div>
-                  </div>
-                  <p className="text-slate-600 dark:text-white/70 text-sm leading-relaxed">
-                    Waste dumps in developed countries (UK, USA) were well-contained and harder to
-                    detect, while developing countries (Pakistan, India, Brazil) provided more
-                    visible targets.{" "}
-                    <span className="text-brand font-semibold">Balancing the dataset</span> between
-                    both types was crucial for generalization across different waste management
-                    practices globally.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Conclusion */}
-        <div className="mb-16">
-          <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-6">Conclusion</h2>
-          <p className="text-slate-600 dark:text-white/70 leading-relaxed mb-4">
-            YOLOv3 proved to be a notoriously fast model compared to other industry-standard object
-            detection models, processing each image only once per iteration. The project
-            successfully demonstrated the viability of using machine learning to track illegal
-            landfill sites, potentially saving environmental agencies millions in monitoring costs.
-          </p>
-          <p className="text-slate-600 dark:text-white/70 leading-relaxed">
-            The findings clearly indicate the potential of such models to help fight waste crime
-            while avoiding both developed and undeveloped countries from investing valuable
-            financial resources into unnecessary labor. Transfer learning techniques and
-            well-annotated high-quality datasets are crucial for achieving excellent results in
-            satellite imagery analysis.
-          </p>
-        </div>
-
-        {/* Download Link */}
-        <div className="text-center py-8">
-          <p className="text-slate-500 dark:text-white/60 mb-6 text-lg">
-            Want to read the full dissertation?
-          </p>
-          <a
-            href="/dissertation/Dissertation_YOLOv3_TYP.pdf"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 glass rounded-xl px-8 py-4 text-slate-900 dark:text-white hover:text-brand hover:bg-slate-900/5 dark:hover:bg-white/10 hover:scale-105 transition-all"
+        {/* Mobile / tablet contents */}
+        <nav
+          aria-label="Contents"
+          className="lg:hidden sticky top-[3px] z-40 -mx-5 md:-mx-8 mb-10 px-5 md:px-8 py-2 bg-background/85 backdrop-blur-md border-y border-slate-200 dark:border-white/10"
+        >
+          <div
+            ref={chipRowRef}
+            className="relative flex gap-1 overflow-x-auto [scrollbar-width:none]"
           >
-            <ExternalLink className="w-5 h-5" />
-            Download Full Paper (PDF)
-          </a>
+            {SECTIONS.map(({ id, label }) => tocLink(id, label, true))}
+          </div>
+        </nav>
+
+        <div className="lg:grid lg:grid-cols-[11rem_minmax(0,1fr)] lg:gap-14">
+          <nav aria-label="Contents" className="hidden lg:block">
+            <div className="sticky top-10">
+              <p className="mb-3 pl-4 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-white/45">
+                Contents
+              </p>
+              {SECTIONS.map(({ id, label }) => (
+                <div key={id}>{tocLink(id, label)}</div>
+              ))}
+            </div>
+          </nav>
+
+          <main className="space-y-20 min-w-0">
+            <Section id="results" title="Results">
+              <dl className="grid grid-cols-2 md:grid-cols-4 max-w-3xl overflow-hidden rounded-2xl border border-slate-300/70 dark:border-white/10 divide-x divide-y md:divide-y-0 divide-slate-300/70 dark:divide-white/10">
+                {RESULTS.map((r) => (
+                  <div key={r.note} className="flex flex-col p-5 bg-white/60 dark:bg-white/[0.03]">
+                    <dt className="order-2 text-sm font-medium text-slate-800 dark:text-white/85">
+                      {r.label}
+                    </dt>
+                    <dd className="order-1 tabular mb-1 text-3xl font-bold text-slate-900 dark:text-white">
+                      {r.value}
+                    </dd>
+                    <dd className="order-3 text-sm text-slate-600 dark:text-white/55">{r.note}</dd>
+                  </div>
+                ))}
+              </dl>
+              <p className={`${prose} mt-6`}>
+                Precision is the share of the model's detections that were real waste dumps. It
+                drops from 76% on the training data to 65% on images the model had not seen, while
+                mean average precision (mAP) at an IoU threshold of 0.5 reached 0.91.
+              </p>
+            </Section>
+
+            <Section id="abstract" title="Abstract">
+              <div className={`${prose} space-y-5`}>
+                <p>
+                  Research in object detection in computer vision have grown exceptionally over the
+                  last few years. The initial aim of this project was to put a machine learning
+                  model in use to track down landfill sites using aerial data collected from
+                  satellites. As environmental agencies across the world are struggling to keep up
+                  with violations in the waste management industry, it has become a necessity to
+                  have a system that can help track illegal landfill sites down to reduce
+                  environmental damage.
+                </p>
+                <p>
+                  This research outlines the architecture of YOLOv3 and how it is implemented to
+                  detect landfill sites. It also evaluates the model's performance using industry
+                  standard metrics. The results obtained from the model vary due to the complexity
+                  of the target objects in dataset. All findings are concluded at the end of the
+                  research alongside suggestions that can contribute towards achieving more accurate
+                  detections.
+                </p>
+              </div>
+            </Section>
+
+            <Section id="background" title="Problem & data">
+              <div className={`${prose} space-y-8`}>
+                <div>
+                  <h3 className={h3}>The problem</h3>
+                  <p>
+                    Britain's environment agency disclosed compensation costs for illegal waste
+                    dumping reached <span className={strong}>£924 million</span> in 2018–2019, a{" "}
+                    <span className={strong}>90% increase</span> since 2015. Traditional manual
+                    monitoring methods proved time-consuming and inefficient.
+                  </p>
+                </div>
+                <div>
+                  <h3 className={h3}>The approach</h3>
+                  <p>
+                    Implemented YOLOv3, a 106-layer neural network powered by Darknet-53. The model
+                    performs detection at <span className={strong}>three different scales</span>,
+                    making it capable of identifying both large and small waste dumps.
+                  </p>
+                </div>
+                <div>
+                  <h3 className={h3}>The dataset</h3>
+                  <p>
+                    Collected high-resolution satellite imagery from Google Earth covering sites in{" "}
+                    <span className={strong}>9 countries</span>: the UK, USA, Canada, South Korea,
+                    China, Pakistan, Brazil, Nigeria, and India. Used LabelImg for precise
+                    annotation with careful boundary detection.
+                  </p>
+                </div>
+              </div>
+            </Section>
+
+            <Section id="architecture" title="Architecture">
+              <p className={`${prose} mb-8`}>
+                An image passes through four stages, from feature extraction to the final filtered
+                boxes. The diagram shows the full 106-layer network and where each detection scale
+                branches off.
+              </p>
+
+              <div className="overflow-x-auto pb-2 -mx-5 px-5 md:mx-0 md:px-0">
+                <Figure
+                  src={`${ASSETS}/yolov3_architecture.webp`}
+                  alt="YOLOv3 network architecture showing 106 layers with three detection scales at layers 82, 94 and 106"
+                  width={1320}
+                  height={736}
+                  className="min-w-[640px]"
+                  imgClassName="bg-white p-3"
+                  caption="YOLOv3 network architecture: a 106-layer convolutional network with multi-scale detection."
+                />
+              </div>
+
+              <ol className="mt-12 max-w-[62ch] space-y-10">
+                {[
+                  {
+                    title: "Darknet-53 backbone",
+                    body: (
+                      <>
+                        <p>
+                          A neural network framework written in C and CUDA with 53 convolutional
+                          layers trained on ImageNet. In its published benchmarks it outperformed
+                          ResNet-152 and other competitors in both speed and accuracy.
+                        </p>
+                        <p className="mt-3 text-sm text-slate-600 dark:text-white/60">
+                          Published reference benchmark, not measured in this project:{" "}
+                          <span className="tabular">1457 BFLOP/s, 78 FPS</span>.
+                        </p>
+                      </>
+                    ),
+                  },
+                  {
+                    title: "Transfer learning",
+                    body: (
+                      <p>
+                        Leveraged pre-trained weights from Darknet-53 trained on ImageNet,{" "}
+                        <span className={strong}>significantly reducing training time</span> while
+                        maintaining accuracy. The model adapted these weights to recognise patterns
+                        specific to waste dumps in satellite imagery.
+                      </p>
+                    ),
+                  },
+                  {
+                    title: "Detection at three scales",
+                    body: (
+                      <>
+                        <p>
+                          YOLOv3 performs predictions at three scales by downsampling images with
+                          varying stride values. This enables detection of objects at various sizes:
+                          from large landfills to smaller waste dumps.
+                        </p>
+                        <table className="tabular mt-4 text-sm">
+                          <thead>
+                            <tr className="text-left text-slate-600 dark:text-white/60">
+                              <th className="pr-8 pb-1 font-medium">Layer</th>
+                              <th className="pr-8 pb-1 font-medium">Stride</th>
+                              <th className="pb-1 font-medium">Best for</th>
+                            </tr>
+                          </thead>
+                          <tbody className="text-slate-800 dark:text-white/85">
+                            <tr>
+                              <td className="pr-8 py-0.5">82</td>
+                              <td className="pr-8">32</td>
+                              <td>Large sites</td>
+                            </tr>
+                            <tr>
+                              <td className="pr-8 py-0.5">94</td>
+                              <td className="pr-8">16</td>
+                              <td>Medium sites</td>
+                            </tr>
+                            <tr>
+                              <td className="pr-8 py-0.5">106</td>
+                              <td className="pr-8">8</td>
+                              <td>Small dumps</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </>
+                    ),
+                  },
+                  {
+                    title: "Filtering with IoU and non-max suppression",
+                    body: (
+                      <p>
+                        Used Intersection over Union (IoU), with a threshold of 0.5, and non-max
+                        suppression to filter overlapping bounding boxes, ensuring only the most
+                        confident predictions remain. This technique{" "}
+                        <span className={strong}>reduced false positives</span> and improved
+                        detection accuracy.
+                      </p>
+                    ),
+                  },
+                ].map((step, i) => (
+                  <li key={step.title} className="grid grid-cols-[2.5rem_minmax(0,1fr)] gap-x-3">
+                    <span
+                      className="tabular flex h-9 w-9 items-center justify-center rounded-full border border-brand/60 text-sm font-semibold text-brand"
+                      aria-hidden="true"
+                    >
+                      {i + 1}
+                    </span>
+                    <div className="text-[1.0625rem] leading-[1.75] text-slate-700 dark:text-white/75">
+                      <h3 className={`${h3} pt-1`}>{step.title}</h3>
+                      {step.body}
+                    </div>
+                  </li>
+                ))}
+              </ol>
+            </Section>
+
+            <Section id="training" title="Training progression">
+              <p className={`${prose} mb-8`}>
+                At 200 iterations, the model was still learning to distinguish relevant features and
+                generated an overwhelming number of bounding box predictions across the entire
+                image. By 2,000 iterations, it had learned to identify waste dumps, filtering out
+                false positives through non-max suppression and IoU thresholding.
+              </p>
+
+              <div className="grid gap-8 md:grid-cols-2">
+                <Figure
+                  src={`${ASSETS}/200_iterations.webp`}
+                  alt="Model predictions at 200 iterations: thousands of overlapping bounding boxes cover the whole image"
+                  width={565}
+                  height={464}
+                  caption={
+                    <>
+                      <span className={strong}>200 iterations.</span> The model predicted thousands
+                      of potential objects, covering nearly the entire image with overlapping boxes.
+                      The convolutional layers were still learning to extract meaningful features.
+                    </>
+                  }
+                />
+                <Figure
+                  src={`${ASSETS}/2000_iterations.webp`}
+                  alt="Model predictions at 2,000 iterations: a few boxes around actual waste piles"
+                  width={715}
+                  height={455}
+                  caption={
+                    <>
+                      <span className={strong}>2,000 iterations.</span> Non-max suppression filtered
+                      redundant boxes, and the model identified target objects while ignoring
+                      similar-looking terrain features.
+                    </>
+                  }
+                />
+              </div>
+
+              <p className={`${prose} mt-8`}>
+                <span className={strong}>Key insight:</span> this progression shows the importance
+                of adequate training iterations and how well YOLOv3's architecture learns complex
+                patterns. Reducing false positives from thousands to a handful shows what deep
+                learning can do when properly trained on domain-specific data.
+              </p>
+            </Section>
+
+            <Section id="challenges" title="Challenges & key learnings">
+              <div className="max-w-3xl divide-y divide-slate-300/70 dark:divide-white/10 border-y border-slate-300/70 dark:border-white/10">
+                {[
+                  {
+                    title: "Quality of annotations",
+                    problem:
+                      "Waste piles were initially labelled without visible borders, so the model misclassified neighbouring mud piles as waste.",
+                    fix: "Re-annotated the entire dataset with proper border visibility, which significantly improved accuracy. Data quality trumps quantity.",
+                  },
+                  {
+                    title: "Training infrastructure",
+                    problem:
+                      "Models trained over several days on Google Colab NVIDIA GPUs. Larger 608×608 inputs improved small-object detection but frequently caused memory crashes on the shared infrastructure.",
+                    fix: "Dynamic image scaling every 10 iterations, alternating between 416×416 and 608×608, to balance detection quality with the memory limits.",
+                  },
+                  {
+                    title: "Dataset diversity",
+                    problem:
+                      "Waste dumps in developed countries (UK, USA) were well-contained and harder to detect, while developing countries (Pakistan, India, Brazil) provided more visible targets.",
+                    fix: "Balanced the dataset between both types so the model generalises across different waste management practices.",
+                  },
+                ].map((c) => (
+                  <div key={c.title} className="py-7">
+                    <h3 className={`${h3} mb-4`}>{c.title}</h3>
+                    <dl className="grid gap-4 sm:grid-cols-2 sm:gap-8 text-base leading-relaxed">
+                      <div>
+                        <dt className="mb-1 text-sm font-semibold text-slate-600 dark:text-white/55">
+                          Problem
+                        </dt>
+                        <dd className="text-slate-700 dark:text-white/75">{c.problem}</dd>
+                      </div>
+                      <div>
+                        <dt className="mb-1 text-sm font-semibold text-brand">What changed</dt>
+                        <dd className="text-slate-700 dark:text-white/75">{c.fix}</dd>
+                      </div>
+                    </dl>
+                  </div>
+                ))}
+              </div>
+            </Section>
+
+            <Section id="conclusion" title="Conclusion">
+              <div className={`${prose} space-y-5`}>
+                <p>
+                  YOLOv3 proved to be a notoriously fast model compared to other industry-standard
+                  object detection models, processing each image only once per iteration. The
+                  project successfully demonstrated the viability of using machine learning to track
+                  illegal landfill sites, potentially saving environmental agencies millions in
+                  monitoring costs.
+                </p>
+                <p>
+                  The findings clearly indicate the potential of such models to help fight waste
+                  crime while avoiding both developed and undeveloped countries from investing
+                  valuable financial resources into unnecessary labor. Transfer learning techniques
+                  and well-annotated high-quality datasets are crucial for achieving excellent
+                  results in satellite imagery analysis.
+                </p>
+              </div>
+
+              <div className="mt-12 max-w-[62ch] rounded-2xl border border-slate-300/70 dark:border-white/10 bg-white/60 dark:bg-white/[0.03] p-6 md:p-8">
+                <h3 className="text-xl font-semibold text-slate-900 dark:text-white mb-2">
+                  Read the full dissertation
+                </h3>
+                <p className="text-slate-700 dark:text-white/70 mb-6">
+                  The complete paper covers the dataset, evaluation method and every result in
+                  detail.
+                </p>
+                <PdfButton />
+              </div>
+            </Section>
+          </main>
         </div>
       </div>
     </div>

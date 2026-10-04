@@ -1,5 +1,6 @@
 import { ExternalLink, ArrowRight, GraduationCap } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { saveReturnPosition } from "@/lib/return-position";
 
 interface Education {
   degree: string;
@@ -39,6 +40,10 @@ const educationHistory: Education[] = [
 
 const ResearchSection = () => {
   const navigate = useNavigate();
+  const openDissertation = () => {
+    saveReturnPosition("research");
+    navigate("/dissertation", { state: { fromHome: true } });
+  };
 
   return (
     <section className="flex items-center justify-center px-6 py-24 relative z-20">
@@ -109,7 +114,7 @@ const ResearchSection = () => {
         <div className="glass-strong rounded-3xl overflow-hidden hover:scale-[1.01] transition-all duration-500">
           <div
             className="bg-gradient-to-r from-brand/25 to-brand/5 px-8 py-5 flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 dark:border-white/5 cursor-pointer hover:bg-slate-900/[0.03] dark:hover:bg-white/5 transition-colors duration-300 group"
-            onClick={() => navigate("/dissertation")}
+            onClick={openDissertation}
           >
             <div className="flex items-center gap-4">
               <div className="glass rounded-2xl p-3">
@@ -201,7 +206,7 @@ const ResearchSection = () => {
 
               {/* View Full Paper button — left column */}
               <button
-                onClick={() => navigate("/dissertation")}
+                onClick={openDissertation}
                 className="flex items-center justify-center gap-2 glass rounded-xl px-6 py-3 text-slate-700 dark:text-white/80 hover:text-brand hover:bg-slate-900/5 dark:hover:bg-white/10 transition-all group/btn mt-auto"
               >
                 <ExternalLink className="w-4 h-4" />
@@ -214,7 +219,7 @@ const ResearchSection = () => {
             <div className="flex flex-col gap-4">
               <div className="glass rounded-2xl overflow-hidden">
                 <img
-                  src="/dissertation/drone_landfill_site.webp"
+                  src="/dissertation-assets/drone_landfill_site.webp"
                   alt="Drone with mounted camera performing object detection over a landfill site"
                   width="1408"
                   height="768"

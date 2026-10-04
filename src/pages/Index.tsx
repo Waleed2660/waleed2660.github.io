@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ChevronUp } from "lucide-react";
+import { useNavigationType } from "react-router-dom";
+import { restoreReturnPosition } from "@/lib/return-position";
 import Navigation from "@/components/Navigation";
 import HomeSection from "@/components/HomeSection";
 import FadeIn from "@/components/FadeIn";
@@ -42,9 +44,16 @@ const Index = () => {
       let corrections = 0;
       let settleTimer: number;
 
+      // The last section can't reach the nav, and its top padding would leave the
+      // cards and footer below the fold, so it scrolls to the very bottom instead.
+      const isLast = sectionId === SECTION_IDS[SECTION_IDS.length - 1];
+      const target = () =>
+        isLast
+          ? document.documentElement.scrollHeight - window.innerHeight
+          : element.getBoundingClientRect().top + window.scrollY - NAV_OFFSET;
+
       const go = () => {
-        const top = element.getBoundingClientRect().top + window.scrollY - NAV_OFFSET;
-        window.scrollTo({ top, behavior: "smooth" });
+        window.scrollTo({ top: target(), behavior: "smooth" });
         waitForSettle();
       };
 
@@ -59,7 +68,7 @@ const Index = () => {
             settleTimer = requestAnimationFrame(tick);
             return;
           }
-          const drift = element.getBoundingClientRect().top - NAV_OFFSET;
+          const drift = target() - window.scrollY;
           if (Math.abs(drift) > 4 && corrections < 3) {
             corrections += 1;
             go();
@@ -116,6 +125,13 @@ const Index = () => {
     };
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  // Returning via Back (browser or in-page) restores the view the visitor left from.
+  const navigationType = useNavigationType();
+  useEffect(() => {
+    if (navigationType === "POP") return restoreReturnPosition();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {

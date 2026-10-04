@@ -2,7 +2,7 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { execSync } from "child_process";
-import { readdirSync, statSync, readFileSync } from "fs";
+import { readdirSync, statSync, readFileSync, writeFileSync } from "fs";
 
 const getGitCommits = (): number => {
   if (process.env.GIT_COMMIT_COUNT) return parseInt(process.env.GIT_COMMIT_COUNT, 10);
@@ -46,6 +46,34 @@ export default defineConfig(() => ({
     {
       name: "inject-yoe",
       transformIndexHtml: (html: string) => html.replaceAll("%YOE%", String(getYOE())),
+    },
+    {
+      // GitHub Pages has no SPA fallback, so emit dissertation.html to serve /dissertation with a 200.
+      name: "dissertation-page",
+      apply: "build" as const,
+      closeBundle() {
+        const title = "Detecting Landfill Sites through YOLOv3 | Waleed Tariq";
+        const desc =
+          "Waleed Tariq's dissertation on detecting landfill sites from drone imagery using the YOLOv3 object detection model.";
+        const url = "https://waleedtariq.com/dissertation";
+        const html = readFileSync("dist/index.html", "utf8")
+          .replace(/<title>.*?<\/title>/, `<title>${title}</title>`)
+          .replace(/(<link rel="canonical" href=")[^"]*/, `$1${url}`)
+          .replace(/(<meta property="og:url" content=")[^"]*/, `$1${url}`)
+          .replace(
+            /(<meta (?:property="og:title"|name="twitter:title") content=")[^"]*/g,
+            `$1${title}`
+          )
+          .replace(
+            /(<meta\s+(?:name="description"|property="og:description"|name="twitter:description")\s+content=")[^"]*/g,
+            `$1${desc}`
+          )
+          .replace(
+            /<noscript>[\s\S]*?<\/noscript>/,
+            `<noscript><h1>${title}</h1><p>${desc}</p></noscript>`
+          );
+        writeFileSync("dist/dissertation.html", html);
+      },
     },
   ],
   define: {
