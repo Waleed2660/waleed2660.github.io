@@ -22,6 +22,10 @@ export const restoreReturnPosition = () => {
   const started = performance.now();
 
   const stop = () => {
+    sessionStorage.removeItem(KEY);
+    cancel();
+  };
+  const cancel = () => {
     cancelAnimationFrame(frame);
     window.removeEventListener("wheel", stop);
     window.removeEventListener("touchstart", stop);
@@ -50,5 +54,5 @@ export const restoreReturnPosition = () => {
   window.addEventListener("touchstart", stop, { passive: true });
   window.addEventListener("keydown", stop);
   frame = requestAnimationFrame(tick);
-  return stop;
+  return cancel;
 };

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { ExternalLink, MapPin, Calendar, ChevronDown, ChevronUp } from "lucide-react";
+import { Pennant } from "./harbor/Marks";
 
 type Talk = {
   title: string;
@@ -404,6 +405,7 @@ const ConferencesSection = () => {
                   <span className="flex items-center gap-1.5">
                     <MapPin className="w-3.5 h-3.5" />
                     {conf.location}
+                    <Pennant className="w-3.5 h-3.5 ml-0.5" />
                   </span>
                 </div>
               </div>

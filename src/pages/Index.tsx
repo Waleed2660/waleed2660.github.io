@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { ChevronUp } from "lucide-react";
+import { Anchor } from "lucide-react";
 import { useNavigationType } from "react-router-dom";
 import { restoreReturnPosition } from "@/lib/return-position";
 import Navigation from "@/components/Navigation";
@@ -15,6 +15,7 @@ import ContactSection from "@/components/ContactSection";
 import CurrentlySection from "@/components/CurrentlySection";
 import ConferencesSection from "@/components/ConferencesSection";
 import ResearchSection from "@/components/ResearchSection";
+import { WaveDivider } from "@/components/harbor/Marks";
 
 const SECTION_IDS = [
   "home",
@@ -208,7 +209,7 @@ const Index = () => {
         style={{ background: "var(--floating-action-bg)" }}
         aria-label="Back to top"
       >
-        <ChevronUp className="w-5 h-5" />
+        <Anchor className="w-5 h-5" />
       </button>
 
       <div className="min-h-screen relative overflow-hidden">
@@ -241,56 +242,56 @@ const Index = () => {
             <HomeSection onNavigate={scrollToSection} />
           </div>
 
-          <div className="h-px bg-gradient-to-r from-transparent via-slate-400/25 dark:via-white/[0.06] to-transparent mx-8 sm:mx-24" />
+          <WaveDivider />
           <div id="experience">
             <FadeIn>
               <ExperienceSection />
             </FadeIn>
           </div>
 
-          <div className="h-px bg-gradient-to-r from-transparent via-slate-400/25 dark:via-white/[0.06] to-transparent mx-8 sm:mx-24" />
+          <WaveDivider />
           <div id="projects">
             <FadeIn>
               <ProjectsSection />
             </FadeIn>
           </div>
 
-          <div className="h-px bg-gradient-to-r from-transparent via-slate-400/25 dark:via-white/[0.06] to-transparent mx-8 sm:mx-24" />
+          <WaveDivider />
           <div id="github">
             <FadeIn>
               <GitHubSection />
             </FadeIn>
           </div>
 
-          <div className="h-px bg-gradient-to-r from-transparent via-slate-400/25 dark:via-white/[0.06] to-transparent mx-8 sm:mx-24" />
+          <WaveDivider />
           <div id="tools">
             <FadeIn>
               <TechStack />
             </FadeIn>
           </div>
 
-          <div className="h-px bg-gradient-to-r from-transparent via-slate-400/25 dark:via-white/[0.06] to-transparent mx-8 sm:mx-24" />
+          <WaveDivider />
           <div id="research">
             <FadeIn>
               <ResearchSection />
             </FadeIn>
           </div>
 
-          <div className="h-px bg-gradient-to-r from-transparent via-slate-400/25 dark:via-white/[0.06] to-transparent mx-8 sm:mx-24" />
+          <WaveDivider />
           <div id="conferences">
             <FadeIn>
               <ConferencesSection />
             </FadeIn>
           </div>
 
-          <div className="h-px bg-gradient-to-r from-transparent via-slate-400/25 dark:via-white/[0.06] to-transparent mx-8 sm:mx-24" />
+          <WaveDivider />
           <div id="currently">
             <FadeIn>
               <CurrentlySection />
             </FadeIn>
           </div>
 
-          <div className="h-px bg-gradient-to-r from-transparent via-slate-400/25 dark:via-white/[0.06] to-transparent mx-8 sm:mx-24" />
+          <WaveDivider />
           <div id="contact">
             <FadeIn>
               <ContactSection />

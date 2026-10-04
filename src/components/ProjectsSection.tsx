@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { ContainerTag } from "./harbor/Marks";
 
 type Project = {
   title: string;
@@ -115,6 +116,7 @@ const ProjectsSection = () => {
                   key={`pinned-${index}`}
                   className="glass-strong featured-card rounded-3xl p-8 hover:bg-slate-900/5 dark:hover:bg-white/10 transition-all duration-500 hover:scale-[1.02] group"
                 >
+                  <ContainerTag code={`WT-${String(index + 1).padStart(2, "0")}`} />
                   <div className="flex flex-col md:flex-row gap-8">
                     <div className="flex-shrink-0 flex flex-col items-center justify-center gap-3">
                       <img
@@ -201,8 +203,9 @@ const ProjectsSection = () => {
               .map((project, index) => (
                 <div
                   key={index}
-                  className={`glass-strong rounded-3xl p-8 hover:bg-slate-900/5 dark:hover:bg-white/10 transition-all duration-500 hover:scale-105 group`}
+                  className={`glass-strong relative rounded-3xl p-8 hover:bg-slate-900/5 dark:hover:bg-white/10 transition-all duration-500 hover:scale-105 group`}
                 >
+                  <ContainerTag code={`WT-${String(index + 2).padStart(2, "0")}`} />
                   <div className="flex flex-col h-full">
                     <div className="flex items-center gap-4 mb-4">
                       <img

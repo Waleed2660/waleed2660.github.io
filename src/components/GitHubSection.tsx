@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Flame, Trophy, CalendarDays } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import "./harbor/marks.css";
 
 // Contribution colour — brand amber ramp, matching the single accent hue
 const USERNAME = "Waleed2660";
@@ -282,10 +283,53 @@ const ContributionGraph = ({ calendar }: { calendar: Record<string, number> }) =
               ))}
             </div>
           </div>
+          <div
+            aria-hidden="true"
+            className="flex gap-1 ml-8 pt-1 border-t border-slate-400/40 dark:border-white/15 font-mono text-[9px] leading-none text-slate-400 dark:text-white/30 pointer-events-none select-none"
+          >
+            {visibleWeeks.map((_, i) => {
+              const bay = monthLabels.findIndex((m) => m.index === i);
+              return (
+                <div
+                  key={i}
+                  className={`w-3 h-3 flex-shrink-0 whitespace-nowrap ${bay >= 0 ? "border-l border-slate-400/40 dark:border-white/15 pl-0.5" : ""}`}
+                >
+                  {bay >= 0 ? String(bay + 1).padStart(2, "0") : ""}
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
     </TooltipProvider>
   );
+};
+
+const seaWave = (y: number, x0: number) =>
+  `M${x0} ${y}q12.5 -4 25 0${" t25 0".repeat(16)}V72H${x0}Z`;
+
+const isLight = (hex: string) => {
+  const n = parseInt(hex.slice(1), 16);
+  return ((n >> 16) * 299 + ((n >> 8) & 255) * 587 + (n & 255) * 114) / 1000 > 150;
+};
+
+// Packs languages into a container stack on the quay deck: biggest shares on the
+// bottom tier, and each tier above holds at most ~60% of the one below it.
+const stackRows = (langs: Language[]) => {
+  const left = [...langs].sort((a, b) => b.percentage - a.percentage);
+  const rows: Language[][] = [];
+  let cap = left.reduce((t, l) => t + l.percentage, 0) * 0.6;
+  while (left.length) {
+    const row = [left.shift()!];
+    let sum = row[0].percentage;
+    while (left.length && sum + left[0].percentage <= cap) {
+      sum += left[0].percentage;
+      row.push(left.shift()!);
+    }
+    rows.push(row);
+    cap = sum * 0.6;
+  }
+  return rows;
 };
 
 const GitHubSection = () => {
@@ -390,10 +434,7 @@ const GitHubSection = () => {
           </div>
 
           {/* Right: Top Languages */}
-          <div className="glass-strong rounded-3xl p-8 hover:scale-[1.02] hover:bg-slate-900/5 dark:hover:bg-white/10 transition-all duration-500">
-            <p className="text-slate-400 dark:text-white/40 text-xs uppercase tracking-widest mb-5">
-              Top Languages
-            </p>
+          <div className="glass-strong rounded-3xl p-8 hover:scale-[1.02] hover:bg-slate-900/5 dark:hover:bg-white/10 transition-all duration-500 flex flex-col">
             {!stats ? (
               <div className="space-y-3">
                 {[...Array(4)].map((_, i) => (
@@ -404,30 +445,61 @@ const GitHubSection = () => {
                 ))}
               </div>
             ) : (
-              <div className="space-y-4">
-                {stats.languages.map(({ name, percentage }) => (
-                  <div key={name}>
-                    <div className="flex justify-between text-sm mb-1.5">
-                      <span className="text-slate-700 dark:text-white/80 flex items-center gap-2">
-                        <span
-                          className="w-2.5 h-2.5 rounded-full inline-block flex-shrink-0"
-                          style={{ background: LANGUAGE_COLORS[name] ?? "#888" }}
-                        />
-                        {name}
-                      </span>
-                      <span className="text-slate-400 dark:text-white/40">{percentage}%</span>
-                    </div>
-                    <div className="h-1.5 rounded-full bg-slate-900/5 dark:bg-white/10 overflow-hidden">
-                      <div
-                        className="h-full rounded-full transition-all duration-700"
-                        style={{
-                          width: `${percentage}%`,
-                          background: LANGUAGE_COLORS[name] ?? "#888",
-                        }}
-                      />
-                    </div>
+              <div className="flex-1 flex flex-col">
+                <div
+                  role="list"
+                  aria-label="Top languages by share"
+                  className="relative flex-1 flex flex-col-reverse pl-[4.75rem] pr-5 sm:pr-9"
+                >
+                  <div aria-hidden="true" className="gh-tower absolute left-3 bottom-0 w-14 h-20">
+                    <div className="gh-bridge" />
                   </div>
-                ))}
+                  {stackRows(stats.languages).map((row, ri, rows) => (
+                    <div key={ri} className="h-8 flex justify-center gap-0.5">
+                      {row.map(({ name, percentage }) => {
+                        const c = LANGUAGE_COLORS[name] ?? "#888888";
+                        const base = rows[0].reduce((t, l) => t + l.percentage, 0);
+                        return (
+                          <div
+                            key={name}
+                            role="listitem"
+                            title={`${name} ${percentage}%`}
+                            className={`gh-box min-w-[4.75rem] rounded-[3px] border px-1 sm:px-1.5 flex flex-col justify-center leading-tight ${isLight(c) ? "text-slate-900" : "text-white"}`}
+                            style={{
+                              width: `${(percentage / base) * 100}%`,
+                              borderColor: `color-mix(in srgb, ${c} 70%, #000)`,
+                              backgroundColor: c,
+                            }}
+                          >
+                            <span className="truncate text-[10px] sm:text-[11px] tracking-tight sm:tracking-normal font-medium">
+                              {name}
+                            </span>
+                            <span className="font-mono text-[10px] opacity-75">{percentage}%</span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  ))}
+                </div>
+                <p className="gh-hull">Top Languages</p>
+                <div aria-hidden="true" className="gh-sea relative -mx-8 -mb-8 rounded-b-3xl">
+                  {[[0], [1, 2, 3]].map((layers, front) => (
+                    <svg
+                      key={front}
+                      className={`absolute inset-0 w-full h-full${front ? " z-[2]" : ""}`}
+                      viewBox="0 0 400 72"
+                      preserveAspectRatio="none"
+                    >
+                      {layers.map((l) => (
+                        <path
+                          key={l}
+                          className={`gh-s${l}`}
+                          d={seaWave([3, 21, 39, 56][l], l * -9 - 5)}
+                        />
+                      ))}
+                    </svg>
+                  ))}
+                </div>
               </div>
             )}
           </div>
