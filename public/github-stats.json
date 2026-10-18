@@ -33,9 +33,9 @@
   "streak": {
     "totalContributions": 4181,
     "since": "2017-03-25",
-    "currentStreak": 2,
-    "currentStreakStart": "2026-10-15",
-    "currentStreakEnd": "2026-10-16",
+    "currentStreak": 0,
+    "currentStreakStart": null,
+    "currentStreakEnd": null,
     "longestStreak": 57,
     "longestStreakStart": "2026-08-17",
     "longestStreakEnd": "2026-10-12"
